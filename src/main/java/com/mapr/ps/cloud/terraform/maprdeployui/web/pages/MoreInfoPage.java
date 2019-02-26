@@ -73,9 +73,6 @@ public class MoreInfoPage extends BasePage {
         IResourceStream a;
         add(statusRefreshContainer());
         add(additionalInfoRefreshContainer());
-        add(destroyButton());
-        add(redeployButton());
-        add(deleteButton());
         add(clusterConfigurationPanel());
     }
 
@@ -93,6 +90,9 @@ public class MoreInfoPage extends BasePage {
                 super.beforeRender(component);
             }
         });
+        statusRefreshContainer.add(destroyButton());
+        statusRefreshContainer.add(redeployButton());
+        statusRefreshContainer.add(deleteButton());
         statusRefreshContainer.setOutputMarkupId(true);
         return statusRefreshContainer;
     }

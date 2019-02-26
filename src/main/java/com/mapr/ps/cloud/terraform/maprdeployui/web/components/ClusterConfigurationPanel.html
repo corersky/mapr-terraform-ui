@@ -13,7 +13,7 @@
             </div>
         </div>
         <div class="mb-3">
-            <label for="prefix">Environment Prefix</label>
+            <label for="prefix">Environment Prefix, must be unique. (used as name prefix for all AWS components)</label>
             <input type="text" class="form-control" id="prefix" placeholder="chufe-poc" wicket:id="envPrefix" required>
             <div class="invalid-feedback">
                 Please enter a valid cluster prefix
@@ -30,7 +30,7 @@
         </div>
 
         <div class="mb-3">
-            <label for="domain">Private Domain</label>
+            <label for="domain">Private Domain (only available in VPC)</label>
             <input type="text" class="form-control" id="domain" placeholder="poc.ps.mapr.com" wicket:id="privateDomain"
                    required>
             <div class="invalid-feedback">
