@@ -2,9 +2,12 @@ package com.mapr.ps.cloud.terraform.maprdeployui.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ClusterConfigurationDTO implements Serializable {
+    private Date deployedAt;
+    private Date destroyedAt;
     private String customerName;
     private String envPrefix;
     private String clusterName;
@@ -97,10 +100,28 @@ public class ClusterConfigurationDTO implements Serializable {
         this.nodesLayout = nodesLayout;
     }
 
+    public Date getDeployedAt() {
+        return deployedAt;
+    }
+
+    public void setDeployedAt(Date deployedAt) {
+        this.deployedAt = deployedAt;
+    }
+
+    public Date getDestroyedAt() {
+        return destroyedAt;
+    }
+
+    public void setDestroyedAt(Date destroyedAt) {
+        this.destroyedAt = destroyedAt;
+    }
+
     @Override
     public String toString() {
         return "ClusterConfigurationDTO{" +
-                "customerName='" + customerName + '\'' +
+                "deployedAt=" + deployedAt +
+                ", destroyedAt=" + destroyedAt +
+                ", customerName='" + customerName + '\'' +
                 ", envPrefix='" + envPrefix + '\'' +
                 ", clusterName='" + clusterName + '\'' +
                 ", privateDomain='" + privateDomain + '\'' +

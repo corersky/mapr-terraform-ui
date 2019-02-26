@@ -5,6 +5,8 @@ import com.mapr.ps.cloud.terraform.maprdeployui.model.*;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.AwsInfoService;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.ClusterLayoutsService;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock;
+import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock2;
+import com.mapr.ps.cloud.terraform.maprdeployui.web.pages.MoreInfoPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -32,7 +34,7 @@ public class ClusterConfigurationPanel extends Panel {
     @SpringBean
     private ClusterLayoutsService clusterLayoutsService;
     @SpringBean
-    private MaprClusterServiceMock maprClusterService;
+    private MaprClusterServiceMock2 maprClusterService;
 
     private final DropDownChoice<AwsInstanceDTO> awsInstanceTypeDropDownChoice;
     private final DropDownChoice<String> awsAvZoneDropDownChoice;
@@ -74,7 +76,7 @@ public class ClusterConfigurationPanel extends Panel {
             protected void onSubmit(AjaxRequestTarget target) {
                 maprClusterService.deployCluster(model.getObject());
                 info("Cluster deployment started");
-                target.add(feedback);
+                setResponsePage(new MoreInfoPage(model));
             }
 
             @Override
@@ -190,7 +192,7 @@ public class ClusterConfigurationPanel extends Panel {
     }
 
     private DropDownChoice<String> awsAvZoneDropDownChoice() {
-        DropDownChoice<String> awsAvZone = new DropDownChoice<>("awsAvZone", new Model<>(), new LoadableDetachableModel<List<String>>() {
+        DropDownChoice<String> awsAvZone = new DropDownChoice<>("awsAvZone", new PropertyModel<>(model, "awsAvZone"), new LoadableDetachableModel<List<String>>() {
             @Override
             protected List<String> load() {
                 AwsRegionDTO object = regionModel.getObject();

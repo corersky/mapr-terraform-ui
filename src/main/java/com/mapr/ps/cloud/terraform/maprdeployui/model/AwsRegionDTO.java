@@ -10,10 +10,25 @@ public class AwsRegionDTO implements Serializable {
     private String code;
     private List<String> zones;
 
+    public AwsRegionDTO() {
+    }
+
     public AwsRegionDTO(String description, String code, List<String> zones) {
         this.description = description;
         this.code = code;
         this.zones = Collections.unmodifiableList(zones);
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public void setZones(List<String> zones) {
+        this.zones = zones;
     }
 
     public String getDescription() {

@@ -8,11 +8,17 @@
 <wicket:extend>
     <div class="col-md-8 order-md-1">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-            <h1 class="h2">MapR Cluster <span class="badge badge-success">Running</span></h1>
+            <h1 class="h2">MapR Cluster
+                <span wicket:id="statusDeploying" class="badge badge-warning">Deploying</span>
+                <span wicket:id="statusDeployed" class="badge badge-success">Deployed</span>
+                <span wicket:id="statusDestroying" class="badge badge-warning">Destroying</span>
+                <span wicket:id="statusDestroyed" class="badge badge-danger">Destroyed</span>
+            </h1>
             <div class="btn-toolbar mb-2 mb-md-0">
-                <button class="btn btn-primary" type="button">Redeploy</button>
-                <button class="btn btn-danger" type="button">Destroy</button>
-                <button class="btn btn-danger" type="button">Delete</button>
+                <button class="btn btn-primary" type="button" wicket:id="redeployButton">Re-Deploy</button>
+                <button class="btn btn-danger" type="button" wicket:id="destroyButton" onclick="return confirm('Really destroy cluster?')">Destroy</button>
+                &nbsp;
+                <button class="btn btn-danger" type="button" wicket:id="deleteButton" onclick="return confirm('Delete cluster configuration?')">Delete</button>
             </div>
         </div>
         <div class="row">
@@ -34,17 +40,16 @@
             <button id="openvpnDownload" class="btn btn-primary form-control" type="button">Download OpenVPN configuration</button>
         </div>
         <hr class="mb-4">
-        <h4 class="mb-3">Deployment Status</h4>
+        <!--<h4 class="mb-3">Deployment Status</h4>-->
+        <!--<div class="mb-3">-->
+            <!--<div>-->
+                <!--<p><label>VPC provisioned</label></p>-->
+                <!--<p>EC2 instances provisioned</p>-->
+                <!--<p>OpenVPN provisioned</p>-->
+                <!--<p>MapR installation</p>-->
+            <!--</div>-->
+        <!--</div>-->
         <div class="mb-3">
-            <div>
-                <p><label>VPC provisioned</label></p>
-                <p>EC2 instances provisioned</p>
-                <p>OpenVPN provisioned</p>
-                <p>MapR installation</p>
-            </div>
-        </div>
-        <div class="mb-3">
-            <label for="showOutputLog">Output Log</label>
             <button id="showOutputLog" class="btn btn-primary form-control" type="button">Show output log</button>
         </div>
         <hr class="mb-4">

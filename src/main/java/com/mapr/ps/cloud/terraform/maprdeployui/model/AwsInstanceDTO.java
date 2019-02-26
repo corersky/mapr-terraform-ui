@@ -12,12 +12,39 @@ public class AwsInstanceDTO implements Serializable {
     private String network;
     private List<String> availableRegion;
 
+    public AwsInstanceDTO() {
+    }
+
     public AwsInstanceDTO(String instanceCode, int vCPU, int memoryInGB, String storage, String network, List<String> availableRegion) {
         this.instanceCode = instanceCode;
         this.vCPU = vCPU;
         this.memoryInGB = memoryInGB;
         this.storage = storage;
         this.network = network;
+        this.availableRegion = availableRegion;
+    }
+
+    public void setInstanceCode(String instanceCode) {
+        this.instanceCode = instanceCode;
+    }
+
+    public void setvCPU(int vCPU) {
+        this.vCPU = vCPU;
+    }
+
+    public void setMemoryInGB(int memoryInGB) {
+        this.memoryInGB = memoryInGB;
+    }
+
+    public void setStorage(String storage) {
+        this.storage = storage;
+    }
+
+    public void setNetwork(String network) {
+        this.network = network;
+    }
+
+    public void setAvailableRegion(List<String> availableRegion) {
         this.availableRegion = availableRegion;
     }
 

@@ -2,7 +2,10 @@ package com.mapr.ps.cloud.terraform.maprdeployui.web.pages;
 
 import com.giffing.wicket.spring.boot.context.scan.WicketHomePage;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterConfigurationDTO;
+import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentStatus;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock;
+import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock2;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -22,7 +25,7 @@ import java.util.List;
 public class ClusterListPage extends BasePage {
 
     @SpringBean
-    private MaprClusterServiceMock maprClusterService;
+    private MaprClusterServiceMock2 maprClusterService;
 
     public ClusterListPage() {
         IModel<List<ClusterConfigurationDTO>> clustersModel = new LoadableDetachableModel<List<ClusterConfigurationDTO>>() {
@@ -35,7 +38,7 @@ public class ClusterListPage extends BasePage {
         add(new BookmarkablePageLink<NewClusterPage>("newClusterTableLink", NewClusterPage.class));
         add(new ListView<ClusterConfigurationDTO>("clusters", clustersModel) {
             @Override
-            protected void populateItem(ListItem<ClusterConfigurationDTO> item) {
+            protected void populateItem(final ListItem<ClusterConfigurationDTO> item) {
                 item.add(new Label("clusterName", new PropertyModel<String>(item.getModel(), "clusterName")));
                 item.add(new Label("privateDomain", new PropertyModel<String>(item.getModel(), "privateDomain")));
                 item.add(new Label("customerName", new PropertyModel<String>(item.getModel(), "customerName")));
@@ -43,6 +46,31 @@ public class ClusterListPage extends BasePage {
                 item.add(new Label("awsAvZone", new PropertyModel<String>(item.getModel(), "awsAvZone")));
                 item.add(new Label("awsInstanceType", new PropertyModel<String>(item.getModel(), "awsInstanceType.instanceCode")));
                 item.add(new Label("numberNodes", new PropertyModel<String>(item.getModel(), "defaultClusterLayout.numberNodes")));
+                item.add(new WebMarkupContainer("statusDeploying") {
+                    @Override
+                    public boolean isVisible() {
+                        return item.getModelObject().getDeploymentStatus() == DeploymentStatus.DEPLOYING;
+                    }
+                });
+                item.add(new WebMarkupContainer("statusDeployed") {
+                    @Override
+                    public boolean isVisible() {
+                        return item.getModelObject().getDeploymentStatus() == DeploymentStatus.DEPLOYED;
+                    }
+                });
+                item.add(new WebMarkupContainer("statusDestroying") {
+                    @Override
+                    public boolean isVisible() {
+                        return item.getModelObject().getDeploymentStatus() == DeploymentStatus.DESTROYING;
+                    }
+                });
+                item.add(new WebMarkupContainer("statusDestroyed") {
+                    @Override
+                    public boolean isVisible() {
+                        return item.getModelObject().getDeploymentStatus() == DeploymentStatus.DESTROYED;
+                    }
+                });
+
                 item.add(new Link<Void>("moreInfoLink") {
                     @Override
                     public void onClick() {

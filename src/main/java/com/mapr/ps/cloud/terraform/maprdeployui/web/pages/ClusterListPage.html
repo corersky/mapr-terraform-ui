@@ -37,8 +37,12 @@
             <td wicket:id="awsAvZone">eu-west-1c</td>
             <td wicket:id="awsInstanceType">r5d.2xlarge</td>
             <td wicket:id="numberNodes">5</td>
-            <td><span class="badge badge-success">Running</span></td>
-            <!--<span class="badge  badge -warning">Deploying</span><span class="badge badge-warning">Destroying</span><span class="badge  badge -danger">Destroyed</span>-->
+            <td>
+                <span wicket:id="statusDeploying" class="badge badge-warning">Deploying</span>
+                <span wicket:id="statusDeployed" class="badge badge-success">Deployed</span>
+                <span wicket:id="statusDestroying" class="badge badge-warning">Destroying</span>
+                <span wicket:id="statusDestroyed" class="badge badge-danger">Destroyed</span>
+            </td>
             <td>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <button type="button" class="btn btn-sm btn-outline-secondary" wicket:id="moreInfoLink">More</button>

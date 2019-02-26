@@ -1,6 +1,13 @@
 security:
   basic:
     enabled: false
+
+maprdeployui:
+  terraform_state_store_path: C:/Projects/workspaces/terraform-mapr/clusterinfo
+  app_json_store_path: C:/Projects/workspaces/terraform-mapr/clusterinfo/maprdeployui
+  terraform_binary_path: /usr/bin/terraform
+
+
 wicket:
   core:
     resourcesettings:
