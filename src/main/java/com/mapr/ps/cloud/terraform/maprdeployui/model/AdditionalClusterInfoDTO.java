@@ -3,6 +3,7 @@ package com.mapr.ps.cloud.terraform.maprdeployui.model;
 import java.io.Serializable;
 
 public class AdditionalClusterInfoDTO implements Serializable {
+    private boolean dataAvailable;
     private String mcsUrl;
     private String openvpnFile;
     private String maprUser;
@@ -10,6 +11,14 @@ public class AdditionalClusterInfoDTO implements Serializable {
     private String dbPassword;
     private String domainName;
     private String envPrefix;
+
+    public boolean isDataAvailable() {
+        return dataAvailable;
+    }
+
+    public void setDataAvailable(boolean dataAvailable) {
+        this.dataAvailable = dataAvailable;
+    }
 
     public String getMcsUrl() {
         return mcsUrl;

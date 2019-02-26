@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,6 +25,13 @@ public class MaprClusterServiceMock2 {
     private String jsonStoragePath;
     @Value("${maprdeployui.terraform_state_store_path}")
     private String terraformStoragePath;
+
+    @PostConstruct
+    public void init() throws IOException {
+        FileUtils.forceMkdir(new File(jsonStoragePath));
+        FileUtils.forceMkdir(new File(terraformStoragePath));
+    }
+
 
     public List<ClusterConfigurationDTO> getMaprClusters() {
         Collection<File> files = FileUtils.listFiles(new File(jsonStoragePath), new String[]{"json"}, false);
@@ -74,11 +82,21 @@ public class MaprClusterServiceMock2 {
         }
     }
 
+    public File getOpenvpnFile(String envPrefix) {
+        AdditionalClusterInfoDTO additionalClusterInfo = getAdditionalClusterInfo(envPrefix);
+        if(additionalClusterInfo.isDataAvailable()) {
+            return new File(terraformStoragePath + "/" + additionalClusterInfo.getOpenvpnFile());
+        }
+        return null;
+    }
+
     public AdditionalClusterInfoDTO getAdditionalClusterInfo(String envPrefix) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             String additionalInfoPath = terraformStoragePath + "/" + envPrefix + "-env.json";
-            return objectMapper.readValue(new File(additionalInfoPath), AdditionalClusterInfoDTO.class);
+            AdditionalClusterInfoDTO additionalClusterInfoDTO = objectMapper.readValue(new File(additionalInfoPath), AdditionalClusterInfoDTO.class);
+            additionalClusterInfoDTO.setDataAvailable(true);
+            return additionalClusterInfoDTO;
         } catch (IOException e) {
             AdditionalClusterInfoDTO additionalClusterInfoDTO = new AdditionalClusterInfoDTO();
             additionalClusterInfoDTO.setDbPassword("Not yet available");
@@ -87,6 +105,7 @@ public class MaprClusterServiceMock2 {
             additionalClusterInfoDTO.setMaprPassword("Not yet available");
             additionalClusterInfoDTO.setMaprUser("Not yet available");
             additionalClusterInfoDTO.setMcsUrl("Not yet available");
+            additionalClusterInfoDTO.setDataAvailable(false);
             return additionalClusterInfoDTO;
         }
     }

@@ -10,6 +10,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
@@ -19,6 +20,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.annotation.mount.MountPath;
 
+import java.io.File;
+
 @MountPath("/moreinfo")
 public class MoreInfoPage extends BasePage {
     @SpringBean
@@ -26,6 +29,7 @@ public class MoreInfoPage extends BasePage {
 
     private final IModel<ClusterConfigurationDTO> clusterConfigModel;
     private final IModel<AdditionalClusterInfoDTO> additionalClusterInfoModel;
+    private final IModel<File> openvpnFilePathModel;
 
     public MoreInfoPage(IModel<String> prefixModel) {
         this.clusterConfigModel = new LoadableDetachableModel<ClusterConfigurationDTO>() {
@@ -38,6 +42,16 @@ public class MoreInfoPage extends BasePage {
             @Override
             protected AdditionalClusterInfoDTO load() {
                 return maprClusterService.getAdditionalClusterInfo(prefixModel.getObject());
+            }
+        };
+        this.openvpnFilePathModel = new LoadableDetachableModel<File>() {
+            @Override
+            protected File load() {
+                File openvpnFile = maprClusterService.getOpenvpnFile(prefixModel.getObject());
+                if(openvpnFile != null && openvpnFile.exists()) {
+                    return openvpnFile;
+                }
+                return null;
             }
         };
         add(statusRefreshContainer());
@@ -72,10 +86,18 @@ public class MoreInfoPage extends BasePage {
         ExternalLink extLink = new ExternalLink("mcsUrl", new PropertyModel<>(additionalClusterInfoModel, "mcsUrl"));
         extLink.add(new Label("mcsUrlLabel", new PropertyModel<>(additionalClusterInfoModel, "mcsUrl")));
         additionalInfoRefreshContainer.add(extLink);
+
+        additionalInfoRefreshContainer.add(new DownloadLink("openvpnDownloadButton", openvpnFilePathModel) {
+            @Override
+            public boolean isEnabled() {
+                return openvpnFilePathModel.getObject() != null;
+            }
+        });
         additionalInfoRefreshContainer.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(5)) {
             @Override
             public void beforeRender(Component component) {
                 additionalClusterInfoModel.detach();
+                openvpnFilePathModel.detach();
                 super.beforeRender(component);
             }
         });
