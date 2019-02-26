@@ -1,17 +1,17 @@
 package com.mapr.ps.cloud.terraform.maprdeployui.service;
 
-import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterLayoutDTO;
+import com.mapr.ps.cloud.terraform.maprdeployui.model.DefaultClusterLayoutDTO;
+import com.mapr.ps.cloud.terraform.maprdeployui.model.NodeLayoutDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class ClusterLayoutsService {
 
-    public List<ClusterLayoutDTO> getPredefindedClusterLayouts() {
-        List<ClusterLayoutDTO> layouts = new ArrayList<>();
+    public List<DefaultClusterLayoutDTO> getPredefindedClusterLayouts() {
+        List<DefaultClusterLayoutDTO> layouts = new ArrayList<>();
         layouts.add(createClusterLayoutNodes3());
         layouts.add(createClusterLayoutNodes4());
         layouts.add(createClusterLayoutNodes5());
@@ -23,8 +23,8 @@ public class ClusterLayoutsService {
         return layouts;
     }
 
-    private ClusterLayoutDTO createClusterLayoutNodes10() {
-        ClusterLayoutDTO layout = new ClusterLayoutDTO();
+    private DefaultClusterLayoutDTO createClusterLayoutNodes10() {
+        DefaultClusterLayoutDTO layout = new DefaultClusterLayoutDTO();
         int numberNodes = 10;
         layout.setNumberNodes(numberNodes);
         layout.setZookeeper(nodes(1, 2, 3, 4, 5));
@@ -50,8 +50,8 @@ public class ClusterLayoutsService {
         return layout;
     }
 
-    private ClusterLayoutDTO createClusterLayoutNodes9() {
-        ClusterLayoutDTO layout = new ClusterLayoutDTO();
+    private DefaultClusterLayoutDTO createClusterLayoutNodes9() {
+        DefaultClusterLayoutDTO layout = new DefaultClusterLayoutDTO();
         int numberNodes = 9;
         layout.setNumberNodes(numberNodes);
         layout.setZookeeper(nodes(1, 2, 3, 4, 5));
@@ -77,8 +77,8 @@ public class ClusterLayoutsService {
         return layout;
     }
 
-    private ClusterLayoutDTO createClusterLayoutNodes8() {
-        ClusterLayoutDTO layout = new ClusterLayoutDTO();
+    private DefaultClusterLayoutDTO createClusterLayoutNodes8() {
+        DefaultClusterLayoutDTO layout = new DefaultClusterLayoutDTO();
         int numberNodes = 8;
         layout.setNumberNodes(numberNodes);
         layout.setZookeeper(nodes(1, 2, 3, 4, 5));
@@ -104,8 +104,8 @@ public class ClusterLayoutsService {
         return layout;
     }
 
-    private ClusterLayoutDTO createClusterLayoutNodes7() {
-        ClusterLayoutDTO layout = new ClusterLayoutDTO();
+    private DefaultClusterLayoutDTO createClusterLayoutNodes7() {
+        DefaultClusterLayoutDTO layout = new DefaultClusterLayoutDTO();
         int numberNodes = 7;
         layout.setNumberNodes(numberNodes);
         layout.setZookeeper(nodes(1, 2, 3));
@@ -132,8 +132,8 @@ public class ClusterLayoutsService {
     }
 
 
-    private ClusterLayoutDTO createClusterLayoutNodes6() {
-        ClusterLayoutDTO layout = new ClusterLayoutDTO();
+    private DefaultClusterLayoutDTO createClusterLayoutNodes6() {
+        DefaultClusterLayoutDTO layout = new DefaultClusterLayoutDTO();
         int numberNodes = 6;
         layout.setNumberNodes(numberNodes);
         layout.setZookeeper(nodes(1, 2, 3));
@@ -159,8 +159,8 @@ public class ClusterLayoutsService {
         return layout;
     }
 
-    private ClusterLayoutDTO createClusterLayoutNodes5() {
-        ClusterLayoutDTO layout = new ClusterLayoutDTO();
+    private DefaultClusterLayoutDTO createClusterLayoutNodes5() {
+        DefaultClusterLayoutDTO layout = new DefaultClusterLayoutDTO();
         int numberNodes = 5;
         layout.setNumberNodes(numberNodes);
         layout.setZookeeper(nodes(1, 2, 3));
@@ -186,8 +186,8 @@ public class ClusterLayoutsService {
         return layout;
     }
 
-    private ClusterLayoutDTO createClusterLayoutNodes4() {
-        ClusterLayoutDTO layout = new ClusterLayoutDTO();
+    private DefaultClusterLayoutDTO createClusterLayoutNodes4() {
+        DefaultClusterLayoutDTO layout = new DefaultClusterLayoutDTO();
         int numberNodes = 4;
         layout.setNumberNodes(numberNodes);
         layout.setZookeeper(nodes(1, 2, 3));
@@ -213,8 +213,8 @@ public class ClusterLayoutsService {
         return layout;
     }
 
-    private ClusterLayoutDTO createClusterLayoutNodes3() {
-        ClusterLayoutDTO layout = new ClusterLayoutDTO();
+    private DefaultClusterLayoutDTO createClusterLayoutNodes3() {
+        DefaultClusterLayoutDTO layout = new DefaultClusterLayoutDTO();
         int numberNodes = 3;
         layout.setNumberNodes(numberNodes);
         layout.setZookeeper(nodes(1, 2, 3));
@@ -254,5 +254,35 @@ public class ClusterLayoutsService {
             nodes.add(nodesIdx);
         }
         return nodes;
+    }
+
+    public List<NodeLayoutDTO> createNodeLayoutList(DefaultClusterLayoutDTO defaultLayout) {
+        List<NodeLayoutDTO> layouts = new ArrayList<>();
+        for(int i = 1; i <= defaultLayout.getNumberNodes(); i++) {
+            NodeLayoutDTO layout = new NodeLayoutDTO();
+            layout.setNodeIndex(i);
+            layout.setZookeeper(defaultLayout.getZookeeper().contains(i));
+            layout.setCldb(defaultLayout.getCldb().contains(i));
+            layout.setFileserver(defaultLayout.getFileserver().contains(i));
+            layout.setKafkaClient(defaultLayout.getKafkaClient().contains(i));
+            layout.setMcs(defaultLayout.getMcs().contains(i));
+            layout.setResourceManager(defaultLayout.getResourceManager().contains(i));
+            layout.setNodeManager(defaultLayout.getNodeManager().contains(i));
+            layout.setHistoryServer(defaultLayout.getHistoryServer().contains(i));
+            layout.setMySQL(defaultLayout.getMySQL().contains(i));
+            layout.setSpark(defaultLayout.getSpark().contains(i));
+            layout.setNfs(defaultLayout.getNfs().contains(i));
+            layout.setDrill(defaultLayout.getDrill().contains(i));
+            layout.setFlume(defaultLayout.getFlume().contains(i));
+            layout.setHbaseCli(defaultLayout.getHbaseCli().contains(i));
+            layout.setHiveCli(defaultLayout.getHiveCli().contains(i));
+            layout.setHiveMetaStore(defaultLayout.getHiveMetaStore().contains(i));
+            layout.setHiveServer2(defaultLayout.getHiveServer2().contains(i));
+            layout.setCollectd(defaultLayout.getCollectd().contains(i));
+            layout.setOpenTSDB(defaultLayout.getOpenTSDB().contains(i));
+            layout.setGrafana(defaultLayout.getGrafana().contains(i));
+            layouts.add(layout);
+        }
+        return layouts;
     }
 }

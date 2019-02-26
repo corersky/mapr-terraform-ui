@@ -2,7 +2,7 @@ package com.mapr.ps.cloud.terraform.maprdeployui.web.pages;
 
 import com.giffing.wicket.spring.boot.context.scan.WicketHomePage;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.MaprClusterDTO;
-import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterService;
+import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -22,7 +22,7 @@ import java.util.List;
 public class ClusterListPage extends BasePage {
 
     @SpringBean
-    private MaprClusterService maprClusterService;
+    private MaprClusterServiceMock maprClusterService;
 
     public ClusterListPage(final PageParameters parameters) {
         super(parameters);

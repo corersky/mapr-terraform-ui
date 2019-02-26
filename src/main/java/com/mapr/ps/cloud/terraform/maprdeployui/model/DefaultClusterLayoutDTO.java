@@ -1,8 +1,9 @@
 package com.mapr.ps.cloud.terraform.maprdeployui.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ClusterLayoutDTO {
+public class DefaultClusterLayoutDTO implements Serializable {
     private int numberNodes;
     private List<Integer> zookeeper;
     private List<Integer> cldb;
