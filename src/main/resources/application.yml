@@ -1,0 +1,16 @@
+security:
+  basic:
+    enabled: false
+wicket:
+  core:
+    resourcesettings:
+      packageresourceguard:
+        pattern:
+          - +*.map
+#server:
+#  compression:
+#    enabled: true
+#spring:
+#  jpa:
+#    hibernate:
+#      ddl-auto: none

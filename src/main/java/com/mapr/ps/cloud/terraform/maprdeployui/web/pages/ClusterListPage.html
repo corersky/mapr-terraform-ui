@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+    <meta charset="utf-8" />
+    <title>MapR Clusters</title>
+</head>
+<body>
+<wicket:extend>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+    <h1 class="h2">MapR-Clusters</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <button class="btn btn-primary" type="button" wicket:id="newClusterTableLink">New Cluster</button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+        <tr>
+            <th>Cluster Name</th>
+            <th>Domain</th>
+            <th>Customer</th>
+            <th>Prefix</th>
+            <th>AV Zone</th>
+            <th>Instance Type</th>
+            <th>Nodes</th>
+            <th>Status</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr wicket:id="clusters">
+            <td wicket:id="name">poc.mapr.com</td>
+            <td wicket:id="domain">ps.mapr.cm</td>
+            <td wicket:id="customer">MapR PS</td>
+            <td wicket:id="prefix">chufe-poc</td>
+            <td wicket:id="avZone">eu-west-1c</td>
+            <td wicket:id="instanceType">r5d.2xlarge</td>
+            <td wicket:id="numberNodes">5</td>
+            <td><span class="badge badge-success">Running</span></td>
+            <!--<span class="badge  badge -warning">Deploying</span><span class="badge badge-warning">Destroying</span><span class="badge  badge -danger">Destroyed</span>-->
+            <td>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" wicket:id="moreInfoLink">More</button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</wicket:extend>
+</body>
+</html>
