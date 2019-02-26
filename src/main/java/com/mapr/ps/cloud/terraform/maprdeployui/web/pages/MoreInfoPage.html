@@ -8,32 +8,34 @@
 <wicket:extend>
     <div class="col-md-8 order-md-1">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
-            <h1 class="h2">MapR Cluster
+            <h1 class="h2" wicket:id="statusRefreshContainer">MapR Cluster
                 <span wicket:id="statusDeploying" class="badge badge-warning">Deploying</span>
                 <span wicket:id="statusDeployed" class="badge badge-success">Deployed</span>
                 <span wicket:id="statusDestroying" class="badge badge-warning">Destroying</span>
                 <span wicket:id="statusDestroyed" class="badge badge-danger">Destroyed</span>
             </h1>
             <div class="btn-toolbar mb-2 mb-md-0">
-                <button class="btn btn-primary" type="button" wicket:id="redeployButton">Re-Deploy</button>
-                <button class="btn btn-danger" type="button" wicket:id="destroyButton" onclick="return confirm('Really destroy cluster?')">Destroy</button>
+                <a class="btn btn-primary" type="button" wicket:id="redeployButton">Re-Deploy</a>
+                <a class="btn btn-danger" type="button" wicket:id="destroyButton" onclick="return confirm('Really destroy cluster?')">Destroy</a>
                 &nbsp;
-                <button class="btn btn-danger" type="button" wicket:id="deleteButton" onclick="return confirm('Delete cluster configuration?')">Delete</button>
+                <a class="btn btn-danger" type="button" wicket:id="deleteButton" onclick="return confirm('Delete cluster configuration?')">Delete</a>
             </div>
         </div>
+        <wicket:container wicket:id="additionalInfoRefreshContainer">
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="maprUser">MapR User</label>
-                <input type="text" class="form-control" id="maprUser" placeholder="Cluster User" required>
+                <div class="form-control"><span id="maprUser" wicket:id="maprUser">maprUser</span></div>
+
             </div>
             <div class="col-md-6 mb-3">
                 <label for="maprPassword">MapR Password</label>
-                <input type="text" class="form-control" id="maprPassword" placeholder="Cluster Password" required>
+                <div class="form-control"><span id="maprPassword" wicket:id="maprPassword">password</span></div>
             </div>
         </div>
         <div class="mb-3">
             <label for="mcsLink">MCS Link (first connect to VPN)</label>
-            <div class="form-control"><a href="" target="_blank" id="mcsLink">https://chufe-poc.poc.mapr.com:8443</a></div>
+            <div class="form-control"><a href="" target="_blank" id="mcsLink" wicket:id="mcsUrl"><span wicket:id="mcsUrlLabel">https://chufe-poc.poc.mapr.com:8443</span></a></div>
         </div>
         <div class="mb-3">
             <label for="openvpnDownload">OpenVPN configuration file</label>
@@ -52,6 +54,7 @@
         <div class="mb-3">
             <button id="showOutputLog" class="btn btn-primary form-control" type="button">Show output log</button>
         </div>
+        </wicket:container>
         <hr class="mb-4">
         <h4 class="mb-3">Cluster Deployment Settings</h4>
         <wicket:container wicket:id="clusterConfiguration"></wicket:container>

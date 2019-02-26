@@ -5,6 +5,8 @@ import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterConfigurationDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentStatus;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock2;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -16,6 +18,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.annotation.mount.MountPath;
 
 import java.util.List;
@@ -26,9 +29,10 @@ public class ClusterListPage extends BasePage {
 
     @SpringBean
     private MaprClusterServiceMock2 maprClusterService;
+    private final IModel<List<ClusterConfigurationDTO>> clustersModel;
 
     public ClusterListPage() {
-        IModel<List<ClusterConfigurationDTO>> clustersModel = new LoadableDetachableModel<List<ClusterConfigurationDTO>>() {
+        clustersModel = new LoadableDetachableModel<List<ClusterConfigurationDTO>>() {
             @Override
             protected List<ClusterConfigurationDTO> load() {
                 return maprClusterService.getMaprClusters();
@@ -36,7 +40,11 @@ public class ClusterListPage extends BasePage {
         };
 
         add(new BookmarkablePageLink<NewClusterPage>("newClusterTableLink", NewClusterPage.class));
-        add(new ListView<ClusterConfigurationDTO>("clusters", clustersModel) {
+        add(tableContainer());
+    }
+
+    private Component tableContainer() {
+        ListView<ClusterConfigurationDTO> listView = new ListView<ClusterConfigurationDTO>("clusters", clustersModel) {
             @Override
             protected void populateItem(final ListItem<ClusterConfigurationDTO> item) {
                 item.add(new Label("clusterName", new PropertyModel<String>(item.getModel(), "clusterName")));
@@ -74,10 +82,22 @@ public class ClusterListPage extends BasePage {
                 item.add(new Link<Void>("moreInfoLink") {
                     @Override
                     public void onClick() {
-                        setResponsePage(new MoreInfoPage(item.getModel()));
+                        setResponsePage(new MoreInfoPage(new PropertyModel<>(item.getModel(), "envPrefix")));
                     }
                 });
             }
+        };
+
+        WebMarkupContainer tableContainer = new WebMarkupContainer("tableContainer");
+        tableContainer.add(new AjaxSelfUpdatingTimerBehavior(Duration.seconds(10)) {
+            @Override
+            public void beforeRender(Component component) {
+                clustersModel.detach();
+                super.beforeRender(component);
+            }
         });
+        tableContainer.add(listView);
+        tableContainer.setOutputMarkupId(true);
+        return tableContainer;
     }
 }

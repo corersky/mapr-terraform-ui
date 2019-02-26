@@ -74,9 +74,14 @@ public class ClusterConfigurationPanel extends Panel {
         form.add(new AjaxSubmitLink("deployButton") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
+                if(maprClusterService.isPrefixUsed(model.getObject())) {
+                    error("Prefix is already in use. If Cluster was destroyed, delete the configuration.");
+                    target.add(feedback);
+                    return;
+                }
                 maprClusterService.deployCluster(model.getObject());
                 info("Cluster deployment started");
-                setResponsePage(new MoreInfoPage(model));
+                setResponsePage(new MoreInfoPage(new PropertyModel<>(model, "envPrefix")));
             }
 
             @Override
@@ -173,7 +178,7 @@ public class ClusterConfigurationPanel extends Panel {
         }, new IChoiceRenderer<AwsInstanceDTO>() {
             @Override
             public Object getDisplayValue(AwsInstanceDTO object) {
-                return object.getInstanceCode() + " (" + object.getvCPU() + " vCPUs - " + object.getvCPU() + " GB RAM - " + object.getStorage() + " - Network " + object.getNetwork() + ")";
+                return object.getInstanceCode() + " (" + object.getvCPU() + " vCPUs - " + object.getMemoryInGB() + " GB RAM - " + object.getStorage() + " - Network " + object.getNetwork() + ")";
             }
 
             @Override
