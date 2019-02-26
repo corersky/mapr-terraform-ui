@@ -11,9 +11,18 @@ public class ClusterConfigurationDTO implements Serializable {
     private String privateDomain;
     private AwsRegionDTO awsRegion;
     private String awsAvZone;
-    private DefaultClusterLayoutDTO numberNodes;
+    private DefaultClusterLayoutDTO defaultClusterLayout;
     private AwsInstanceDTO awsInstanceType;
     private List<NodeLayoutDTO> nodesLayout = new ArrayList<>();
+    private DeploymentStatus deploymentStatus;
+
+    public DeploymentStatus getDeploymentStatus() {
+        return deploymentStatus;
+    }
+
+    public void setDeploymentStatus(DeploymentStatus deploymentStatus) {
+        this.deploymentStatus = deploymentStatus;
+    }
 
     public String getCustomerName() {
         return customerName;
@@ -56,12 +65,12 @@ public class ClusterConfigurationDTO implements Serializable {
         this.awsAvZone = awsAvZone;
     }
 
-    public DefaultClusterLayoutDTO getNumberNodes() {
-        return numberNodes;
+    public DefaultClusterLayoutDTO getDefaultClusterLayout() {
+        return defaultClusterLayout;
     }
 
-    public void setNumberNodes(DefaultClusterLayoutDTO numberNodes) {
-        this.numberNodes = numberNodes;
+    public void setDefaultClusterLayout(DefaultClusterLayoutDTO defaultClusterLayout) {
+        this.defaultClusterLayout = defaultClusterLayout;
     }
 
     public AwsRegionDTO getAwsRegion() {
@@ -97,9 +106,10 @@ public class ClusterConfigurationDTO implements Serializable {
                 ", privateDomain='" + privateDomain + '\'' +
                 ", awsRegion=" + awsRegion +
                 ", awsAvZone='" + awsAvZone + '\'' +
-                ", numberNodes=" + numberNodes +
+                ", defaultClusterLayout=" + defaultClusterLayout +
                 ", awsInstanceType=" + awsInstanceType +
                 ", nodesLayout=" + nodesLayout +
+                ", deploymentStatus=" + deploymentStatus +
                 '}';
     }
 }

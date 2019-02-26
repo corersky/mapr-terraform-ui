@@ -20,7 +20,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.util.ListModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Collections;
@@ -42,7 +41,7 @@ public class ClusterConfigurationPanel extends Panel {
     private final IModel<ClusterConfigurationDTO> model;
     private final IModel<AwsRegionDTO> regionModel;
     private final IModel<AwsInstanceDTO> instanceModel;
-    private final IModel<DefaultClusterLayoutDTO> numberNodesModel;
+    private final IModel<DefaultClusterLayoutDTO> defaultClusterLayoutModel;
     private final IModel<List<NodeLayoutDTO>> nodeLayoutsModel;
 
     public ClusterConfigurationPanel(String id, IModel<ClusterConfigurationDTO> model) {
@@ -50,9 +49,16 @@ public class ClusterConfigurationPanel extends Panel {
         this.model = model;
         regionModel = new PropertyModel<>(model, "awsRegion");
         instanceModel = new PropertyModel<>(model, "awsInstanceType");
-        numberNodesModel = new PropertyModel<>(model, "numberNodes");
+        defaultClusterLayoutModel = new PropertyModel<>(model, "defaultClusterLayout");
         nodeLayoutsModel = new PropertyModel<>(model, "nodesLayout");
-        Form<Void> form = new Form<>("form");
+        Form<ClusterConfigurationDTO> form = new Form<ClusterConfigurationDTO>("form") {
+
+            @Override
+            public boolean isEnabled() {
+                return !ClusterConfigurationPanel.this.isReadOnly();
+
+            }
+        };
         form.add(new RequiredTextField<String>("customerName", new PropertyModel<>(model, "customerName")));
         form.add(new RequiredTextField<String>("envPrefix", new PropertyModel<>(model, "envPrefix")));
         form.add(new RequiredTextField<String>("clusterName", new PropertyModel<>(model, "clusterName")));
@@ -75,15 +81,22 @@ public class ClusterConfigurationPanel extends Panel {
             protected void onError(AjaxRequestTarget target) {
                 target.add(feedback);
             }
+
+            @Override
+            public boolean isVisible() {
+                return !ClusterConfigurationPanel.this.isReadOnly();
+            }
         });
         add(form);
     }
+
+
 
     private FeedbackPanel feedbackPanel() {
         FeedbackPanel feedback = new FeedbackPanel("feedback") {
             @Override
             public boolean isVisible() {
-                return anyErrorMessage();
+                return anyErrorMessage() && !ClusterConfigurationPanel.this.isReadOnly();
             }
         };
         feedback.setOutputMarkupId(true);
@@ -95,7 +108,7 @@ public class ClusterConfigurationPanel extends Panel {
         WebMarkupContainer component = new WebMarkupContainer("deploymentMatrix") {
             @Override
             public boolean isVisible() {
-                return numberNodesModel.getObject() != null;
+                return defaultClusterLayoutModel.getObject() != null;
             }
         };
         component.setOutputMarkupPlaceholderTag(true);
@@ -130,7 +143,7 @@ public class ClusterConfigurationPanel extends Panel {
     }
 
     private DropDownChoice<DefaultClusterLayoutDTO> numberNodesDropDownChoice() {
-        DropDownChoice<DefaultClusterLayoutDTO> dropdown = new DropDownChoice<>("numberNodes", numberNodesModel, new LoadableDetachableModel<List<? extends DefaultClusterLayoutDTO>>() {
+        DropDownChoice<DefaultClusterLayoutDTO> dropdown = new DropDownChoice<>("numberNodes", defaultClusterLayoutModel, new LoadableDetachableModel<List<? extends DefaultClusterLayoutDTO>>() {
             @Override
             protected List<? extends DefaultClusterLayoutDTO> load() {
                 return clusterLayoutsService.getPredefindedClusterLayouts();
@@ -139,7 +152,7 @@ public class ClusterConfigurationPanel extends Panel {
         dropdown.add(new AjaxFormComponentUpdatingBehavior("change") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                nodeLayoutsModel.setObject(clusterLayoutsService.createNodeLayoutList(numberNodesModel.getObject()));
+                nodeLayoutsModel.setObject(clusterLayoutsService.createNodeLayoutList(defaultClusterLayoutModel.getObject()));
                 target.add(deploymentMatrixComponent);
             }
         });
@@ -223,5 +236,9 @@ public class ClusterConfigurationPanel extends Panel {
         });
         awsRegion.setRequired(true);
         return awsRegion;
+    }
+
+    public boolean isReadOnly() {
+        return false;
     }
 }

@@ -30,8 +30,7 @@ import java.util.stream.Collectors;
 public class NewClusterPage extends BasePage {
 
 
-    public NewClusterPage(PageParameters parameters) {
-        super(parameters);
+    public NewClusterPage() {
         add(new ClusterConfigurationPanel("clusterConfiguration", Model.of(new ClusterConfigurationDTO())));
     }
 

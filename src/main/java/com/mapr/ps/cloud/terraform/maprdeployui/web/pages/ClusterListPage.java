@@ -1,7 +1,7 @@
 package com.mapr.ps.cloud.terraform.maprdeployui.web.pages;
 
 import com.giffing.wicket.spring.boot.context.scan.WicketHomePage;
-import com.mapr.ps.cloud.terraform.maprdeployui.model.MaprClusterDTO;
+import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterConfigurationDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -24,30 +24,29 @@ public class ClusterListPage extends BasePage {
     @SpringBean
     private MaprClusterServiceMock maprClusterService;
 
-    public ClusterListPage(final PageParameters parameters) {
-        super(parameters);
-        IModel<List<MaprClusterDTO>> clustersModel = new LoadableDetachableModel<List<MaprClusterDTO>>() {
+    public ClusterListPage() {
+        IModel<List<ClusterConfigurationDTO>> clustersModel = new LoadableDetachableModel<List<ClusterConfigurationDTO>>() {
             @Override
-            protected List<MaprClusterDTO> load() {
+            protected List<ClusterConfigurationDTO> load() {
                 return maprClusterService.getMaprClusters();
             }
         };
 
         add(new BookmarkablePageLink<NewClusterPage>("newClusterTableLink", NewClusterPage.class));
-        add(new ListView<MaprClusterDTO>("clusters", clustersModel) {
+        add(new ListView<ClusterConfigurationDTO>("clusters", clustersModel) {
             @Override
-            protected void populateItem(ListItem<MaprClusterDTO> item) {
-                item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
-                item.add(new Label("domain", new PropertyModel<String>(item.getModel(), "domain")));
-                item.add(new Label("customer", new PropertyModel<String>(item.getModel(), "customer")));
-                item.add(new Label("prefix", new PropertyModel<String>(item.getModel(), "prefix")));
-                item.add(new Label("avZone", new PropertyModel<String>(item.getModel(), "avZone")));
-                item.add(new Label("instanceType", new PropertyModel<String>(item.getModel(), "instanceType")));
-                item.add(new Label("numberNodes", new PropertyModel<String>(item.getModel(), "numberNodes")));
+            protected void populateItem(ListItem<ClusterConfigurationDTO> item) {
+                item.add(new Label("clusterName", new PropertyModel<String>(item.getModel(), "clusterName")));
+                item.add(new Label("privateDomain", new PropertyModel<String>(item.getModel(), "privateDomain")));
+                item.add(new Label("customerName", new PropertyModel<String>(item.getModel(), "customerName")));
+                item.add(new Label("envPrefix", new PropertyModel<String>(item.getModel(), "envPrefix")));
+                item.add(new Label("awsAvZone", new PropertyModel<String>(item.getModel(), "awsAvZone")));
+                item.add(new Label("awsInstanceType", new PropertyModel<String>(item.getModel(), "awsInstanceType.instanceCode")));
+                item.add(new Label("numberNodes", new PropertyModel<String>(item.getModel(), "defaultClusterLayout.numberNodes")));
                 item.add(new Link<Void>("moreInfoLink") {
                     @Override
                     public void onClick() {
-                        setResponsePage(MoreInfoPage.class);
+                        setResponsePage(new MoreInfoPage(item.getModel()));
                     }
                 });
             }

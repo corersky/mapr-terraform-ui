@@ -7,8 +7,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class BasePage extends WebPage {
 
-    public BasePage(PageParameters parameters) {
-        super(parameters);
+    public BasePage() {
         add(new BookmarkablePageLink<>("clusterListLink", ClusterListPage.class));
 //        add(new BookmarkablePageLink<NewClusterPage>("newClusterLink", NewClusterPage.class));
     }
