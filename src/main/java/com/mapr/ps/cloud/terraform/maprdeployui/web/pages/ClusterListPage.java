@@ -78,7 +78,12 @@ public class ClusterListPage extends BasePage {
                         return item.getModelObject().getDeploymentStatus() == DeploymentStatus.DESTROYED;
                     }
                 });
-
+                item.add(new WebMarkupContainer("statusFailed") {
+                    @Override
+                    public boolean isVisible() {
+                        return item.getModelObject().getDeploymentStatus() == DeploymentStatus.FAILED;
+                    }
+                });
                 item.add(new Link<Void>("moreInfoLink") {
                     @Override
                     public void onClick() {

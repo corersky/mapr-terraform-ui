@@ -12,16 +12,18 @@
                 <span wicket:id="statusDeploying" class="badge badge-warning">Deploying</span>
                 <span wicket:id="statusDeployed" class="badge badge-success">Deployed</span>
                 <span wicket:id="statusDestroying" class="badge badge-warning">Destroying</span>
-                <span wicket:id="statusDestroyed" class="badge badge-danger">Destroyed</span>
+                <span wicket:id="statusDestroyed" class="badge badge-secondary">Destroyed</span>
+                <span wicket:id="statusFailed" class="badge badge-danger">Failed</span>
             </h1>
             <div class="btn-toolbar mb-2 mb-md-0">
                 <a class="btn btn-primary" type="button" wicket:id="redeployButton">Re-Deploy</a>
+                &nbsp;
                 <a class="btn btn-danger" type="button" wicket:id="destroyButton" onclick="return confirm('Really destroy cluster?')">Destroy</a>
                 &nbsp;
                 <a class="btn btn-danger" type="button" wicket:id="deleteButton" onclick="return confirm('Delete cluster configuration?')">Delete</a>
             </div>
         </div>
-        <wicket:container wicket:id="additionalInfoRefreshContainer">
+        <div wicket:id="additionalInfoRefreshContainer">
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="maprUser">MapR User</label>
@@ -52,12 +54,12 @@
             <!--</div>-->
         <!--</div>-->
         <div class="mb-3">
-            <button id="showOutputLog" class="btn btn-primary form-control" type="button">Show output log</button>
+            <a id="showOutputLog" class="btn btn-primary form-control" type="button" wicket:id="showOutputLog" target="_blank">Show output log</a>
         </div>
-        </wicket:container>
+        </div>
         <hr class="mb-4">
         <h4 class="mb-3">Cluster Deployment Settings</h4>
-        <wicket:container wicket:id="clusterConfiguration"></wicket:container>
+        <div wicket:id="clusterConfiguration"></div>
     </div>
 </wicket:extend>
 </body>
