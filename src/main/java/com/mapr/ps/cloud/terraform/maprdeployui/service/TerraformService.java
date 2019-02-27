@@ -119,7 +119,7 @@ public class TerraformService {
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();
             processBuilder.directory(new File(terraformProjectPath));
-            processBuilder.command(terraformBinaryPath, terraformMethod, "-state=./clusterinfo/states/" + clusterConfiguration.getEnvPrefix() + ".tfstate", "-var-file=./clusterinfo/terraformconfig/" + clusterConfiguration.getEnvPrefix() + ".tfvars", "-auto-approve");
+            processBuilder.command(terraformBinaryPath, terraformMethod, "-state=./clusterinfo/states/" + clusterConfiguration.getEnvPrefix() + ".tfstate", "-var-file=./clusterinfo/terraformconfig/" + clusterConfiguration.getEnvPrefix() + ".tfvars", "-auto-approve", "-no-color");
             Process process = processBuilder.start();
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;

@@ -13,6 +13,7 @@ import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -132,6 +133,7 @@ public class MaprClusterService {
         checkState(clusterConfiguration, DeploymentStatus.DEPLOYED, DeploymentStatus.FAILED);
         clusterConfiguration.setDeploymentStatus(DeploymentStatus.WAIT_DESTROY);
         clusterConfiguration.setDestroyedAt(new Date());
+        clusterConfiguration.setDeploymentComponents(Collections.emptySet());
         saveJson(clusterConfiguration);
         terraformService.destroy(clusterConfiguration);
     }
