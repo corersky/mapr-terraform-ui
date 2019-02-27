@@ -4,8 +4,7 @@ package com.mapr.ps.cloud.terraform.maprdeployui.web.components;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.*;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.AwsInfoService;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.ClusterLayoutsService;
-import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock;
-import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock2;
+import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterService;
 import com.mapr.ps.cloud.terraform.maprdeployui.web.pages.MoreInfoPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -20,7 +19,6 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -34,7 +32,7 @@ public class ClusterConfigurationPanel extends Panel {
     @SpringBean
     private ClusterLayoutsService clusterLayoutsService;
     @SpringBean
-    private MaprClusterServiceMock2 maprClusterService;
+    private MaprClusterService maprClusterService;
 
     private final DropDownChoice<AwsInstanceDTO> awsInstanceTypeDropDownChoice;
     private final DropDownChoice<String> awsAvZoneDropDownChoice;
@@ -133,6 +131,7 @@ public class ClusterConfigurationPanel extends Panel {
                 item.add(new CheckBox("historyServer", new PropertyModel<>(item.getModel(), "historyServer")));
                 item.add(new CheckBox("mySQL", new PropertyModel<>(item.getModel(), "mySQL")));
                 item.add(new CheckBox("spark", new PropertyModel<>(item.getModel(), "spark")));
+                item.add(new CheckBox("sparkHistoryServer", new PropertyModel<>(item.getModel(), "sparkHistoryServer")));
                 item.add(new CheckBox("nfs", new PropertyModel<>(item.getModel(), "nfs")));
                 item.add(new CheckBox("drill", new PropertyModel<>(item.getModel(), "drill")));
                 item.add(new CheckBox("flume", new PropertyModel<>(item.getModel(), "flume")));

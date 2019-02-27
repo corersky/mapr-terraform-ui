@@ -14,6 +14,7 @@ public class NodeLayoutDTO implements Serializable {
     private boolean historyServer;
     private boolean mySQL;
     private boolean spark;
+    private boolean sparkHistoryServer;
     private boolean nfs;
     private boolean drill;
     private boolean flume;
@@ -31,6 +32,14 @@ public class NodeLayoutDTO implements Serializable {
 
     public void setNodeIndex(Integer nodeIndex) {
         this.nodeIndex = nodeIndex;
+    }
+
+    public boolean isSparkHistoryServer() {
+        return sparkHistoryServer;
+    }
+
+    public void setSparkHistoryServer(boolean sparkHistoryServer) {
+        this.sparkHistoryServer = sparkHistoryServer;
     }
 
     public boolean isZookeeper() {

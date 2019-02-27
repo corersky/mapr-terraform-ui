@@ -3,8 +3,7 @@ package com.mapr.ps.cloud.terraform.maprdeployui.web.pages;
 import com.giffing.wicket.spring.boot.context.scan.WicketHomePage;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterConfigurationDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentStatus;
-import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock;
-import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock2;
+import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterService;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
@@ -14,11 +13,9 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.annotation.mount.MountPath;
@@ -30,7 +27,7 @@ import java.util.List;
 public class ClusterListPage extends BasePage {
 
     @SpringBean
-    private MaprClusterServiceMock2 maprClusterService;
+    private MaprClusterService maprClusterService;
     private final IModel<List<ClusterConfigurationDTO>> clustersModel;
 
     public ClusterListPage() {
@@ -60,11 +57,7 @@ public class ClusterListPage extends BasePage {
                     @Override
                     public String getObject() {
                         ClusterConfigurationDTO modelObject = item.getModelObject();
-                        if(modelObject.getDeploymentStatus() == DeploymentStatus.DEPLOYING
-                        || modelObject.getDeploymentStatus() == DeploymentStatus.DEPLOYED
-                        || modelObject.getDeploymentStatus() == DeploymentStatus.DESTROYING
-                        || modelObject.getDeploymentStatus() == DeploymentStatus.FAILED
-                        ) {
+                        if(modelObject.getDeploymentStatus() != DeploymentStatus.DESTROYED && modelObject.getDeploymentStatus() != DeploymentStatus.WAIT_DEPLOY) {
                             long duration = System.currentTimeMillis() - modelObject.getDeployedAt().getTime();
                             return DurationFormatUtils.formatDurationWords(duration, true, true);
                         }
@@ -93,6 +86,18 @@ public class ClusterListPage extends BasePage {
                     @Override
                     public boolean isVisible() {
                         return item.getModelObject().getDeploymentStatus() == DeploymentStatus.DESTROYED;
+                    }
+                });
+                item.add(new WebMarkupContainer("statusWaitDestroy") {
+                    @Override
+                    public boolean isVisible() {
+                        return item.getModelObject().getDeploymentStatus() == DeploymentStatus.WAIT_DESTROY;
+                    }
+                });
+                item.add(new WebMarkupContainer("statusWaitDeploy") {
+                    @Override
+                    public boolean isVisible() {
+                        return item.getModelObject().getDeploymentStatus() == DeploymentStatus.WAIT_DEPLOY;
                     }
                 });
                 item.add(new WebMarkupContainer("statusFailed") {

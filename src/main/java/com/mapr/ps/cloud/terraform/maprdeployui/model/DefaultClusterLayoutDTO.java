@@ -15,6 +15,7 @@ public class DefaultClusterLayoutDTO implements Serializable {
     private List<Integer> historyServer;
     private List<Integer> mySQL;
     private List<Integer> spark;
+    private List<Integer> sparkHistoryServer;
     private List<Integer> nfs;
     private List<Integer> drill;
     private List<Integer> flume;
@@ -32,6 +33,14 @@ public class DefaultClusterLayoutDTO implements Serializable {
 
     public void setNumberNodes(int numberNodes) {
         this.numberNodes = numberNodes;
+    }
+
+    public List<Integer> getSparkHistoryServer() {
+        return sparkHistoryServer;
+    }
+
+    public void setSparkHistoryServer(List<Integer> sparkHistoryServer) {
+        this.sparkHistoryServer = sparkHistoryServer;
     }
 
     public List<Integer> getZookeeper() {

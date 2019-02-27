@@ -1,9 +1,13 @@
 package com.mapr.ps.cloud.terraform.maprdeployui.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterConfigurationDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.DefaultClusterLayoutDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.NodeLayoutDTO;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +41,7 @@ public class ClusterLayoutsService {
         layout.setHistoryServer(nodes(10));
         layout.setMySQL(nodes(10));
         layout.setSpark(all(numberNodes));
+        layout.setSparkHistoryServer(nodes(10));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -64,6 +69,7 @@ public class ClusterLayoutsService {
         layout.setHistoryServer(nodes(9));
         layout.setMySQL(nodes(9));
         layout.setSpark(all(numberNodes));
+        layout.setSparkHistoryServer(nodes(9));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -91,6 +97,7 @@ public class ClusterLayoutsService {
         layout.setHistoryServer(nodes(8));
         layout.setMySQL(nodes(8));
         layout.setSpark(all(numberNodes));
+        layout.setSparkHistoryServer(nodes(8));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -118,6 +125,7 @@ public class ClusterLayoutsService {
         layout.setHistoryServer(nodes(7));
         layout.setMySQL(nodes(7));
         layout.setSpark(all(numberNodes));
+        layout.setSparkHistoryServer(nodes(7));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -146,6 +154,7 @@ public class ClusterLayoutsService {
         layout.setHistoryServer(nodes(6));
         layout.setMySQL(nodes(6));
         layout.setSpark(all(numberNodes));
+        layout.setSparkHistoryServer(nodes(6));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -173,6 +182,7 @@ public class ClusterLayoutsService {
         layout.setHistoryServer(nodes(5));
         layout.setMySQL(nodes(5));
         layout.setSpark(all(numberNodes));
+        layout.setSparkHistoryServer(nodes(5));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -200,6 +210,7 @@ public class ClusterLayoutsService {
         layout.setHistoryServer(nodes(4));
         layout.setMySQL(nodes(4));
         layout.setSpark(all(numberNodes));
+        layout.setSparkHistoryServer(nodes(4));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -227,6 +238,7 @@ public class ClusterLayoutsService {
         layout.setHistoryServer(nodes(3));
         layout.setMySQL(nodes(3));
         layout.setSpark(all(numberNodes));
+        layout.setSparkHistoryServer(nodes(3));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -271,6 +283,7 @@ public class ClusterLayoutsService {
             layout.setHistoryServer(defaultLayout.getHistoryServer().contains(i));
             layout.setMySQL(defaultLayout.getMySQL().contains(i));
             layout.setSpark(defaultLayout.getSpark().contains(i));
+            layout.setSparkHistoryServer(defaultLayout.getSparkHistoryServer().contains(i));
             layout.setNfs(defaultLayout.getNfs().contains(i));
             layout.setDrill(defaultLayout.getDrill().contains(i));
             layout.setFlume(defaultLayout.getFlume().contains(i));

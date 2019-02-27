@@ -48,9 +48,10 @@ dependencies {
 	compile 'org.wicketstuff:wicketstuff-jamon:8.3.0'
 	compile 'de.agilecoders.wicket.webjars:wicket-webjars:2.0.11'
 
+	compile group: 'org.apache.commons', name: 'commons-text', version: '1.6'
 	// Webjars
 	compile 'org.webjars:webjars-locator:0.30'
-	compile 'org.webjars:jquery:3.3.1-2'
+//	compile 'org.webjars:jquery:3.3.1-2'
 	compile 'org.webjars:bootstrap:4.3.1'
 	compile 'org.webjars.npm:feather-icons:4.10.0'
 

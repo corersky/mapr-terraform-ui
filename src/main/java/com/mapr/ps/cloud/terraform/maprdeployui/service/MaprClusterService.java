@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.AdditionalClusterInfoDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterConfigurationDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentStatus;
-import com.mapr.ps.cloud.terraform.maprdeployui.model.NodeLayoutDTO;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,16 +12,17 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class MaprClusterServiceMock2 {
+public class MaprClusterService {
     @Value("${maprdeployui.terraform_project_path}")
     private String terraformProjectPath;
+    @Autowired
+    private TerraformService terraformService;
 
     @PostConstruct
     public void init() throws IOException {
@@ -55,23 +55,26 @@ public class MaprClusterServiceMock2 {
     }
 
     public void deployCluster(ClusterConfigurationDTO clusterConfiguration) {
-        clusterConfiguration.setDeploymentStatus(DeploymentStatus.DEPLOYING);
+        clusterConfiguration.setDeploymentStatus(DeploymentStatus.WAIT_DEPLOY);
         clusterConfiguration.setDeployedAt(new Date());
         saveJson(clusterConfiguration);
+        terraformService.deploy(clusterConfiguration);
     }
 
     public void redeployCluster(ClusterConfigurationDTO clusterConfiguration) throws InvalidClusterStateException {
         checkState(clusterConfiguration, DeploymentStatus.DESTROYED, DeploymentStatus.FAILED);
-        clusterConfiguration.setDeploymentStatus(DeploymentStatus.DEPLOYING);
+        clusterConfiguration.setDeploymentStatus(DeploymentStatus.WAIT_DEPLOY);
         clusterConfiguration.setDeployedAt(new Date());
         clusterConfiguration.setDestroyedAt(null);
         saveJson(clusterConfiguration);
+        terraformService.deploy(clusterConfiguration);
     }
 
     public void deleteCluster(ClusterConfigurationDTO clusterConfiguration) throws InvalidClusterStateException {
         checkState(clusterConfiguration, DeploymentStatus.DESTROYED);
         try {
             FileUtils.forceDelete(new File(terraformProjectPath + "/clusterinfo/maprdeployui/" + clusterConfiguration.getEnvPrefix() + "-maprdeployui.json"));
+            terraformService.deleteTerraformData(clusterConfiguration);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -109,6 +112,7 @@ public class MaprClusterServiceMock2 {
             additionalClusterInfoDTO.setMaprPassword("Not yet available");
             additionalClusterInfoDTO.setMaprUser("Not yet available");
             additionalClusterInfoDTO.setMcsUrl("Not yet available");
+            additionalClusterInfoDTO.setSshConnection("Not yet available");
             additionalClusterInfoDTO.setDataAvailable(false);
             return additionalClusterInfoDTO;
         }
@@ -116,9 +120,10 @@ public class MaprClusterServiceMock2 {
 
     public void destroyCluster(ClusterConfigurationDTO clusterConfiguration) throws InvalidClusterStateException {
         checkState(clusterConfiguration, DeploymentStatus.DEPLOYED, DeploymentStatus.FAILED);
-        clusterConfiguration.setDeploymentStatus(DeploymentStatus.DESTROYING);
+        clusterConfiguration.setDeploymentStatus(DeploymentStatus.WAIT_DESTROY);
         clusterConfiguration.setDestroyedAt(new Date());
         saveJson(clusterConfiguration);
+        terraformService.destroy(clusterConfiguration);
     }
 
     private void saveJson(ClusterConfigurationDTO clusterConfiguration) {

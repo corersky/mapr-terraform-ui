@@ -1,0 +1,330 @@
+random_string.mapr_password: Refreshing state... (ID: none)
+random_string.db_password: Refreshing state... (ID: none)
+data.template_file.clusterinfo: Refreshing state...
+data.template_file.sethostname[2]: Refreshing state...
+data.template_file.sethostname[0]: Refreshing state...
+data.template_file.sethostname[1]: Refreshing state...
+local_file.clusterinfo: Refreshing state... (ID: 861ca4f5696d23b9e4823c27498b7836f3fd9246)
+aws_vpc.mapr_vpc: Refreshing state... (ID: vpc-0a1f07e3005d44500)
+aws_eip.openvpn_eip: Refreshing state... (ID: eipalloc-0a8da4de504533221)
+aws_vpc_dhcp_options.mapr_dhcp: Refreshing state... (ID: dopt-02d3d6cf8df9c48a1)
+aws_key_pair.mapr_cluster_key: Refreshing state... (ID: chufe-poc-customer-mapr-cluster)
+data.aws_ami.ubuntu: Refreshing state...
+data.aws_ami.rhel: Refreshing state...
+data.template_file.install_openvpn: Refreshing state...
+local_file.openvpn_config_file: Refreshing state... (ID: 8800a9fb13111af9fc7e714f678bc2e8e99df1cf)
+aws_internet_gateway.mapr_private_routing: Refreshing state... (ID: igw-0e5d102a23ac02103)
+aws_route53_zone.private: Refreshing state... (ID: Z2ZN55NCK54C3C)
+aws_route53_zone.private_reverse: Refreshing state... (ID: Z1NRGLEUI8QO8I)
+aws_vpc_dhcp_options_association.dhcp_assoc: Refreshing state... (ID: dopt-02d3d6cf8df9c48a1-vpc-0a1f07e3005d44500)
+aws_subnet.mapr_private: Refreshing state... (ID: subnet-0276d5a6ab5270176)
+aws_security_group.openvpn: Refreshing state... (ID: sg-0d43fcb0a164ea910)
+aws_route_table.mapr_private_route: Refreshing state... (ID: rtb-07bcdb4a8cdd76aa6)
+aws_security_group.mapr_default_sg: Refreshing state... (ID: sg-05f11eb5b95b0a412)
+aws_instance.openvpn: Refreshing state... (ID: i-062b7840094e12d10)
+aws_route_table_association.private_subnet_route: Refreshing state... (ID: rtbassoc-0a63c34baca78883c)
+aws_instance.node[0]: Refreshing state... (ID: i-05e5d4e6dc81fd546)
+aws_instance.node[1]: Refreshing state... (ID: i-0e19b98bc9cb4ca02)
+aws_instance.node[2]: Refreshing state... (ID: i-063413190dbed3119)
+null_resource.sethostname: Refreshing state... (ID: 5990050744009749520)
+aws_eip_association.eip_assoc: Refreshing state... (ID: eipassoc-00a7bf76ad278f162)
+aws_route53_record.openvpn_record: Refreshing state... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-openvpn_A)
+null_resource.openvpn_setup_files: Refreshing state... (ID: 3750549542344548118)
+null_resource.openvpn_setup: Refreshing state... (ID: 7080750092680507335)
+null_resource.openvpn_getkeys: Refreshing state... (ID: 6347535198039208641)
+aws_route53_record.mapr_dns_without_domain[2]: Refreshing state... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-03_A)
+aws_route53_record.mapr_dns_without_domain[0]: Refreshing state... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-01_A)
+aws_route53_record.mapr_dns_without_domain[1]: Refreshing state... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-02_A)
+aws_route53_record.reverse_record[2]: Refreshing state... (ID: Z1NRGLEUI8QO8I_68.0_PTR)
+aws_route53_record.reverse_record[1]: Refreshing state... (ID: Z1NRGLEUI8QO8I_30.0_PTR)
+aws_route53_record.reverse_record[0]: Refreshing state... (ID: Z1NRGLEUI8QO8I_87.0_PTR)
+data.template_file.ansible_inventory_file: Refreshing state...
+local_file.ansible_dyn_inventory: Refreshing state... (ID: 051ae9461acc6a430da55a89d72e475c6d67a90f)
+null_resource.sethostname[2]: Refreshing state... (ID: 7375111764755347747)
+null_resource.sethostname[0]: Refreshing state... (ID: 1731805322385201251)
+null_resource.sethostname[1]: Refreshing state... (ID: 1811352803644393741)
+null_resource.run_ansible: Refreshing state... (ID: 5472217980116062127)
+null_resource.setmaprpassword[1]: Refreshing state... (ID: 2335063510246484544)
+null_resource.setmaprpassword[0]: Refreshing state... (ID: 89079894685251344)
+null_resource.setmaprpassword[2]: Refreshing state... (ID: 3571247781601506807)
+
+An execution plan has been generated and is shown below.
+Resource actions are indicated with the following symbols:
+  - destroy
+
+Terraform will perform the following actions:
+
+  - module.ansible.local_file.ansible_dyn_inventory
+
+  - module.ansible.local_file.clusterinfo
+
+  - module.ansible.null_resource.run_ansible
+
+  - module.ansible.null_resource.sethostname[0]
+
+  - module.ansible.null_resource.sethostname[1]
+
+  - module.ansible.null_resource.sethostname[2]
+
+  - module.ansible.null_resource.setmaprpassword[0]
+
+  - module.ansible.null_resource.setmaprpassword[1]
+
+  - module.ansible.null_resource.setmaprpassword[2]
+
+  - module.ansible.random_string.db_password
+
+  - module.ansible.random_string.mapr_password
+
+  - module.ec2.aws_instance.node[0]
+
+  - module.ec2.aws_instance.node[1]
+
+  - module.ec2.aws_instance.node[2]
+
+  - module.ec2.aws_route53_record.mapr_dns_without_domain[0]
+
+  - module.ec2.aws_route53_record.mapr_dns_without_domain[1]
+
+  - module.ec2.aws_route53_record.mapr_dns_without_domain[2]
+
+  - module.ec2.aws_route53_record.reverse_record[0]
+
+  - module.ec2.aws_route53_record.reverse_record[1]
+
+  - module.ec2.aws_route53_record.reverse_record[2]
+
+  - module.ec2.aws_security_group.mapr_default_sg
+
+  - module.keypair.aws_key_pair.mapr_cluster_key
+
+  - module.openvpn.aws_eip.openvpn_eip
+
+  - module.openvpn.aws_eip_association.eip_assoc
+
+  - module.openvpn.aws_instance.openvpn
+
+  - module.openvpn.aws_route53_record.openvpn_record
+
+  - module.openvpn.aws_security_group.openvpn
+
+  - module.openvpn.local_file.openvpn_config_file
+
+  - module.openvpn.null_resource.openvpn_getkeys
+
+  - module.openvpn.null_resource.openvpn_setup
+
+  - module.openvpn.null_resource.openvpn_setup_files
+
+  - module.openvpn.null_resource.sethostname
+
+  - module.vpc.aws_internet_gateway.mapr_private_routing
+
+  - module.vpc.aws_route53_zone.private
+
+  - module.vpc.aws_route53_zone.private_reverse
+
+  - module.vpc.aws_route_table.mapr_private_route
+
+  - module.vpc.aws_route_table_association.private_subnet_route
+
+  - module.vpc.aws_subnet.mapr_private
+
+  - module.vpc.aws_vpc.mapr_vpc
+
+  - module.vpc.aws_vpc_dhcp_options.mapr_dhcp
+
+  - module.vpc.aws_vpc_dhcp_options_association.dhcp_assoc
+
+
+Plan: 0 to add, 0 to change, 41 to destroy.
+
+Do you really want to destroy all resources?
+  Terraform will destroy all your managed infrastructure, as shown above.
+  There is no undo. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+module.ansible.local_file.clusterinfo: Destroying... (ID: 861ca4f5696d23b9e4823c27498b7836f3fd9246)
+module.ansible.null_resource.setmaprpassword[0]: Destroying... (ID: 89079894685251344)
+module.ansible.null_resource.setmaprpassword[1]: Destroying... (ID: 2335063510246484544)
+module.openvpn.null_resource.openvpn_getkeys: Destroying... (ID: 6347535198039208641)
+module.ansible.null_resource.setmaprpassword[2]: Destroying... (ID: 3571247781601506807)
+module.ansible.null_resource.setmaprpassword[2]: Destruction complete after 0s
+module.ansible.local_file.clusterinfo: Destruction complete after 0s
+module.openvpn.null_resource.openvpn_getkeys: Destruction complete after 0s
+module.ansible.null_resource.setmaprpassword[1]: Destruction complete after 0s
+module.ansible.null_resource.setmaprpassword[0]: Destruction complete after 0s
+module.openvpn.null_resource.openvpn_setup: Destroying... (ID: 7080750092680507335)
+module.openvpn.null_resource.openvpn_setup: Destruction complete after 0s
+module.ansible.null_resource.run_ansible: Destroying... (ID: 5472217980116062127)
+module.ansible.null_resource.run_ansible: Destruction complete after 0s
+module.openvpn.null_resource.openvpn_setup_files: Destroying... (ID: 3750549542344548118)
+module.openvpn.null_resource.openvpn_setup_files: Destruction complete after 0s
+module.ansible.random_string.mapr_password: Destroying... (ID: none)
+module.ansible.null_resource.sethostname[0]: Destroying... (ID: 1731805322385201251)
+module.ansible.random_string.db_password: Destroying... (ID: none)
+module.ansible.null_resource.sethostname[2]: Destroying... (ID: 7375111764755347747)
+module.ansible.null_resource.sethostname[1]: Destroying... (ID: 1811352803644393741)
+module.ansible.null_resource.sethostname[2]: Destruction complete after 0s
+module.openvpn.null_resource.sethostname: Destroying... (ID: 5990050744009749520)
+module.ansible.random_string.db_password: Destruction complete after 0s
+module.openvpn.local_file.openvpn_config_file: Destroying... (ID: 8800a9fb13111af9fc7e714f678bc2e8e99df1cf)
+module.ansible.null_resource.sethostname[0]: Destruction complete after 0s
+module.ansible.null_resource.sethostname[1]: Destruction complete after 0s
+module.ansible.random_string.mapr_password: Destruction complete after 0s
+module.openvpn.null_resource.sethostname: Destruction complete after 0s
+module.openvpn.local_file.openvpn_config_file: Destruction complete after 0s
+module.ansible.local_file.ansible_dyn_inventory: Destroying... (ID: 051ae9461acc6a430da55a89d72e475c6d67a90f)
+module.ansible.local_file.ansible_dyn_inventory: Destruction complete after 0s
+module.vpc.aws_vpc_dhcp_options_association.dhcp_assoc: Destroying... (ID: dopt-02d3d6cf8df9c48a1-vpc-0a1f07e3005d44500)
+module.openvpn.aws_eip_association.eip_assoc: Destroying... (ID: eipassoc-00a7bf76ad278f162)
+module.ec2.aws_route53_record.reverse_record[2]: Destroying... (ID: Z1NRGLEUI8QO8I_68.0_PTR)
+module.ec2.aws_route53_record.mapr_dns_without_domain[2]: Destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-03_A)
+module.openvpn.aws_route53_record.openvpn_record: Destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-openvpn_A)
+module.vpc.aws_route_table_association.private_subnet_route: Destroying... (ID: rtbassoc-0a63c34baca78883c)
+module.ec2.aws_route53_record.mapr_dns_without_domain[1]: Destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-02_A)
+module.ec2.aws_route53_record.mapr_dns_without_domain[0]: Destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-01_A)
+module.ec2.aws_route53_record.reverse_record[0]: Destroying... (ID: Z1NRGLEUI8QO8I_87.0_PTR)
+module.ec2.aws_route53_record.reverse_record[1]: Destroying... (ID: Z1NRGLEUI8QO8I_30.0_PTR)
+module.vpc.aws_vpc_dhcp_options_association.dhcp_assoc: Destruction complete after 0s
+module.vpc.aws_vpc_dhcp_options.mapr_dhcp: Destroying... (ID: dopt-02d3d6cf8df9c48a1)
+module.vpc.aws_route_table_association.private_subnet_route: Destruction complete after 0s
+module.vpc.aws_route_table.mapr_private_route: Destroying... (ID: rtb-07bcdb4a8cdd76aa6)
+module.openvpn.aws_eip_association.eip_assoc: Destruction complete after 0s
+module.openvpn.aws_eip.openvpn_eip: Destroying... (ID: eipalloc-0a8da4de504533221)
+module.vpc.aws_vpc_dhcp_options.mapr_dhcp: Destruction complete after 0s
+module.vpc.aws_route_table.mapr_private_route: Destruction complete after 1s
+module.vpc.aws_internet_gateway.mapr_private_routing: Destroying... (ID: igw-0e5d102a23ac02103)
+module.openvpn.aws_eip.openvpn_eip: Destruction complete after 1s
+module.ec2.aws_route53_record.reverse_record.2: Still destroying... (ID: Z1NRGLEUI8QO8I_68.0_PTR, 10s elapsed)
+module.ec2.aws_route53_record.mapr_dns_without_domain.2: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-03_A, 10s elapsed)
+module.openvpn.aws_route53_record.openvpn_record: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-openvpn_A, 10s elapsed)
+module.ec2.aws_route53_record.mapr_dns_without_domain.1: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-02_A, 10s elapsed)
+module.ec2.aws_route53_record.mapr_dns_without_domain.0: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-01_A, 10s elapsed)
+module.ec2.aws_route53_record.reverse_record.0: Still destroying... (ID: Z1NRGLEUI8QO8I_87.0_PTR, 10s elapsed)
+module.ec2.aws_route53_record.reverse_record.1: Still destroying... (ID: Z1NRGLEUI8QO8I_30.0_PTR, 10s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 10s elapsed)
+module.ec2.aws_route53_record.mapr_dns_without_domain.2: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-03_A, 20s elapsed)
+module.ec2.aws_route53_record.reverse_record.2: Still destroying... (ID: Z1NRGLEUI8QO8I_68.0_PTR, 20s elapsed)
+module.openvpn.aws_route53_record.openvpn_record: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-openvpn_A, 20s elapsed)
+module.ec2.aws_route53_record.mapr_dns_without_domain.0: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-01_A, 20s elapsed)
+module.ec2.aws_route53_record.mapr_dns_without_domain.1: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-02_A, 20s elapsed)
+module.ec2.aws_route53_record.reverse_record.1: Still destroying... (ID: Z1NRGLEUI8QO8I_30.0_PTR, 20s elapsed)
+module.ec2.aws_route53_record.reverse_record.0: Still destroying... (ID: Z1NRGLEUI8QO8I_87.0_PTR, 20s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 20s elapsed)
+module.ec2.aws_route53_record.reverse_record.2: Still destroying... (ID: Z1NRGLEUI8QO8I_68.0_PTR, 30s elapsed)
+module.ec2.aws_route53_record.mapr_dns_without_domain.2: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-03_A, 30s elapsed)
+module.openvpn.aws_route53_record.openvpn_record: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-openvpn_A, 30s elapsed)
+module.ec2.aws_route53_record.reverse_record.0: Still destroying... (ID: Z1NRGLEUI8QO8I_87.0_PTR, 30s elapsed)
+module.ec2.aws_route53_record.mapr_dns_without_domain.1: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-02_A, 30s elapsed)
+module.ec2.aws_route53_record.mapr_dns_without_domain.0: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-01_A, 30s elapsed)
+module.ec2.aws_route53_record.reverse_record.1: Still destroying... (ID: Z1NRGLEUI8QO8I_30.0_PTR, 30s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 30s elapsed)
+module.ec2.aws_route53_record.mapr_dns_without_domain.2: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-03_A, 40s elapsed)
+module.ec2.aws_route53_record.reverse_record.2: Still destroying... (ID: Z1NRGLEUI8QO8I_68.0_PTR, 40s elapsed)
+module.openvpn.aws_route53_record.openvpn_record: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-openvpn_A, 40s elapsed)
+module.ec2.aws_route53_record.mapr_dns_without_domain.1: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-02_A, 40s elapsed)
+module.ec2.aws_route53_record.mapr_dns_without_domain.0: Still destroying... (ID: Z2ZN55NCK54C3C_chufe-poc-customer-node-01_A, 40s elapsed)
+module.ec2.aws_route53_record.reverse_record.1: Still destroying... (ID: Z1NRGLEUI8QO8I_30.0_PTR, 40s elapsed)
+module.ec2.aws_route53_record.reverse_record.0: Still destroying... (ID: Z1NRGLEUI8QO8I_87.0_PTR, 40s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 40s elapsed)
+module.openvpn.aws_route53_record.openvpn_record: Destruction complete after 48s
+module.openvpn.aws_instance.openvpn: Destroying... (ID: i-062b7840094e12d10)
+module.ec2.aws_route53_record.reverse_record[0]: Destruction complete after 48s
+module.ec2.aws_route53_record.reverse_record[2]: Destruction complete after 48s
+module.ec2.aws_route53_record.mapr_dns_without_domain[0]: Destruction complete after 48s
+module.ec2.aws_route53_record.mapr_dns_without_domain[2]: Destruction complete after 48s
+module.ec2.aws_route53_record.mapr_dns_without_domain[1]: Destruction complete after 48s
+module.vpc.aws_route53_zone.private: Destroying... (ID: Z2ZN55NCK54C3C)
+module.ec2.aws_route53_record.reverse_record[1]: Destruction complete after 48s
+module.vpc.aws_route53_zone.private_reverse: Destroying... (ID: Z1NRGLEUI8QO8I)
+module.ec2.aws_instance.node[0]: Destroying... (ID: i-05e5d4e6dc81fd546)
+module.ec2.aws_instance.node[1]: Destroying... (ID: i-0e19b98bc9cb4ca02)
+module.ec2.aws_instance.node[2]: Destroying... (ID: i-063413190dbed3119)
+module.vpc.aws_route53_zone.private: Destruction complete after 1s
+module.vpc.aws_route53_zone.private_reverse: Destruction complete after 1s
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 50s elapsed)
+module.openvpn.aws_instance.openvpn: Still destroying... (ID: i-062b7840094e12d10, 10s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 10s elapsed)
+module.ec2.aws_instance.node.2: Still destroying... (ID: i-063413190dbed3119, 10s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 10s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 1m0s elapsed)
+module.openvpn.aws_instance.openvpn: Still destroying... (ID: i-062b7840094e12d10, 20s elapsed)
+module.ec2.aws_instance.node.2: Still destroying... (ID: i-063413190dbed3119, 20s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 20s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 20s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 1m10s elapsed)
+module.openvpn.aws_instance.openvpn: Still destroying... (ID: i-062b7840094e12d10, 30s elapsed)
+module.ec2.aws_instance.node.2: Still destroying... (ID: i-063413190dbed3119, 30s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 30s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 30s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 1m20s elapsed)
+module.openvpn.aws_instance.openvpn: Still destroying... (ID: i-062b7840094e12d10, 40s elapsed)
+module.ec2.aws_instance.node.2: Still destroying... (ID: i-063413190dbed3119, 40s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 40s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 40s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 1m30s elapsed)
+module.openvpn.aws_instance.openvpn: Still destroying... (ID: i-062b7840094e12d10, 50s elapsed)
+module.ec2.aws_instance.node.2: Still destroying... (ID: i-063413190dbed3119, 50s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 50s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 50s elapsed)
+module.openvpn.aws_instance.openvpn: Destruction complete after 51s
+module.keypair.aws_key_pair.mapr_cluster_key: Destroying... (ID: chufe-poc-customer-mapr-cluster)
+module.keypair.aws_key_pair.mapr_cluster_key: Destruction complete after 0s
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 1m40s elapsed)
+module.ec2.aws_instance.node.2: Still destroying... (ID: i-063413190dbed3119, 1m0s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 1m0s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 1m0s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 1m50s elapsed)
+module.ec2.aws_instance.node.2: Still destroying... (ID: i-063413190dbed3119, 1m10s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 1m10s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 1m10s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 2m0s elapsed)
+module.ec2.aws_instance.node.2: Still destroying... (ID: i-063413190dbed3119, 1m20s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 1m20s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 1m20s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 2m10s elapsed)
+module.ec2.aws_instance.node.2: Still destroying... (ID: i-063413190dbed3119, 1m30s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 1m30s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 1m30s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 2m20s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 1m40s elapsed)
+module.ec2.aws_instance.node.2: Still destroying... (ID: i-063413190dbed3119, 1m40s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 1m40s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 2m30s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 1m50s elapsed)
+module.ec2.aws_instance.node.2: Still destroying... (ID: i-063413190dbed3119, 1m50s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 1m50s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 2m40s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 2m0s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 2m0s elapsed)
+module.ec2.aws_instance.node.2: Still destroying... (ID: i-063413190dbed3119, 2m0s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 2m50s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 2m10s elapsed)
+module.ec2.aws_instance.node.2: Still destroying... (ID: i-063413190dbed3119, 2m10s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 2m10s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 3m0s elapsed)
+module.ec2.aws_instance.node[2]: Destruction complete after 2m13s
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 2m20s elapsed)
+module.ec2.aws_instance.node.0: Still destroying... (ID: i-05e5d4e6dc81fd546, 2m20s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 3m10s elapsed)
+module.ec2.aws_instance.node[0]: Destruction complete after 2m23s
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 2m30s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 3m20s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 2m40s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Still destroying... (ID: igw-0e5d102a23ac02103, 3m30s elapsed)
+module.vpc.aws_internet_gateway.mapr_private_routing: Destruction complete after 3m36s
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 2m50s elapsed)
+module.ec2.aws_instance.node.1: Still destroying... (ID: i-0e19b98bc9cb4ca02, 3m0s elapsed)
+module.ec2.aws_instance.node[1]: Destruction complete after 3m4s
+module.ec2.aws_security_group.mapr_default_sg: Destroying... (ID: sg-05f11eb5b95b0a412)
+module.vpc.aws_subnet.mapr_private: Destroying... (ID: subnet-0276d5a6ab5270176)
+module.ec2.aws_security_group.mapr_default_sg: Destruction complete after 1s
+module.vpc.aws_subnet.mapr_private: Destruction complete after 1s
+module.openvpn.aws_security_group.openvpn: Destroying... (ID: sg-0d43fcb0a164ea910)
+module.openvpn.aws_security_group.openvpn: Destruction complete after 0s
+module.vpc.aws_vpc.mapr_vpc: Destroying... (ID: vpc-0a1f07e3005d44500)
+module.vpc.aws_vpc.mapr_vpc: Destruction complete after 1s
+
+Destroy complete! Resources: 41 destroyed.

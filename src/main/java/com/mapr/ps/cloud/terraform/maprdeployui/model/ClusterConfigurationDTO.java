@@ -1,9 +1,7 @@
 package com.mapr.ps.cloud.terraform.maprdeployui.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class ClusterConfigurationDTO implements Serializable {
     private Date deployedAt;
@@ -18,6 +16,7 @@ public class ClusterConfigurationDTO implements Serializable {
     private AwsInstanceDTO awsInstanceType;
     private List<NodeLayoutDTO> nodesLayout = new ArrayList<>();
     private DeploymentStatus deploymentStatus;
+    private Set<DeploymentComponents> deploymentComponents = new HashSet<>();
 
     public DeploymentStatus getDeploymentStatus() {
         return deploymentStatus;
@@ -116,6 +115,14 @@ public class ClusterConfigurationDTO implements Serializable {
         this.destroyedAt = destroyedAt;
     }
 
+    public Set<DeploymentComponents> getDeploymentComponents() {
+        return deploymentComponents;
+    }
+
+    public void setDeploymentComponents(Set<DeploymentComponents> deploymentComponents) {
+        this.deploymentComponents = deploymentComponents;
+    }
+
     @Override
     public String toString() {
         return "ClusterConfigurationDTO{" +
@@ -131,6 +138,7 @@ public class ClusterConfigurationDTO implements Serializable {
                 ", awsInstanceType=" + awsInstanceType +
                 ", nodesLayout=" + nodesLayout +
                 ", deploymentStatus=" + deploymentStatus +
+                ", deploymentComponents=" + deploymentComponents +
                 '}';
     }
 }
