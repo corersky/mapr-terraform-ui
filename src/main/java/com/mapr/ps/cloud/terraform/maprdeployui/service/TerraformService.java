@@ -138,7 +138,6 @@ public class TerraformService {
 
             int exitVal = process.waitFor();
             if (exitVal == 0) {
-                //            "Apply complete!"
                 updateDeploymentStatus(clusterConfiguration, targetStatus);
             } else {
                 updateDeploymentStatus(clusterConfiguration, DeploymentStatus.FAILED);
@@ -164,6 +163,9 @@ public class TerraformService {
         } else if(line.startsWith("module.ec2.aws_instance.node") && line.contains("Creation complete")) {
             clusterConfiguration.getDeploymentComponents().add(DeploymentComponents.EC2);
             updateClusterConfiguration(clusterConfiguration);
+        } else if(line.startsWith("Apply complete!")) {
+            clusterConfiguration.getDeploymentComponents().add(DeploymentComponents.ALL);
+            updateClusterConfiguration(clusterConfiguration);
         }
     }
 
@@ -179,12 +181,7 @@ public class TerraformService {
 
     private void updateDeploymentStatus(ClusterConfigurationDTO clusterConfiguration, DeploymentStatus status) {
         clusterConfiguration.setDeploymentStatus(status);
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            objectMapper.writeValue(new File(terraformProjectPath + "/clusterinfo/maprdeployui/" +  clusterConfiguration.getEnvPrefix() + "-maprdeployui.json"), clusterConfiguration);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        updateClusterConfiguration(clusterConfiguration);
     }
 
     private void updateClusterConfiguration(ClusterConfigurationDTO clusterConfiguration) {

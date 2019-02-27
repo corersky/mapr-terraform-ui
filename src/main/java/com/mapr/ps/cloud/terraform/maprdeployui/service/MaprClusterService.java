@@ -39,14 +39,7 @@ public class MaprClusterService {
 
     public List<ClusterConfigurationDTO> getMaprClusters() {
         Collection<File> files = FileUtils.listFiles(new File(terraformProjectPath + "/clusterinfo/maprdeployui/"), new String[]{"json"}, false);
-        ObjectMapper objectMapper = new ObjectMapper();
-        return files.stream().map(file -> {
-            try {
-                return objectMapper.readValue(file, ClusterConfigurationDTO.class);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }).collect(Collectors.toList());
+        return files.stream().map(this::getClusterConfigurationByFile).collect(Collectors.toList());
 
     }
 
@@ -81,12 +74,25 @@ public class MaprClusterService {
     }
 
     public ClusterConfigurationDTO getClusterConfigurationByEnvPrefix(String envPrefix) {
+        File inputFile = new File(terraformProjectPath + "/clusterinfo/maprdeployui/" + envPrefix + "-maprdeployui.json");
+        return getClusterConfigurationByFile(inputFile);
+    }
+
+    private ClusterConfigurationDTO getClusterConfigurationByFile(File inputFile) {
         ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            return objectMapper.readValue(new File(terraformProjectPath + "/clusterinfo/maprdeployui/" + envPrefix + "-maprdeployui.json"), ClusterConfigurationDTO.class);
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot read cluster configuration file. ", e);
+        // Sometimes the json file is just written and invalid. Retry, up to ten times
+        for (int i = 0; i < 10 ; i++) {
+            try {
+                return objectMapper.readValue(inputFile, ClusterConfigurationDTO.class);
+            } catch (IOException e) {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e1) {
+
+                }
+            }
         }
+        throw new RuntimeException("Was not able to read JSON files.");
     }
 
     public File getOpenvpnFile(String envPrefix) {
@@ -95,6 +101,10 @@ public class MaprClusterService {
             return new File(terraformProjectPath + "/clusterinfo/openvpn/" + additionalClusterInfo.getOpenvpnFile());
         }
         return null;
+    }
+
+    public File getLogFile(String envPrefix) {
+        return new File(terraformProjectPath + "/clusterinfo/logs/" + envPrefix + ".log");
     }
 
     public AdditionalClusterInfoDTO getAdditionalClusterInfo(String envPrefix) {

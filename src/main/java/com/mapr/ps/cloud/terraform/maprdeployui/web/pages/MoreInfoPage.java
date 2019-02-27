@@ -2,6 +2,7 @@ package com.mapr.ps.cloud.terraform.maprdeployui.web.pages;
 
 import com.mapr.ps.cloud.terraform.maprdeployui.model.AdditionalClusterInfoDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterConfigurationDTO;
+import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentComponents;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentStatus;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.InvalidClusterStateException;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterService;
@@ -11,13 +12,17 @@ import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.*;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
+import org.apache.wicket.util.resource.FileResourceStream;
 import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.annotation.mount.MountPath;
@@ -25,6 +30,8 @@ import org.wicketstuff.annotation.mount.MountPath;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @MountPath("/moreinfo")
 public class MoreInfoPage extends BasePage {
@@ -34,6 +41,7 @@ public class MoreInfoPage extends BasePage {
     private final IModel<ClusterConfigurationDTO> clusterConfigModel;
     private final IModel<AdditionalClusterInfoDTO> additionalClusterInfoModel;
     private final IModel<File> openvpnFilePathModel;
+    private final IModel<File> logFilePathModel;
 
     public MoreInfoPage(IModel<String> prefixModel) {
         this.clusterConfigModel = new LoadableDetachableModel<ClusterConfigurationDTO>() {
@@ -58,7 +66,16 @@ public class MoreInfoPage extends BasePage {
                 return null;
             }
         };
-        IResourceStream a;
+        this.logFilePathModel = new LoadableDetachableModel<File>() {
+            @Override
+            protected File load() {
+                File logFile = maprClusterService.getLogFile(prefixModel.getObject());
+                if(logFile != null && logFile.exists()) {
+                    return logFile;
+                }
+                return null;
+            }
+        };
         add(statusRefreshContainer());
         add(additionalInfoRefreshContainer());
         add(clusterConfigurationPanel());
@@ -104,26 +121,47 @@ public class MoreInfoPage extends BasePage {
         });
 
 
-
-        additionalInfoRefreshContainer.add(new Link<Void>("showOutputLog") {
+        Link<Void> components = new Link<Void>("showOutputLog") {
             @Override
             public void onClick() {
-                // Oder doch als resourceß
-                AbstractResourceStreamWriter rstream = new AbstractResourceStreamWriter() {
-
-                    @Override
-                    public void write(OutputStream output) throws IOException {
-                        output.write("Hello World\nTest".getBytes());
-                    }
-                };
-
-                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(rstream, "deployment.log");
+                File file = logFilePathModel.getObject();
+                FileResourceStream resourceStream = new FileResourceStream(file);
+                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(resourceStream, "deployment.log");
                 handler.setContentDisposition(ContentDisposition.INLINE);
                 handler.setCacheDuration(Duration.NONE);
                 getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
             }
-        });
 
+            @Override
+            public boolean isEnabled() {
+                return logFilePathModel.getObject() != null;
+            }
+        };
+        components.setPopupSettings(new PopupSettings(PopupSettings.RESIZABLE | PopupSettings.SCROLLBARS));
+        additionalInfoRefreshContainer.add(components);
+
+
+        additionalInfoRefreshContainer.add(new ListView<DeploymentStatusDefinition>("deploymentStatusList", createDeploymentDefinitionModel()) {
+            @Override
+            protected void populateItem(final ListItem<DeploymentStatusDefinition> item) {
+                WebMarkupContainer finishedContainer = new WebMarkupContainer("finishedContainer") {
+                    @Override
+                    public boolean isVisible() {
+                        return clusterConfigModel.getObject().getDeploymentComponents().contains(item.getModelObject().getComponent());
+                    }
+                };
+                finishedContainer.add(new Label("finishedLabel", new PropertyModel<>(item.getModel(), "label")));
+                item.add(finishedContainer);
+                WebMarkupContainer pendingContainer = new WebMarkupContainer("pendingContainer") {
+                    @Override
+                    public boolean isVisible() {
+                        return !clusterConfigModel.getObject().getDeploymentComponents().contains(item.getModelObject().getComponent());
+                    }
+                };
+                pendingContainer.add(new Label("pendingLabel", new PropertyModel<>(item.getModel(), "label")));
+                item.add(pendingContainer);
+            }
+        });
 
         additionalInfoRefreshContainer.add(new
 
@@ -134,6 +172,7 @@ public class MoreInfoPage extends BasePage {
                 public void beforeRender (Component component){
                 additionalClusterInfoModel.detach();
                 openvpnFilePathModel.detach();
+                logFilePathModel.detach();
                 super.beforeRender(component);
             }
             });
@@ -141,7 +180,17 @@ public class MoreInfoPage extends BasePage {
         return additionalInfoRefreshContainer;
         }
 
-        private ClusterConfigurationPanel clusterConfigurationPanel() {
+    private IModel<List<DeploymentStatusDefinition>> createDeploymentDefinitionModel() {
+        List<DeploymentStatusDefinition> defs = new ArrayList<>();
+        defs.add(new DeploymentStatusDefinition("VPC provisioned", DeploymentComponents.VPC));
+        defs.add(new DeploymentStatusDefinition("EC2 instances provisioned", DeploymentComponents.EC2));
+        defs.add(new DeploymentStatusDefinition("OpenVPN provisioned", DeploymentComponents.OPENVPN));
+        defs.add(new DeploymentStatusDefinition("MapR installation", DeploymentComponents.ANSIBLE));
+        defs.add(new DeploymentStatusDefinition("Post actions", DeploymentComponents.ALL));
+        return Model.ofList(defs);
+    }
+
+    private ClusterConfigurationPanel clusterConfigurationPanel() {
         return new ClusterConfigurationPanel("clusterConfiguration", clusterConfigModel) {
             @Override
             public boolean isReadOnly() {

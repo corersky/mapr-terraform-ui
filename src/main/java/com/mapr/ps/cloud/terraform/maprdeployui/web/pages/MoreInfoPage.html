@@ -50,17 +50,15 @@
             <button id="openvpnDownload" class="btn btn-primary form-control" type="button" wicket:id="openvpnDownloadButton">Download OpenVPN configuration</button>
         </div>
         <hr class="mb-4">
-        <!--<h4 class="mb-3">Deployment Status</h4>-->
-        <!--<div class="mb-3">-->
-            <!--<div>-->
-                <!--<p><label>VPC provisioned</label></p>-->
-                <!--<p>EC2 instances provisioned</p>-->
-                <!--<p>OpenVPN provisioned</p>-->
-                <!--<p>MapR installation</p>-->
-            <!--</div>-->
-        <!--</div>-->
+        <h4 class="mb-3">Deployment Status</h4>
         <div class="mb-3">
-            <a id="showOutputLog" class="btn btn-primary form-control" type="button" wicket:id="showOutputLog" target="_blank">Show output log</a>
+            <div wicket:id="deploymentStatusList">
+                <p wicket:id="finishedContainer"><span class="octicon octicon-check" style="font-size: 18px; vertical-align: inherit"></span> <span wicket:id="finishedLabel">VPC provisioned</span></p>
+                <p wicket:id="pendingContainer" style="color: darkgray"><span class="octicon octicon-clock" style="font-size: 18px; vertical-align: inherit; "></span> <span wicket:id="pendingLabel">VPC provisioned</span></p>
+            </div>
+        </div>
+        <div class="mb-3">
+            <button id="showOutputLog" class="btn btn-primary form-control" type="button" wicket:id="showOutputLog" target="_blank">Show output log</button>
         </div>
         </div>
         <hr class="mb-4">
