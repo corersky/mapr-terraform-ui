@@ -28,6 +28,9 @@ public class ClusterConfigurationService {
 
     public ClusterConfigurationDTO getClusterConfigurationByEnvPrefix(String envPrefix) {
         File inputFile = new File(terraformProjectPath + "/clusterinfo/maprdeployui/" + envPrefix + "-maprdeployui.json");
+        if(!inputFile.exists()) {
+            return new ClusterConfigurationDTO();
+        }
         return getClusterConfigurationByFile(inputFile);
     }
 

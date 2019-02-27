@@ -15,6 +15,10 @@ repositories {
 	maven { url 'https://repo.spring.io/milestone' }
 }
 
+bootJar {
+	launchScript()
+}
+
 ext {
 	set('springStatemachineVersion', '2.0.1.RELEASE')
 }
