@@ -36,15 +36,14 @@ public class TerraformService {
     @PostConstruct
     public void init() throws IOException, InterruptedException {
         String template = StreamUtils.copyToString(terraformConfigTpl.getInputStream(), Charset.defaultCharset());
-        System.out.println(template);
-//        ProcessBuilder processBuilder = new ProcessBuilder();
-//        processBuilder.directory(new File(terraformProjectPath));
-//        processBuilder.command(terraformBinaryPath, "init");
-//        Process process = processBuilder.start();
-//        int exitVal = process.waitFor();
-//        if (exitVal != 0) {
-//            throw new IllegalStateException("Failed to run 'terraform init'");
-//        }
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        processBuilder.directory(new File(terraformProjectPath));
+        processBuilder.command(terraformBinaryPath, "init");
+        Process process = processBuilder.start();
+        int exitVal = process.waitFor();
+        if (exitVal != 0) {
+            throw new IllegalStateException("Failed to run 'terraform init'");
+        }
     }
 
 
@@ -116,12 +115,6 @@ public class TerraformService {
     private void executeTerraform(ClusterConfigurationDTO clusterConfiguration, String terraformMethod, DeploymentStatus operationStatus, DeploymentStatus targetStatus) {
         writeTerraformConfiguration(clusterConfiguration);
         updateDeploymentStatus(clusterConfiguration, operationStatus);
-        // TODO remove
-        try {
-            Thread.sleep(15000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         FileWriter fw = null;
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();
@@ -133,6 +126,7 @@ public class TerraformService {
             fw = new FileWriter(new File(terraformProjectPath + "/clusterinfo/logs/" +  clusterConfiguration.getEnvPrefix() + ".log"));
             while ((line = reader.readLine()) != null) {
                 fw.append(line).append("\n");
+                fw.flush();
                 updateComponentStatus(clusterConfiguration, line);
             }
 

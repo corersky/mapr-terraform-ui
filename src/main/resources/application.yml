@@ -3,10 +3,11 @@ security:
     enabled: false
 
 maprdeployui:
-  terraform_project_path: C:/Projects/workspaces/terraform-mapr/
-  terraform_binary_path: C:/Projects/workspaces/mapr-terraform-ui/mock/terraform_deploy.bat
+#  terraform_project_path: C:/Projects/workspaces/terraform-mapr/
+  terraform_project_path: /mnt/c/Projects/workspaces/terraform-mapr/
+#  terraform_binary_path: C:/Projects/workspaces/mapr-terraform-ui/mock/terraform_deploy.bat
 #  terraform_binary_path:  C:/Projects/workspaces/mapr-terraform-ui/mock/terraform_destroy.bat
-#  terraform_binary_path: /usr/bin/terraform
+  terraform_binary_path: /usr/bin/terraform
 
 
 wicket:

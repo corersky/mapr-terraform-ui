@@ -58,6 +58,15 @@ dependencies {
 
 }
 
+sourceSets {
+	main {
+		resources {
+			srcDir 'src/main/resources'
+			srcDir 'src/main/java'
+		}
+	}
+}
+
 dependencyManagement {
 	imports {
 		mavenBom "org.springframework.statemachine:spring-statemachine-bom:${springStatemachineVersion}"
