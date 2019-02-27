@@ -8,6 +8,8 @@ import com.mapr.ps.cloud.terraform.maprdeployui.model.NodeLayoutDTO;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.text.StringSubstitutor;
+import org.apache.wicket.util.collections.ConcurrentHashSet;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.scheduling.annotation.Async;
@@ -21,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -32,10 +35,14 @@ public class TerraformService {
     private String terraformBinaryPath;
     @Value("classpath:terraform/terraformconfig.tfvars.tpl")
     private Resource terraformConfigTpl;
+    @Autowired
+    private ClusterConfigurationService clusterConfigurationService;
+
+    private ConcurrentHashMap<String, Process> activeProcesses = new ConcurrentHashMap<>();
+    private ConcurrentHashSet<String> abortedDeployments = new ConcurrentHashSet<>();
 
     @PostConstruct
     public void init() throws IOException, InterruptedException {
-        String template = StreamUtils.copyToString(terraformConfigTpl.getInputStream(), Charset.defaultCharset());
         ProcessBuilder processBuilder = new ProcessBuilder();
         processBuilder.directory(new File(terraformProjectPath));
         processBuilder.command(terraformBinaryPath, "init");
@@ -109,6 +116,21 @@ public class TerraformService {
 
     @Async
     public void deploy(ClusterConfigurationDTO clusterConfiguration) {
+        // This is async call and still in queue, when aborted was pressed.
+        if(abortedDeployments.contains(clusterConfiguration.getEnvPrefix())) {
+            abortedDeployments.remove(clusterConfiguration.getEnvPrefix());
+            // Wait that JSON file is really written.
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+            }
+            ClusterConfigurationDTO updatedConfig = clusterConfigurationService.getClusterConfigurationByEnvPrefix(clusterConfiguration.getEnvPrefix());
+            if(updatedConfig.getDeploymentStatus() != DeploymentStatus.WAIT_DEPLOY) {
+                // When status WAIT_DEPLOY, race condition happened and someone tried to re-deploy.
+                // All others state will be aborted.
+                return;
+            }
+        }
         executeTerraform(clusterConfiguration, "apply", DeploymentStatus.DEPLOYING, DeploymentStatus.DEPLOYED);
     }
 
@@ -121,6 +143,7 @@ public class TerraformService {
             processBuilder.directory(new File(terraformProjectPath));
             processBuilder.command(terraformBinaryPath, terraformMethod, "-state=./clusterinfo/states/" + clusterConfiguration.getEnvPrefix() + ".tfstate", "-var-file=./clusterinfo/terraformconfig/" + clusterConfiguration.getEnvPrefix() + ".tfvars", "-auto-approve", "-no-color");
             Process process = processBuilder.start();
+            activeProcesses.put(clusterConfiguration.getEnvPrefix(), process);
             BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
             String line;
             fw = new FileWriter(new File(terraformProjectPath + "/clusterinfo/logs/" +  clusterConfiguration.getEnvPrefix() + ".log"));
@@ -136,10 +159,18 @@ public class TerraformService {
             } else {
                 updateDeploymentStatus(clusterConfiguration, DeploymentStatus.FAILED);
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (InterruptedException e) {
+            if(abortedDeployments.contains(clusterConfiguration.getEnvPrefix())) {
+                updateDeploymentStatus(clusterConfiguration, DeploymentStatus.ABORTED);
+            } else {
+                updateDeploymentStatus(clusterConfiguration, DeploymentStatus.FAILED);
+            }
+        } catch (IOException e) {
             updateDeploymentStatus(clusterConfiguration, DeploymentStatus.FAILED);
             throw new RuntimeException(e);
         } finally {
+            abortedDeployments.remove(clusterConfiguration.getEnvPrefix());
+            activeProcesses.remove(clusterConfiguration.getEnvPrefix());
             IOUtils.closeQuietly(fw);
         }
     }
@@ -147,19 +178,19 @@ public class TerraformService {
     private void updateComponentStatus(ClusterConfigurationDTO clusterConfiguration, String line) {
         if(line.startsWith("module.vpc.aws_vpc.mapr_vpc: Creation complete")) {
             clusterConfiguration.getDeploymentComponents().add(DeploymentComponents.VPC);
-            updateClusterConfiguration(clusterConfiguration);
+            clusterConfigurationService.saveJson(clusterConfiguration);
         } else if(line.startsWith("module.openvpn.null_resource.openvpn_setup: Creation complete")) {
             clusterConfiguration.getDeploymentComponents().add(DeploymentComponents.OPENVPN);
-            updateClusterConfiguration(clusterConfiguration);
+            clusterConfigurationService.saveJson(clusterConfiguration);
         } else if(line.startsWith("module.ansible.null_resource.run_ansible: Creation complete")) {
             clusterConfiguration.getDeploymentComponents().add(DeploymentComponents.ANSIBLE);
-            updateClusterConfiguration(clusterConfiguration);
+            clusterConfigurationService.saveJson(clusterConfiguration);
         } else if(line.startsWith("module.ec2.aws_instance.node") && line.contains("Creation complete")) {
             clusterConfiguration.getDeploymentComponents().add(DeploymentComponents.EC2);
-            updateClusterConfiguration(clusterConfiguration);
+            clusterConfigurationService.saveJson(clusterConfiguration);
         } else if(line.startsWith("Apply complete!")) {
             clusterConfiguration.getDeploymentComponents().add(DeploymentComponents.ALL);
-            updateClusterConfiguration(clusterConfiguration);
+            clusterConfigurationService.saveJson(clusterConfiguration);
         }
     }
 
@@ -175,15 +206,25 @@ public class TerraformService {
 
     private void updateDeploymentStatus(ClusterConfigurationDTO clusterConfiguration, DeploymentStatus status) {
         clusterConfiguration.setDeploymentStatus(status);
-        updateClusterConfiguration(clusterConfiguration);
+        clusterConfigurationService.saveJson(clusterConfiguration);
     }
 
-    private void updateClusterConfiguration(ClusterConfigurationDTO clusterConfiguration) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            objectMapper.writeValue(new File(terraformProjectPath + "/clusterinfo/maprdeployui/" +  clusterConfiguration.getEnvPrefix() + "-maprdeployui.json"), clusterConfiguration);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public void abort(ClusterConfigurationDTO clusterConfiguration) {
+        abortedDeployments.add(clusterConfiguration.getEnvPrefix());
+        if(activeProcesses.containsKey(clusterConfiguration.getEnvPrefix())) {
+            // if active set back to deploying, do not support cancellation of active process
+            updateDeploymentStatus(clusterConfiguration, DeploymentStatus.DEPLOYING);
+
+//            Process process = activeProcesses.get(clusterConfiguration.getEnvPrefix());
+//            if(process != null) {
+//                process.destroy();
+//            }
+//            updateDeploymentStatus(clusterConfiguration, DeploymentStatus.ABORTED);
+        }
+        else {
+            updateDeploymentStatus(clusterConfiguration, DeploymentStatus.ABORTED);
         }
     }
+
+
 }

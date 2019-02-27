@@ -12,11 +12,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MaprClusterService {
@@ -24,6 +22,8 @@ public class MaprClusterService {
     private String terraformProjectPath;
     @Autowired
     private TerraformService terraformService;
+    @Autowired
+    private ClusterConfigurationService clusterConfigurationService;
 
     @PostConstruct
     public void init() throws IOException {
@@ -38,20 +38,10 @@ public class MaprClusterService {
     }
 
 
-    public List<ClusterConfigurationDTO> getMaprClusters() {
-        Collection<File> files = FileUtils.listFiles(new File(terraformProjectPath + "/clusterinfo/maprdeployui/"), new String[]{"json"}, false);
-        return files.stream().map(this::getClusterConfigurationByFile).collect(Collectors.toList());
-
-    }
-
-    public boolean isPrefixUsed(ClusterConfigurationDTO clusterConfiguration) {
-        return new File(terraformProjectPath + "/clusterinfo/maprdeployui/" + clusterConfiguration.getEnvPrefix() + "-maprdeployui.json").exists();
-    }
-
     public void deployCluster(ClusterConfigurationDTO clusterConfiguration) {
         clusterConfiguration.setDeploymentStatus(DeploymentStatus.WAIT_DEPLOY);
         clusterConfiguration.setDeployedAt(new Date());
-        saveJson(clusterConfiguration);
+        clusterConfigurationService.saveJson(clusterConfiguration);
         terraformService.deploy(clusterConfiguration);
     }
 
@@ -60,7 +50,7 @@ public class MaprClusterService {
         clusterConfiguration.setDeploymentStatus(DeploymentStatus.WAIT_DEPLOY);
         clusterConfiguration.setDeployedAt(new Date());
         clusterConfiguration.setDestroyedAt(null);
-        saveJson(clusterConfiguration);
+        clusterConfigurationService.saveJson(clusterConfiguration);
         terraformService.deploy(clusterConfiguration);
     }
 
@@ -74,31 +64,9 @@ public class MaprClusterService {
         }
     }
 
-    public ClusterConfigurationDTO getClusterConfigurationByEnvPrefix(String envPrefix) {
-        File inputFile = new File(terraformProjectPath + "/clusterinfo/maprdeployui/" + envPrefix + "-maprdeployui.json");
-        return getClusterConfigurationByFile(inputFile);
-    }
-
-    private ClusterConfigurationDTO getClusterConfigurationByFile(File inputFile) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        // Sometimes the json file is just written and invalid. Retry, up to ten times
-        for (int i = 0; i < 10 ; i++) {
-            try {
-                return objectMapper.readValue(inputFile, ClusterConfigurationDTO.class);
-            } catch (IOException e) {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e1) {
-
-                }
-            }
-        }
-        throw new RuntimeException("Was not able to read JSON files.");
-    }
-
     public File getOpenvpnFile(String envPrefix) {
         AdditionalClusterInfoDTO additionalClusterInfo = getAdditionalClusterInfo(envPrefix);
-        if(additionalClusterInfo.isDataAvailable()) {
+        if (additionalClusterInfo.isDataAvailable()) {
             return new File(terraformProjectPath + "/clusterinfo/openvpn/" + additionalClusterInfo.getOpenvpnFile());
         }
         return null;
@@ -129,36 +97,42 @@ public class MaprClusterService {
         }
     }
 
+    public void abortClusterDeployment(ClusterConfigurationDTO clusterConfiguration) throws InvalidClusterStateException {
+//        checkState(clusterConfiguration, DeploymentStatus.DEPLOYING, DeploymentStatus.WAIT_DEPLOY);
+        checkState(clusterConfiguration, DeploymentStatus.WAIT_DEPLOY);
+        clusterConfiguration.setDeploymentStatus(DeploymentStatus.ABORTING);
+        clusterConfigurationService.saveJson(clusterConfiguration);
+        terraformService.abort(clusterConfiguration);
+    }
+
     public void destroyCluster(ClusterConfigurationDTO clusterConfiguration) throws InvalidClusterStateException {
-        checkState(clusterConfiguration, DeploymentStatus.DEPLOYED, DeploymentStatus.FAILED);
+        checkState(clusterConfiguration, DeploymentStatus.DEPLOYED, DeploymentStatus.FAILED, DeploymentStatus.ABORTED);
         clusterConfiguration.setDeploymentStatus(DeploymentStatus.WAIT_DESTROY);
         clusterConfiguration.setDestroyedAt(new Date());
         clusterConfiguration.setDeploymentComponents(Collections.emptySet());
-        saveJson(clusterConfiguration);
+        clusterConfigurationService.saveJson(clusterConfiguration);
         terraformService.destroy(clusterConfiguration);
     }
 
-    private void saveJson(ClusterConfigurationDTO clusterConfiguration) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            objectMapper.writeValue(new File(terraformProjectPath + "/clusterinfo/maprdeployui/" +  clusterConfiguration.getEnvPrefix() + "-maprdeployui.json"), clusterConfiguration);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    private void checkState(ClusterConfigurationDTO clusterConfiguration, DeploymentStatus... expectedStates) throws InvalidClusterStateException {
+        ClusterConfigurationDTO clusterConfigurationDTO = clusterConfigurationService.getClusterConfigurationByEnvPrefix(clusterConfiguration.getEnvPrefix());
+        for (DeploymentStatus expectedState : expectedStates) {
+            if (clusterConfigurationDTO.getDeploymentStatus() == expectedState) {
+                return;
+            }
         }
+        throw new InvalidClusterStateException("Action aborted. Cluster state was changed and is " + clusterConfigurationDTO.getDeploymentStatus());
     }
 
-    private void checkState(ClusterConfigurationDTO clusterConfiguration, DeploymentStatus ...expectedStates) throws InvalidClusterStateException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            ClusterConfigurationDTO clusterConfigurationDTO = objectMapper.readValue(new File(terraformProjectPath + "/clusterinfo/maprdeployui/" + clusterConfiguration.getEnvPrefix() + "-maprdeployui.json"), ClusterConfigurationDTO.class);
-            for (DeploymentStatus expectedState : expectedStates) {
-                if(clusterConfigurationDTO.getDeploymentStatus() == expectedState) {
-                    return;
-                }
-            }
-            throw new InvalidClusterStateException("Action aborted. Cluster state was changed and is " + clusterConfigurationDTO.getDeploymentStatus());
-        } catch (IOException e) {
-            throw new InvalidClusterStateException("Cannot read cluster configuration file. " + e.getMessage());
-        }
+    public List<ClusterConfigurationDTO> getMaprClusters() {
+        return clusterConfigurationService.getMaprClusters();
+    }
+
+    public boolean isPrefixUsed(ClusterConfigurationDTO object) {
+        return clusterConfigurationService.isPrefixUsed(object);
+    }
+
+    public ClusterConfigurationDTO getClusterConfigurationByEnvPrefix(String object) {
+        return clusterConfigurationService.getClusterConfigurationByEnvPrefix(object);
     }
 }

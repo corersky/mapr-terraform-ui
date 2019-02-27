@@ -16,6 +16,8 @@
                 <span wicket:id="statusFailed" class="badge badge-danger">Failed</span>
                 <span wicket:id="statusWaitDeploy" class="badge badge-warning">Waiting - Deploy</span>
                 <span wicket:id="statusWaitDestroy" class="badge badge-warning">Waiting - Destroy</span>
+                <span wicket:id="statusAborting" class="badge badge-danger">Aborting</span>
+                <span wicket:id="statusAborted" class="badge badge-danger">Aborted</span>
             </h1>
             <div class="btn-toolbar mb-2 mb-md-0">
                 <a class="btn btn-primary" type="button" wicket:id="redeployButton">Re-Deploy</a>
@@ -23,6 +25,8 @@
                 <a class="btn btn-danger" type="button" wicket:id="destroyButton" onclick="return confirm('Really destroy cluster?')">Destroy</a>
                 &nbsp;
                 <a class="btn btn-danger" type="button" wicket:id="deleteButton" onclick="return confirm('Delete cluster configuration?')">Delete</a>
+                &nbsp;
+                <a class="btn btn-danger" type="button" wicket:id="abortButton" onclick="return confirm('Abort deployment?')">Abort</a>
             </div>
         </div>
         <div wicket:id="additionalInfoRefreshContainer">

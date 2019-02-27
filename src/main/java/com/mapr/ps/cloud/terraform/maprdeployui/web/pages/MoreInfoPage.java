@@ -87,6 +87,8 @@ public class MoreInfoPage extends BasePage {
         statusRefreshContainer.add(statusDeployedContainer());
         statusRefreshContainer.add(statusDestroyingContainer());
         statusRefreshContainer.add(statusDestroyedContainer());
+        statusRefreshContainer.add(statusAbortedContainer());
+        statusRefreshContainer.add(statusAbortingContainer());
         statusRefreshContainer.add(statusWaitDeployContainer());
         statusRefreshContainer.add(statusWaitDestroyContainer());
         statusRefreshContainer.add(statusFailedContainer());
@@ -100,6 +102,7 @@ public class MoreInfoPage extends BasePage {
         statusRefreshContainer.add(destroyButton());
         statusRefreshContainer.add(redeployButton());
         statusRefreshContainer.add(deleteButton());
+        statusRefreshContainer.add(abortButton());
         statusRefreshContainer.setOutputMarkupId(true);
         return statusRefreshContainer;
     }
@@ -241,6 +244,28 @@ public class MoreInfoPage extends BasePage {
         };
     }
 
+    private Link<Void> abortButton() {
+        return new Link<Void>("abortButton") {
+            @Override
+            public void onClick() {
+                try {
+                    maprClusterService.abortClusterDeployment(clusterConfigModel.getObject());
+                } catch (InvalidClusterStateException e) {
+                    error(e.getMessage());
+                    return;
+                }
+                info("Cluster is being aborted.");
+            }
+
+            @Override
+            public boolean isVisible() {
+                DeploymentStatus deploymentStatus = clusterConfigModel.getObject().getDeploymentStatus();
+//                return deploymentStatus == DeploymentStatus.DEPLOYING || deploymentStatus == DeploymentStatus.WAIT_DEPLOY;
+                return deploymentStatus == DeploymentStatus.WAIT_DEPLOY;
+            }
+        };
+    }
+
     private Link<Void> destroyButton() {
         return new Link<Void>("destroyButton") {
             @Override
@@ -257,7 +282,7 @@ public class MoreInfoPage extends BasePage {
             @Override
             public boolean isVisible() {
                 DeploymentStatus deploymentStatus = clusterConfigModel.getObject().getDeploymentStatus();
-                return deploymentStatus == DeploymentStatus.DEPLOYED  || deploymentStatus == DeploymentStatus.FAILED;
+                return deploymentStatus == DeploymentStatus.DEPLOYED  || deploymentStatus == DeploymentStatus.FAILED || deploymentStatus == DeploymentStatus.ABORTED;
             }
         };
     }
@@ -312,6 +337,24 @@ public class MoreInfoPage extends BasePage {
             @Override
             public boolean isVisible() {
                 return clusterConfigModel.getObject().getDeploymentStatus() == DeploymentStatus.DEPLOYING;
+            }
+        };
+    }
+
+    private WebMarkupContainer statusAbortedContainer() {
+        return new WebMarkupContainer("statusAborted") {
+            @Override
+            public boolean isVisible() {
+                return clusterConfigModel.getObject().getDeploymentStatus() == DeploymentStatus.ABORTED;
+            }
+        };
+    }
+
+    private WebMarkupContainer statusAbortingContainer() {
+        return new WebMarkupContainer("statusAborting") {
+            @Override
+            public boolean isVisible() {
+                return clusterConfigModel.getObject().getDeploymentStatus() == DeploymentStatus.ABORTING;
             }
         };
     }
