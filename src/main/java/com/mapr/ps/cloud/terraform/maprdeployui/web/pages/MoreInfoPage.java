@@ -101,6 +101,7 @@ public class MoreInfoPage extends BasePage {
         WebMarkupContainer additionalInfoRefreshContainer = new WebMarkupContainer("additionalInfoRefreshContainer");
         additionalInfoRefreshContainer.add(new Label("maprUser", new PropertyModel<>(additionalClusterInfoModel, "maprUser")));
         additionalInfoRefreshContainer.add(new Label("maprPassword", new PropertyModel<>(additionalClusterInfoModel, "maprPassword")));
+        additionalInfoRefreshContainer.add(new Label("sshConnection", new PropertyModel<>(additionalClusterInfoModel, "sshConnection")));
         ExternalLink extLink = new ExternalLink("mcsUrl", new PropertyModel<>(additionalClusterInfoModel, "mcsUrl"));
         extLink.add(new Label("mcsUrlLabel", new PropertyModel<>(additionalClusterInfoModel, "mcsUrl")));
         additionalInfoRefreshContainer.add(extLink);

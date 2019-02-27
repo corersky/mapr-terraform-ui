@@ -5,6 +5,7 @@ import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterConfigurationDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentStatus;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterServiceMock2;
+import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -13,6 +14,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
@@ -54,6 +56,21 @@ public class ClusterListPage extends BasePage {
                 item.add(new Label("awsAvZone", new PropertyModel<String>(item.getModel(), "awsAvZone")));
                 item.add(new Label("awsInstanceType", new PropertyModel<String>(item.getModel(), "awsInstanceType.instanceCode")));
                 item.add(new Label("numberNodes", new PropertyModel<String>(item.getModel(), "defaultClusterLayout.numberNodes")));
+                item.add(new Label("uptime", new IModel<String>() {
+                    @Override
+                    public String getObject() {
+                        ClusterConfigurationDTO modelObject = item.getModelObject();
+                        if(modelObject.getDeploymentStatus() == DeploymentStatus.DEPLOYING
+                        || modelObject.getDeploymentStatus() == DeploymentStatus.DEPLOYED
+                        || modelObject.getDeploymentStatus() == DeploymentStatus.DESTROYING
+                        || modelObject.getDeploymentStatus() == DeploymentStatus.FAILED
+                        ) {
+                            long duration = System.currentTimeMillis() - modelObject.getDeployedAt().getTime();
+                            return DurationFormatUtils.formatDurationWords(duration, true, true);
+                        }
+                        return "offline";
+                    }
+                }));
                 item.add(new WebMarkupContainer("statusDeploying") {
                     @Override
                     public boolean isVisible() {

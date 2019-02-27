@@ -11,6 +11,7 @@ public class AdditionalClusterInfoDTO implements Serializable {
     private String dbPassword;
     private String domainName;
     private String envPrefix;
+    private String sshConnection;
 
     public boolean isDataAvailable() {
         return dataAvailable;
@@ -74,6 +75,14 @@ public class AdditionalClusterInfoDTO implements Serializable {
 
     public void setEnvPrefix(String envPrefix) {
         this.envPrefix = envPrefix;
+    }
+
+    public String getSshConnection() {
+        return sshConnection;
+    }
+
+    public void setSshConnection(String sshConnection) {
+        this.sshConnection = sshConnection;
     }
 
     @Override
