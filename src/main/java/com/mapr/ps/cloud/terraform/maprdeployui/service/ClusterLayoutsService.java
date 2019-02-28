@@ -1,13 +1,9 @@
 package com.mapr.ps.cloud.terraform.maprdeployui.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterConfigurationDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.DefaultClusterLayoutDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.NodeLayoutDTO;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +31,7 @@ public class ClusterLayoutsService {
         layout.setCldb(nodes(6,7,8));
         layout.setFileserver(all(numberNodes));
         layout.setKafkaClient(all(numberNodes));
+        layout.setKafkaKsql(all(numberNodes));
         layout.setMcs(nodes(1, 2));
         layout.setResourceManager(nodes(1, 2, 3));
         layout.setNodeManager(all(numberNodes));
@@ -63,6 +60,7 @@ public class ClusterLayoutsService {
         layout.setCldb(nodes(6,7,8));
         layout.setFileserver(all(numberNodes));
         layout.setKafkaClient(all(numberNodes));
+        layout.setKafkaKsql(all(numberNodes));
         layout.setMcs(nodes(1, 2));
         layout.setResourceManager(nodes(1, 2, 3));
         layout.setNodeManager(all(numberNodes));
@@ -91,6 +89,7 @@ public class ClusterLayoutsService {
         layout.setCldb(nodes(6,7,8));
         layout.setFileserver(all(numberNodes));
         layout.setKafkaClient(all(numberNodes));
+        layout.setKafkaKsql(all(numberNodes));
         layout.setMcs(nodes(1, 2));
         layout.setResourceManager(nodes(1, 2, 3));
         layout.setNodeManager(all(numberNodes));
@@ -119,6 +118,7 @@ public class ClusterLayoutsService {
         layout.setCldb(nodes(4,5,6));
         layout.setFileserver(all(numberNodes));
         layout.setKafkaClient(all(numberNodes));
+        layout.setKafkaKsql(all(numberNodes));
         layout.setMcs(nodes(1, 2));
         layout.setResourceManager(nodes(1, 2, 3));
         layout.setNodeManager(all(numberNodes));
@@ -148,6 +148,7 @@ public class ClusterLayoutsService {
         layout.setCldb(nodes(4,5,6));
         layout.setFileserver(all(numberNodes));
         layout.setKafkaClient(all(numberNodes));
+        layout.setKafkaKsql(all(numberNodes));
         layout.setMcs(nodes(1, 2));
         layout.setResourceManager(nodes(1, 2, 3));
         layout.setNodeManager(all(numberNodes));
@@ -176,6 +177,7 @@ public class ClusterLayoutsService {
         layout.setCldb(nodes(3,4,5));
         layout.setFileserver(all(numberNodes));
         layout.setKafkaClient(all(numberNodes));
+        layout.setKafkaKsql(all(numberNodes));
         layout.setMcs(nodes(1, 2));
         layout.setResourceManager(nodes(3, 4));
         layout.setNodeManager(all(numberNodes));
@@ -204,6 +206,7 @@ public class ClusterLayoutsService {
         layout.setCldb(nodes(2, 3, 4));
         layout.setFileserver(all(numberNodes));
         layout.setKafkaClient(all(numberNodes));
+        layout.setKafkaKsql(all(numberNodes));
         layout.setMcs(nodes(1, 2));
         layout.setResourceManager(nodes(1, 2));
         layout.setNodeManager(all(numberNodes));
@@ -232,6 +235,7 @@ public class ClusterLayoutsService {
         layout.setCldb(nodes(1, 2, 3));
         layout.setFileserver(all(numberNodes));
         layout.setKafkaClient(all(numberNodes));
+        layout.setKafkaKsql(all(numberNodes));
         layout.setMcs(nodes(1, 2));
         layout.setResourceManager(nodes(1, 2));
         layout.setNodeManager(all(numberNodes));
@@ -277,6 +281,7 @@ public class ClusterLayoutsService {
             layout.setCldb(defaultLayout.getCldb().contains(i));
             layout.setFileserver(defaultLayout.getFileserver().contains(i));
             layout.setKafkaClient(defaultLayout.getKafkaClient().contains(i));
+            layout.setKafkaKsql(defaultLayout.getKafkaKsql().contains(i));
             layout.setMcs(defaultLayout.getMcs().contains(i));
             layout.setResourceManager(defaultLayout.getResourceManager().contains(i));
             layout.setNodeManager(defaultLayout.getNodeManager().contains(i));

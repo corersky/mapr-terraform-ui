@@ -125,6 +125,7 @@ public class ClusterConfigurationPanel extends Panel {
                 item.add(new CheckBox("cldb", new PropertyModel<>(item.getModel(), "cldb")));
                 item.add(new CheckBox("fileserver", new PropertyModel<>(item.getModel(), "fileserver")));
                 item.add(new CheckBox("kafkaClient", new PropertyModel<>(item.getModel(), "kafkaClient")));
+                item.add(new CheckBox("kafkaKsql", new PropertyModel<>(item.getModel(), "kafkaKsql")));
                 item.add(new CheckBox("mcs", new PropertyModel<>(item.getModel(), "mcs")));
                 item.add(new CheckBox("resourceManager", new PropertyModel<>(item.getModel(), "resourceManager")));
                 item.add(new CheckBox("nodeManager", new PropertyModel<>(item.getModel(), "nodeManager")));

@@ -9,6 +9,7 @@ public class DefaultClusterLayoutDTO implements Serializable {
     private List<Integer> cldb;
     private List<Integer> fileserver;
     private List<Integer> kafkaClient;
+    private List<Integer> kafkaKsql;
     private List<Integer> mcs;
     private List<Integer> resourceManager;
     private List<Integer> nodeManager;
@@ -26,6 +27,14 @@ public class DefaultClusterLayoutDTO implements Serializable {
     private List<Integer> collectd;
     private List<Integer> openTSDB;
     private List<Integer> grafana;
+
+    public List<Integer> getKafkaKsql() {
+        return kafkaKsql;
+    }
+
+    public void setKafkaKsql(List<Integer> kafkaKsql) {
+        this.kafkaKsql = kafkaKsql;
+    }
 
     public int getNumberNodes() {
         return numberNodes;

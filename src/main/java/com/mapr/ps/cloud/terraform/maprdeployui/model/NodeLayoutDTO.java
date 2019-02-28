@@ -8,6 +8,7 @@ public class NodeLayoutDTO implements Serializable {
     private boolean cldb;
     private boolean fileserver;
     private boolean kafkaClient;
+    private boolean kafkaKsql;
     private boolean mcs;
     private boolean resourceManager;
     private boolean nodeManager;
@@ -25,6 +26,14 @@ public class NodeLayoutDTO implements Serializable {
     private boolean collectd;
     private boolean openTSDB;
     private boolean grafana;
+
+    public boolean isKafkaKsql() {
+        return kafkaKsql;
+    }
+
+    public void setKafkaKsql(boolean kafkaKsql) {
+        this.kafkaKsql = kafkaKsql;
+    }
 
     public Integer getNodeIndex() {
         return nodeIndex;

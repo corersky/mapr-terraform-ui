@@ -89,6 +89,7 @@ public class TerraformService {
             substitutes.put("mapr_fileserver", getNodesString(clusterConfig, NodeLayoutDTO::isFileserver));
             substitutes.put("mapr_cldb", getNodesString(clusterConfig, NodeLayoutDTO::isCldb));
             substitutes.put("mapr_kafka", getNodesString(clusterConfig, NodeLayoutDTO::isKafkaClient));
+            substitutes.put("mapr_kafka_ksql", getNodesString(clusterConfig, NodeLayoutDTO::isKafkaKsql));
             substitutes.put("mapr_mcs", getNodesString(clusterConfig, NodeLayoutDTO::isMcs));
             substitutes.put("mapr_resourcemanager", getNodesString(clusterConfig, NodeLayoutDTO::isResourceManager));
             substitutes.put("mapr_nodemanager", getNodesString(clusterConfig, NodeLayoutDTO::isNodeManager));
