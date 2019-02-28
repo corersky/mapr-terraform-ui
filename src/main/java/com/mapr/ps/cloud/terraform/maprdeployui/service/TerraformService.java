@@ -138,13 +138,16 @@ public class TerraformService {
         writeTerraformConfiguration(clusterConfiguration);
         updateDeploymentStatus(clusterConfiguration, operationStatus);
         FileWriter fw = null;
+        BufferedReader reader = null;
+        BufferedReader errorReader = null;
         try {
             ProcessBuilder processBuilder = new ProcessBuilder();
             processBuilder.directory(new File(terraformProjectPath));
             processBuilder.command(terraformBinaryPath, terraformMethod, "-state=./clusterinfo/states/" + clusterConfiguration.getEnvPrefix() + ".tfstate", "-var-file=./clusterinfo/terraformconfig/" + clusterConfiguration.getEnvPrefix() + ".tfvars", "-auto-approve", "-no-color");
             Process process = processBuilder.start();
             activeProcesses.put(clusterConfiguration.getEnvPrefix(), process);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
             String line;
             fw = new FileWriter(new File(terraformProjectPath + "/clusterinfo/logs/" +  clusterConfiguration.getEnvPrefix() + ".log"));
             while ((line = reader.readLine()) != null) {
@@ -152,7 +155,12 @@ public class TerraformService {
                 fw.flush();
                 updateComponentStatus(clusterConfiguration, line);
             }
-
+            fw.append("===================================================================\n");
+            while ((line = errorReader.readLine()) != null) {
+                fw.append(line).append("\n");
+                fw.flush();
+                updateComponentStatus(clusterConfiguration, line);
+            }
             int exitVal = process.waitFor();
             if (exitVal == 0) {
                 updateDeploymentStatus(clusterConfiguration, targetStatus);
@@ -172,6 +180,8 @@ public class TerraformService {
             abortedDeployments.remove(clusterConfiguration.getEnvPrefix());
             activeProcesses.remove(clusterConfiguration.getEnvPrefix());
             IOUtils.closeQuietly(fw);
+            IOUtils.closeQuietly(reader);
+            IOUtils.closeQuietly(errorReader);
         }
     }
 

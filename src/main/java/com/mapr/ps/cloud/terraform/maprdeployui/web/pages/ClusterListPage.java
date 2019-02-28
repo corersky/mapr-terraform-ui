@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
@@ -121,7 +122,9 @@ public class ClusterListPage extends BasePage {
                 item.add(new Link<Void>("moreInfoLink") {
                     @Override
                     public void onClick() {
-                        setResponsePage(new MoreInfoPage(new PropertyModel<>(item.getModel(), "envPrefix")));
+//                        setResponsePage(new MoreInfoPage(new PropertyModel<>(item.getModel(), "envPrefix")));
+                        // Needs to be a copy of model, because delete leads to strage behaviour
+                        setResponsePage(new MoreInfoPage(Model.of(item.getModelObject().getEnvPrefix())));
                     }
                 });
             }
