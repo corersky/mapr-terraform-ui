@@ -106,7 +106,9 @@
         </div>
         <hr class="mb-4">
         <h4 class="mb-3">Deployment Matrix</h4>
-
+        <div class="mb-3" wicket:id="deploymentMatrixHint">
+            Please select number of nodes.
+        </div>
         <div class="mb-3" wicket:id="deploymentMatrix">
             <div class="scrollable-table">
 
@@ -280,6 +282,12 @@
                 </table>
             </div>
         </div>
+        <hr class="mb-4">
+            <h4 class="mb-3">Additional Components</h4>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="extensionDsr" wicket:id="extensionDsr">
+                <label class="custom-control-label" for="extensionDsr">Data Science Refinery (deployed on separate edge node)</label>
+            </div>
         <hr class="mb-4">
         <div class="alert alert-danger" wicket:id="feedback">
             Feedback

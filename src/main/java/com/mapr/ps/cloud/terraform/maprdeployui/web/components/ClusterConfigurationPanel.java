@@ -36,7 +36,8 @@ public class ClusterConfigurationPanel extends Panel {
 
     private final DropDownChoice<AwsInstanceDTO> awsInstanceTypeDropDownChoice;
     private final DropDownChoice<String> awsAvZoneDropDownChoice;
-    private final Component deploymentMatrixComponent;
+    private final WebMarkupContainer deploymentMatrixComponent;
+    private final WebMarkupContainer deploymentMatrixHint;
     private final FeedbackPanel feedback;
     private final IModel<ClusterConfigurationDTO> model;
     private final IModel<AwsRegionDTO> regionModel;
@@ -59,15 +60,17 @@ public class ClusterConfigurationPanel extends Panel {
 
             }
         };
-        form.add(new RequiredTextField<String>("customerName", new PropertyModel<>(model, "customerName")));
-        form.add(new RequiredTextField<String>("envPrefix", new PropertyModel<>(model, "envPrefix")));
-        form.add(new RequiredTextField<String>("clusterName", new PropertyModel<>(model, "clusterName")));
-        form.add(new RequiredTextField<String>("privateDomain", new PropertyModel<>(model, "privateDomain")));
+        form.add(customerName());
+        form.add(envPrefix());
+        form.add(clusterName());
+        form.add(privateDomain());
         form.add(awsAvZoneDropDownChoice = awsAvZoneDropDownChoice());
         form.add(awsInstanceTypeDropDownChoice = awsInstanceTypeDropDownChoice());
         form.add(deploymentMatrixComponent = deploymentMatrixComponent());
+        form.add(deploymentMatrixHint = deploymentMatrixHint());
         form.add(awsRegionDropDownChoice());
         form.add(numberNodesDropDownChoice());
+        form.add(extensionDsr());
         form.add(feedback = feedbackPanel());
         form.add(new AjaxSubmitLink("deployButton") {
             @Override
@@ -95,6 +98,37 @@ public class ClusterConfigurationPanel extends Panel {
         add(form);
     }
 
+    private CheckBox extensionDsr() {
+        return new CheckBox("extensionDsr", new PropertyModel<>(model, "extensionDsr"));
+    }
+
+    private RequiredTextField<String> privateDomain() {
+        return new RequiredTextField<String>("privateDomain", new PropertyModel<>(model, "privateDomain"));
+    }
+
+    private RequiredTextField<String> clusterName() {
+        return new RequiredTextField<String>("clusterName", new PropertyModel<>(model, "clusterName"));
+    }
+
+    private RequiredTextField<String> envPrefix() {
+        return new RequiredTextField<String>("envPrefix", new PropertyModel<>(model, "envPrefix"));
+    }
+
+    private RequiredTextField<String> customerName() {
+        return new RequiredTextField<>("customerName", new PropertyModel<>(model, "customerName"));
+    }
+
+    private WebMarkupContainer deploymentMatrixHint() {
+        WebMarkupContainer webMarkupContainer = new WebMarkupContainer("deploymentMatrixHint") {
+            @Override
+            public boolean isVisible() {
+                return defaultClusterLayoutModel.getObject() == null;
+            }
+        };
+        webMarkupContainer.setOutputMarkupId(true);
+        webMarkupContainer.setOutputMarkupPlaceholderTag(true);
+        return webMarkupContainer;
+    }
 
 
     private FeedbackPanel feedbackPanel() {
@@ -109,7 +143,7 @@ public class ClusterConfigurationPanel extends Panel {
         return feedback;
     }
 
-    private Component deploymentMatrixComponent() {
+    private WebMarkupContainer deploymentMatrixComponent() {
         WebMarkupContainer component = new WebMarkupContainer("deploymentMatrix") {
             @Override
             public boolean isVisible() {
@@ -160,6 +194,7 @@ public class ClusterConfigurationPanel extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 nodeLayoutsModel.setObject(clusterLayoutsService.createNodeLayoutList(defaultClusterLayoutModel.getObject()));
+                target.add(deploymentMatrixHint);
                 target.add(deploymentMatrixComponent);
             }
         });

@@ -32,3 +32,4 @@ mapr_hive_server2 = "${mapr_hive_server2}"
 mapr_collectd = "${mapr_collectd}"
 mapr_opentsdb = "${mapr_opentsdb}"
 mapr_grafana = "${mapr_grafana}"
+ext_dsr_instance_count = ${ext_dsr_instance_count}

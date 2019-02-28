@@ -16,7 +16,16 @@ public class ClusterConfigurationDTO implements Serializable {
     private AwsInstanceDTO awsInstanceType;
     private List<NodeLayoutDTO> nodesLayout = new ArrayList<>();
     private DeploymentStatus deploymentStatus;
-    private Set<DeploymentComponents> deploymentComponents = new HashSet<>();
+    private Set<DeploymentComponent> deploymentComponents = new HashSet<>();
+    private boolean extensionDsr;
+
+    public boolean isExtensionDsr() {
+        return extensionDsr;
+    }
+
+    public void setExtensionDsr(boolean extensionDsr) {
+        this.extensionDsr = extensionDsr;
+    }
 
     public DeploymentStatus getDeploymentStatus() {
         return deploymentStatus;
@@ -115,11 +124,11 @@ public class ClusterConfigurationDTO implements Serializable {
         this.destroyedAt = destroyedAt;
     }
 
-    public Set<DeploymentComponents> getDeploymentComponents() {
+    public Set<DeploymentComponent> getDeploymentComponents() {
         return deploymentComponents;
     }
 
-    public void setDeploymentComponents(Set<DeploymentComponents> deploymentComponents) {
+    public void setDeploymentComponents(Set<DeploymentComponent> deploymentComponents) {
         this.deploymentComponents = deploymentComponents;
     }
 

@@ -1,17 +1,17 @@
 package com.mapr.ps.cloud.terraform.maprdeployui.web.pages;
 
-import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentComponents;
+import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentComponent;
 
 import java.io.Serializable;
 
 public class DeploymentStatusDefinition implements Serializable {
     private String label;
-    private DeploymentComponents component;
+    private DeploymentComponent component;
 
     public DeploymentStatusDefinition() {
     }
 
-    public DeploymentStatusDefinition(String label, DeploymentComponents component) {
+    public DeploymentStatusDefinition(String label, DeploymentComponent component) {
         this.label = label;
         this.component = component;
     }
@@ -24,11 +24,11 @@ public class DeploymentStatusDefinition implements Serializable {
         this.label = label;
     }
 
-    public DeploymentComponents getComponent() {
+    public DeploymentComponent getComponent() {
         return component;
     }
 
-    public void setComponent(DeploymentComponents component) {
+    public void setComponent(DeploymentComponent component) {
         this.component = component;
     }
 

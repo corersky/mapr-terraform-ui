@@ -16,11 +16,8 @@ repositories {
 }
 
 bootJar {
-	launchScript()
-}
-
-ext {
-	set('springStatemachineVersion', '2.0.1.RELEASE')
+//	launchScript()
+//	from ("src/main/java/**/*.html")
 }
 
 dependencies {
@@ -30,7 +27,6 @@ dependencies {
 //	implementation 'com.okta.spring:okta-spring-boot-starter:1.1.0'
 //	implementation 'org.springframework.retry:spring-retry'
 //	implementation 'org.springframework.shell:spring-shell-starter:2.0.0.RELEASE'
-	implementation 'org.springframework.statemachine:spring-statemachine-starter'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -71,8 +67,4 @@ sourceSets {
 	}
 }
 
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.statemachine:spring-statemachine-bom:${springStatemachineVersion}"
-	}
-}
+

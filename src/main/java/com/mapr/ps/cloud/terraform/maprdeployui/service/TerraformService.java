@@ -1,8 +1,7 @@
 package com.mapr.ps.cloud.terraform.maprdeployui.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterConfigurationDTO;
-import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentComponents;
+import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentComponent;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentStatus;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.NodeLayoutDTO;
 import org.apache.commons.io.FileUtils;
@@ -43,14 +42,14 @@ public class TerraformService {
 
     @PostConstruct
     public void init() throws IOException, InterruptedException {
-        ProcessBuilder processBuilder = new ProcessBuilder();
-        processBuilder.directory(new File(terraformProjectPath));
-        processBuilder.command(terraformBinaryPath, "init");
-        Process process = processBuilder.start();
-        int exitVal = process.waitFor();
-        if (exitVal != 0) {
-            throw new IllegalStateException("Failed to run 'terraform init'");
-        }
+//        ProcessBuilder processBuilder = new ProcessBuilder();
+//        processBuilder.directory(new File(terraformProjectPath));
+//        processBuilder.command(terraformBinaryPath, "init");
+//        Process process = processBuilder.start();
+//        int exitVal = process.waitFor();
+//        if (exitVal != 0) {
+//            throw new IllegalStateException("Failed to run 'terraform init'");
+//        }
     }
 
 
@@ -107,6 +106,7 @@ public class TerraformService {
             substitutes.put("mapr_collectd", getNodesString(clusterConfig, NodeLayoutDTO::isCollectd));
             substitutes.put("mapr_opentsdb", getNodesString(clusterConfig, NodeLayoutDTO::isOpenTSDB));
             substitutes.put("mapr_grafana", getNodesString(clusterConfig, NodeLayoutDTO::isGrafana));
+            substitutes.put("ext_dsr_instance_count", clusterConfig.isExtensionDsr() ? "1" : "0");
             StringSubstitutor sub = new StringSubstitutor(substitutes);
             String result = sub.replace(template);
             FileUtils.write(new File(terraformProjectPath + "/clusterinfo/terraformconfig/" + clusterConfig.getEnvPrefix() + ".tfvars"), result, Charset.defaultCharset());
@@ -188,19 +188,22 @@ public class TerraformService {
 
     private void updateComponentStatus(ClusterConfigurationDTO clusterConfiguration, String line) {
         if(line.startsWith("module.vpc.aws_vpc.mapr_vpc: Creation complete")) {
-            clusterConfiguration.getDeploymentComponents().add(DeploymentComponents.VPC);
+            clusterConfiguration.getDeploymentComponents().add(DeploymentComponent.VPC);
             clusterConfigurationService.saveJson(clusterConfiguration);
         } else if(line.startsWith("module.openvpn.null_resource.openvpn_setup: Creation complete")) {
-            clusterConfiguration.getDeploymentComponents().add(DeploymentComponents.OPENVPN);
+            clusterConfiguration.getDeploymentComponents().add(DeploymentComponent.OPENVPN);
             clusterConfigurationService.saveJson(clusterConfiguration);
         } else if(line.startsWith("module.ansible.null_resource.run_ansible: Creation complete")) {
-            clusterConfiguration.getDeploymentComponents().add(DeploymentComponents.ANSIBLE);
+            clusterConfiguration.getDeploymentComponents().add(DeploymentComponent.ANSIBLE);
             clusterConfigurationService.saveJson(clusterConfiguration);
         } else if(line.startsWith("module.ec2.aws_instance.node") && line.contains("Creation complete")) {
-            clusterConfiguration.getDeploymentComponents().add(DeploymentComponents.EC2);
+            clusterConfiguration.getDeploymentComponents().add(DeploymentComponent.EC2);
+            clusterConfigurationService.saveJson(clusterConfiguration);
+        } else if(line.startsWith("module.ansible.null_resource.ext_dsr_run_ansible: Creation complete")) {
+            clusterConfiguration.getDeploymentComponents().add(DeploymentComponent.EXT_DSR);
             clusterConfigurationService.saveJson(clusterConfiguration);
         } else if(line.startsWith("Apply complete!")) {
-            clusterConfiguration.getDeploymentComponents().add(DeploymentComponents.ALL);
+            clusterConfiguration.getDeploymentComponents().add(DeploymentComponent.ALL);
             clusterConfigurationService.saveJson(clusterConfiguration);
         }
     }

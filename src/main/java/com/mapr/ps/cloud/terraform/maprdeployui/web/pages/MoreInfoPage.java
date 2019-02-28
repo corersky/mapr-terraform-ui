@@ -1,9 +1,6 @@
 package com.mapr.ps.cloud.terraform.maprdeployui.web.pages;
 
-import com.mapr.ps.cloud.terraform.maprdeployui.model.AdditionalClusterInfoDTO;
-import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterConfigurationDTO;
-import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentComponents;
-import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentStatus;
+import com.mapr.ps.cloud.terraform.maprdeployui.model.*;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.InvalidClusterStateException;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterService;
 import com.mapr.ps.cloud.terraform.maprdeployui.web.components.ClusterConfigurationPanel;
@@ -21,15 +18,11 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.resource.AbstractResourceStreamWriter;
 import org.apache.wicket.util.resource.FileResourceStream;
-import org.apache.wicket.util.resource.IResourceStream;
 import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.annotation.mount.MountPath;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,11 +178,14 @@ public class MoreInfoPage extends BasePage {
 
     private IModel<List<DeploymentStatusDefinition>> createDeploymentDefinitionModel() {
         List<DeploymentStatusDefinition> defs = new ArrayList<>();
-        defs.add(new DeploymentStatusDefinition("VPC provisioned", DeploymentComponents.VPC));
-        defs.add(new DeploymentStatusDefinition("EC2 instances provisioned", DeploymentComponents.EC2));
-        defs.add(new DeploymentStatusDefinition("OpenVPN provisioned", DeploymentComponents.OPENVPN));
-        defs.add(new DeploymentStatusDefinition("MapR installation", DeploymentComponents.ANSIBLE));
-        defs.add(new DeploymentStatusDefinition("Post actions", DeploymentComponents.ALL));
+        defs.add(new DeploymentStatusDefinition("VPC provisioned", DeploymentComponent.VPC));
+        defs.add(new DeploymentStatusDefinition("EC2 instances provisioned", DeploymentComponent.EC2));
+        defs.add(new DeploymentStatusDefinition("OpenVPN provisioned", DeploymentComponent.OPENVPN));
+        defs.add(new DeploymentStatusDefinition("MapR installation", DeploymentComponent.ANSIBLE));
+        if(clusterConfigModel.getObject().isExtensionDsr()) {
+            defs.add(new DeploymentStatusDefinition("Extension: Data Science Refinery", DeploymentComponent.EXT_DSR));
+        }
+        defs.add(new DeploymentStatusDefinition("Post actions", DeploymentComponent.ALL));
         return Model.ofList(defs);
     }
 
