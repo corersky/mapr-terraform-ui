@@ -47,14 +47,19 @@
                 <option>eu-west-1c</option>
             </select>
             <div class="invalid-feedback">
-                Please enter SSH Key Pair
+                Please choose SSH Key Pair
             </div>
         </div>
         <div class="mb-3">
             <label for="awsAccount">AWS Account</label>
-            <input type="text" class="form-control" id="awsAccount" placeholder="AWS Account TODO" disabled>
+            <select class="custom-select d-block w-100" id="awsAccount" wicket:id="awsAccount" required>
+                <option value="">Choose...</option>
+                <option>eu-west-1a</option>
+                <option>eu-west-1b</option>
+                <option>eu-west-1c</option>
+            </select>
             <div class="invalid-feedback">
-                Please enter AWS Account
+                Please choose AWS Account
             </div>
         </div>
         <div class="row">

@@ -107,8 +107,10 @@ public class TerraformService {
             substitutes.put("mapr_opentsdb", getNodesString(clusterConfig, NodeLayoutDTO::isOpenTSDB));
             substitutes.put("mapr_grafana", getNodesString(clusterConfig, NodeLayoutDTO::isGrafana));
             substitutes.put("ext_dsr_instance_count", clusterConfig.isExtensionDsr() ? "1" : "0");
-            substitutes.put("ssh_public_key_file", terraformProjectPath + "/clusterinfo/keypairs/" + clusterConfig.getSshKeyPairFileRef().getPublicKeyFile());
-            substitutes.put("ssh_private_key_file", terraformProjectPath + "/clusterinfo/keypairs/" + clusterConfig.getSshKeyPairFileRef().getPrivateKeyFile());
+            substitutes.put("ssh_public_key_file", new File(terraformProjectPath + "/clusterinfo/keypairs/" + clusterConfig.getSshKeyPairFileRef().getPublicKeyFile()).getAbsolutePath());
+            substitutes.put("ssh_private_key_file", new File(terraformProjectPath + "/clusterinfo/keypairs/" + clusterConfig.getSshKeyPairFileRef().getPrivateKeyFile()).getAbsolutePath());
+            substitutes.put("aws_access_key", clusterConfig.getAwsAccount().getAwsAccessKeyId());
+            substitutes.put("aws_secret_key", clusterConfig.getAwsAccount().getAwsSecretAccessKey());
             StringSubstitutor sub = new StringSubstitutor(substitutes);
             String result = sub.replace(template);
             FileUtils.write(new File(terraformProjectPath + "/clusterinfo/terraformconfig/" + clusterConfig.getEnvPrefix() + ".tfvars"), result, Charset.defaultCharset());

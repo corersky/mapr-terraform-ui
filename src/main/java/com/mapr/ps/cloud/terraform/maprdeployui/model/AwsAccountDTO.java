@@ -56,7 +56,6 @@ public class AwsAccountDTO implements Serializable {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", awsAccessKeyId='" + awsAccessKeyId + '\'' +
-                ", awsSecretAccessKey='" + awsSecretAccessKey + '\'' +
                 ", createdAt=" + createdAt +
                 '}';
     }

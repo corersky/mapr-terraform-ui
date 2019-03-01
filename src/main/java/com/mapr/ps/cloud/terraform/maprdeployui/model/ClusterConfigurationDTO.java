@@ -13,6 +13,7 @@ public class ClusterConfigurationDTO implements Serializable {
     private AwsRegionDTO awsRegion;
     private String awsAvZone;
     private SshKeyPairFileRefDTO sshKeyPairFileRef;
+    private AwsAccountDTO awsAccount;
     private DefaultClusterLayoutDTO defaultClusterLayout;
     private AwsInstanceDTO awsInstanceType;
     private List<NodeLayoutDTO> nodesLayout = new ArrayList<>();
@@ -141,6 +142,14 @@ public class ClusterConfigurationDTO implements Serializable {
         this.deploymentComponents = deploymentComponents;
     }
 
+    public AwsAccountDTO getAwsAccount() {
+        return awsAccount;
+    }
+
+    public void setAwsAccount(AwsAccountDTO awsAccount) {
+        this.awsAccount = awsAccount;
+    }
+
     @Override
     public String toString() {
         return "ClusterConfigurationDTO{" +
@@ -153,6 +162,7 @@ public class ClusterConfigurationDTO implements Serializable {
                 ", awsRegion=" + awsRegion +
                 ", awsAvZone='" + awsAvZone + '\'' +
                 ", sshKeyPairFileRef=" + sshKeyPairFileRef +
+                ", awsAccount=" + awsAccount +
                 ", defaultClusterLayout=" + defaultClusterLayout +
                 ", awsInstanceType=" + awsInstanceType +
                 ", nodesLayout=" + nodesLayout +

@@ -2,10 +2,7 @@ package com.mapr.ps.cloud.terraform.maprdeployui.web.components;
 
 
 import com.mapr.ps.cloud.terraform.maprdeployui.model.*;
-import com.mapr.ps.cloud.terraform.maprdeployui.service.AwsInfoService;
-import com.mapr.ps.cloud.terraform.maprdeployui.service.ClusterLayoutsService;
-import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterService;
-import com.mapr.ps.cloud.terraform.maprdeployui.service.SshKeyPairService;
+import com.mapr.ps.cloud.terraform.maprdeployui.service.*;
 import com.mapr.ps.cloud.terraform.maprdeployui.web.pages.MoreInfoPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -36,6 +33,8 @@ public class ClusterConfigurationPanel extends Panel {
     private MaprClusterService maprClusterService;
     @SpringBean
     private SshKeyPairService sshKeyPairService;
+    @SpringBean
+    private AwsAccountService awsAccountService;
 
     private final DropDownChoice<AwsInstanceDTO> awsInstanceTypeDropDownChoice;
     private final DropDownChoice<String> awsAvZoneDropDownChoice;
@@ -45,9 +44,10 @@ public class ClusterConfigurationPanel extends Panel {
     private final IModel<ClusterConfigurationDTO> model;
     private final IModel<AwsRegionDTO> regionModel;
     private final IModel<AwsInstanceDTO> instanceModel;
-    private final IModel<SshKeyPairDTO> sshKeyPairModel;
+    private final IModel<SshKeyPairFileRefDTO> sshKeyPairModel;
     private final IModel<DefaultClusterLayoutDTO> defaultClusterLayoutModel;
     private final IModel<List<NodeLayoutDTO>> nodeLayoutsModel;
+    private final IModel<AwsAccountDTO> awsAccountModel;
 
     public ClusterConfigurationPanel(String id, IModel<ClusterConfigurationDTO> model) {
         super(id, model);
@@ -55,6 +55,7 @@ public class ClusterConfigurationPanel extends Panel {
         regionModel = new PropertyModel<>(model, "awsRegion");
         instanceModel = new PropertyModel<>(model, "awsInstanceType");
         sshKeyPairModel = new PropertyModel<>(model, "sshKeyPairFileRef");
+        awsAccountModel = new PropertyModel<>(model, "awsAccount");
         defaultClusterLayoutModel = new PropertyModel<>(model, "defaultClusterLayout");
         nodeLayoutsModel = new PropertyModel<>(model, "nodesLayout");
         Form<ClusterConfigurationDTO> form = new Form<ClusterConfigurationDTO>("form") {
@@ -75,6 +76,7 @@ public class ClusterConfigurationPanel extends Panel {
         form.add(deploymentMatrixHint = deploymentMatrixHint());
         form.add(awsRegionDropDownChoice());
         form.add(sshKeyPairDropDownChoice());
+        form.add(awsAccountsDropDownChoice());
         form.add(numberNodesDropDownChoice());
         form.add(extensionDsr());
         form.add(feedback = feedbackPanel());
@@ -254,17 +256,30 @@ public class ClusterConfigurationPanel extends Panel {
         return awsInstanceType;
     }
 
-    private DropDownChoice<SshKeyPairDTO> sshKeyPairDropDownChoice() {
-        DropDownChoice<SshKeyPairDTO> sshKeyPair = new DropDownChoice<>("sshKeyPair", sshKeyPairModel, new LoadableDetachableModel<List<SshKeyPairDTO>>() {
+    private DropDownChoice<SshKeyPairFileRefDTO> sshKeyPairDropDownChoice() {
+        DropDownChoice<SshKeyPairFileRefDTO> sshKeyPair = new DropDownChoice<>("sshKeyPair", sshKeyPairModel, new LoadableDetachableModel<List<SshKeyPairFileRefDTO>>() {
             @Override
-            protected List<SshKeyPairDTO> load() {
-                return sshKeyPairService.getSshKeyPairs();
+            protected List<SshKeyPairFileRefDTO> load() {
+                return sshKeyPairService.getSshKeyPairsFileRef();
             }
-        }, new ChoiceRenderer<SshKeyPairDTO>("name"));
+        }, new ChoiceRenderer<>("name", "id"));
         sshKeyPair.setRequired(true);
         sshKeyPair.setOutputMarkupId(true);
         return sshKeyPair;
     }
+
+    private DropDownChoice<AwsAccountDTO> awsAccountsDropDownChoice() {
+        DropDownChoice<AwsAccountDTO> sshKeyPair = new DropDownChoice<AwsAccountDTO>("awsAccount", awsAccountModel, new LoadableDetachableModel<List<AwsAccountDTO>>() {
+            @Override
+            protected List<AwsAccountDTO> load() {
+                return awsAccountService.getAwsAccounts();
+            }
+        }, new ChoiceRenderer<AwsAccountDTO>("name", "id"));
+        sshKeyPair.setRequired(true);
+        sshKeyPair.setOutputMarkupId(true);
+        return sshKeyPair;
+    }
+
 
 
 
