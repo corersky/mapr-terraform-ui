@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+    <meta charset="utf-8" />
+    <title>AWS Account</title>
+</head>
+<body>
+<wicket:extend>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+        <h1 class="h2">AWS Account / Credentials</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <a class="btn btn-danger" type="button" wicket:id="deleteButton" onclick="return confirm('Delete Key Pair?')">Delete</a>
+        </div>
+    </div>
+    <form class="needs-validation" novalidate wicket:id="form">
+        <div class="mb-3">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" placeholder="Name"
+                   wicket:id="name" required>
+            <div class="invalid-feedback">
+                Please enter a name
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="awsAccessKeyId">AWS Access Key ID</label>
+            <input type="text" class="form-control" id="awsAccessKeyId" placeholder="AWS Access Key ID - Paste here"
+                   wicket:id="awsAccessKeyId" required/>
+            <div class="invalid-feedback">
+                Please enter AWS Access Key ID
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="awsSecretAccessKey">AWS Secret Access Key</label>
+            <input type="password" class="form-control" id="awsSecretAccessKey" placeholder="AWS Secret Access Key - Paste here"
+                   wicket:id="awsSecretAccessKey"/>
+            <div class="invalid-feedback">
+                Please enter AWS Secret Access Key
+            </div>
+        </div>
+        <hr class="mb-4">
+        <div class="alert alert-danger" wicket:id="feedback">
+            Feedback
+        </div>
+        <button class="btn btn-primary btn-lg btn-block" type="submit" wicket:id="saveButton">Save!</button>
+        <hr class="mb-4">
+    </form>
+</wicket:extend>
+</body>
+</html>

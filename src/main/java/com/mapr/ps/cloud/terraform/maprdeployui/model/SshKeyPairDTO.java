@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class SshKeyPairDTO implements Serializable {
-    private Date createdt;
+    private Date createdAt;
     private String id;
     private String name;
     private String privateKey;
@@ -18,12 +18,12 @@ public class SshKeyPairDTO implements Serializable {
         this.id = id;
     }
 
-    public Date getCreatedt() {
-        return createdt;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreatedt(Date createdt) {
-        this.createdt = createdt;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     public String getName() {
@@ -53,7 +53,7 @@ public class SshKeyPairDTO implements Serializable {
     @Override
     public String toString() {
         return "SshKeyPairDTO{" +
-                "createdt=" + createdt +
+                "createdAt=" + createdAt +
                 ", id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", publicKey='" + publicKey + '\'' +

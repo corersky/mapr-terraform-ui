@@ -1,7 +1,8 @@
 package com.mapr.ps.cloud.terraform.maprdeployui.web.pages;
 
+import com.mapr.ps.cloud.terraform.maprdeployui.model.AwsAccountDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.SshKeyPairDTO;
-import com.mapr.ps.cloud.terraform.maprdeployui.model.SshKeyPairFileRefDTO;
+import com.mapr.ps.cloud.terraform.maprdeployui.service.AwsAccountService;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.SshKeyPairService;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -20,30 +21,31 @@ import org.wicketstuff.annotation.mount.MountPath;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-@MountPath("/sshkeypairs")
-public class KeyPairListPage extends BasePage {
+@MountPath("/awsaccounts")
+public class AwsAccountListPage extends BasePage {
 
     @SpringBean
-    private SshKeyPairService sshKeyPairService;
-    private final IModel<List<SshKeyPairFileRefDTO>> keyPairsModel;
+    private AwsAccountService awsAccountService;
+    private final IModel<List<AwsAccountDTO>> awsAccountModel;
 
-    public KeyPairListPage() {
-        keyPairsModel = new LoadableDetachableModel<List<SshKeyPairFileRefDTO>>() {
+    public AwsAccountListPage() {
+        awsAccountModel = new LoadableDetachableModel<List<AwsAccountDTO>>() {
             @Override
-            protected List<SshKeyPairFileRefDTO> load() {
-                return sshKeyPairService.getSshKeyPairsFileRef();
+            protected List<AwsAccountDTO> load() {
+                return awsAccountService.getAwsAccounts();
             }
         };
 
-        add(new BookmarkablePageLink<NewClusterPage>("newKeyPairLink", KeyPairEditPage.class));
+        add(new BookmarkablePageLink<NewClusterPage>("newAwsAccount", AwsAccountEditPage.class));
         add(tableContainer());
     }
 
     private Component tableContainer() {
-        ListView<SshKeyPairFileRefDTO> listView = new ListView<SshKeyPairFileRefDTO>("keypairs", keyPairsModel) {
+        ListView<AwsAccountDTO> listView = new ListView<AwsAccountDTO>("awsAccounts", awsAccountModel) {
             @Override
-            protected void populateItem(final ListItem<SshKeyPairFileRefDTO> item) {
+            protected void populateItem(final ListItem<AwsAccountDTO> item) {
                 item.add(new Label("name", new PropertyModel<String>(item.getModel(), "name")));
+                item.add(new Label("awsAccessKeyId", new PropertyModel<String>(item.getModel(), "awsAccessKeyId")));
                 item.add(new Label("createdAt", new LoadableDetachableModel<String>() {
                     @Override
                     protected String load() {
@@ -55,7 +57,7 @@ public class KeyPairListPage extends BasePage {
                     @Override
                     public void onClick() {
                         Model<String> of = Model.of(item.getModelObject().getId());
-                        setResponsePage(new KeyPairEditPage(of) {
+                        setResponsePage(new AwsAccountEditPage(of) {
                             @Override
                             public boolean isReadOnly() {
                                 return true;

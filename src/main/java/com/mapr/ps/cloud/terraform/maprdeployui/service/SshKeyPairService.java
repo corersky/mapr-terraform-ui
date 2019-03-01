@@ -52,7 +52,7 @@ public class SshKeyPairService {
         sshKeyPairByFile.setPrivateKey(privateKey);
         sshKeyPairByFile.setPublicKey(publicKey);
         sshKeyPairByFile.setName(withFileRef.getName());
-        sshKeyPairByFile.setCreatedt(withFileRef.getCreatedt());
+        sshKeyPairByFile.setCreatedAt(withFileRef.getCreatedAt());
         return sshKeyPairByFile;
     }
 
@@ -100,7 +100,7 @@ public class SshKeyPairService {
         stored.setId(id);
         stored.setPublicKeyFile(id + ".pub");
         stored.setPrivateKeyFile(id + ".key");
-        stored.setCreatedt(new Date());
+        stored.setCreatedAt(new Date());
         stored.setName(sshKeyPairDTO.getName());
         ObjectMapper objectMapper = new ObjectMapper();
         try {

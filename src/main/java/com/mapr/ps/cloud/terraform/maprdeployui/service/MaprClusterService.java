@@ -31,7 +31,7 @@ public class MaprClusterService {
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/"));
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/openvpn/"));
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/keypairs/"));
-        FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/awsaccount/"));
+        FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/awsaccounts/"));
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/logs/"));
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/states/"));
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/maprdeployui/"));
