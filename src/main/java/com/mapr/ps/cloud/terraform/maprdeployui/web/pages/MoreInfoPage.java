@@ -105,9 +105,22 @@ public class MoreInfoPage extends BasePage {
         additionalInfoRefreshContainer.add(new Label("maprUser", new PropertyModel<>(additionalClusterInfoModel, "maprUser")));
         additionalInfoRefreshContainer.add(new Label("maprPassword", new PropertyModel<>(additionalClusterInfoModel, "maprPassword")));
         additionalInfoRefreshContainer.add(new Label("sshConnection", new PropertyModel<>(additionalClusterInfoModel, "sshConnection")));
-        ExternalLink extLink = new ExternalLink("mcsUrl", new PropertyModel<>(additionalClusterInfoModel, "mcsUrl"));
-        extLink.add(new Label("mcsUrlLabel", new PropertyModel<>(additionalClusterInfoModel, "mcsUrl")));
-        additionalInfoRefreshContainer.add(extLink);
+        ExternalLink mcsUrlLink = new ExternalLink("mcsUrl", new PropertyModel<>(additionalClusterInfoModel, "mcsUrl"));
+        mcsUrlLink.add(new Label("mcsUrlLabel", new PropertyModel<>(additionalClusterInfoModel, "mcsUrl")));
+        additionalInfoRefreshContainer.add(mcsUrlLink);
+        ExternalLink extDsrLink = new ExternalLink("extDsrUrl", new PropertyModel<>(additionalClusterInfoModel, "extDsrUrl"));
+        extDsrLink.add(new Label("extDsrUrlLabel", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                AdditionalClusterInfoDTO dto = additionalClusterInfoModel.getObject();
+                if(dto.getExtDsrInstalled() == 1) {
+                    return dto.getExtDsrUrl();
+                }
+                return "Not Installed";
+            }
+        }));
+        additionalInfoRefreshContainer.add(extDsrLink);
+
 
         additionalInfoRefreshContainer.add(new DownloadLink("openvpnDownloadButton", openvpnFilePathModel) {
             @Override

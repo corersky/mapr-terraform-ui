@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class AdditionalClusterInfoDTO implements Serializable {
     private boolean dataAvailable;
     private String mcsUrl;
+    private String extDsrUrl;
     private String openvpnFile;
     private String maprUser;
     private String maprPassword;
@@ -12,6 +13,23 @@ public class AdditionalClusterInfoDTO implements Serializable {
     private String domainName;
     private String envPrefix;
     private String sshConnection;
+    private int extDsrInstalled;
+
+    public int getExtDsrInstalled() {
+        return extDsrInstalled;
+    }
+
+    public void setExtDsrInstalled(int extDsrInstalled) {
+        this.extDsrInstalled = extDsrInstalled;
+    }
+
+    public String getExtDsrUrl() {
+        return extDsrUrl;
+    }
+
+    public void setExtDsrUrl(String extDsrUrl) {
+        this.extDsrUrl = extDsrUrl;
+    }
 
     public boolean isDataAvailable() {
         return dataAvailable;
@@ -88,13 +106,17 @@ public class AdditionalClusterInfoDTO implements Serializable {
     @Override
     public String toString() {
         return "AdditionalClusterInfoDTO{" +
-                "mcsUrl='" + mcsUrl + '\'' +
+                "dataAvailable=" + dataAvailable +
+                ", mcsUrl='" + mcsUrl + '\'' +
+                ", extDsrUrl='" + extDsrUrl + '\'' +
                 ", openvpnFile='" + openvpnFile + '\'' +
                 ", maprUser='" + maprUser + '\'' +
                 ", maprPassword='" + maprPassword + '\'' +
                 ", dbPassword='" + dbPassword + '\'' +
                 ", domainName='" + domainName + '\'' +
                 ", envPrefix='" + envPrefix + '\'' +
+                ", sshConnection='" + sshConnection + '\'' +
+                ", extDsrInstalled=" + extDsrInstalled +
                 '}';
     }
 }

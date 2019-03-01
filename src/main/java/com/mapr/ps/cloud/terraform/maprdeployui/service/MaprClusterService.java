@@ -92,6 +92,8 @@ public class MaprClusterService {
             additionalClusterInfoDTO.setMaprUser("Not yet available");
             additionalClusterInfoDTO.setMcsUrl("Not yet available");
             additionalClusterInfoDTO.setSshConnection("Not yet available");
+            additionalClusterInfoDTO.setExtDsrUrl("Not yet available");
+            additionalClusterInfoDTO.setExtDsrInstalled(1);
             additionalClusterInfoDTO.setDataAvailable(false);
             return additionalClusterInfoDTO;
         }
