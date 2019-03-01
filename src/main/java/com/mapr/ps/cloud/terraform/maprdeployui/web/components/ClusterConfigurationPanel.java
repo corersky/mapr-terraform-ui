@@ -72,17 +72,33 @@ public class ClusterConfigurationPanel extends Panel {
         form.add(numberNodesDropDownChoice());
         form.add(extensionDsr());
         form.add(feedback = feedbackPanel());
-        form.add(new AjaxSubmitLink("deployButton") {
+        AjaxSubmitLink submitLink = new AjaxSubmitLink("deployButton") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                if(maprClusterService.isPrefixUsed(model.getObject())) {
-                    error("Prefix is already in use. If Cluster was destroyed, delete the configuration.");
+                ClusterConfigurationDTO clusterConfig = model.getObject();
+                advancedValidation(clusterConfig);
+                if (feedback.anyErrorMessage()) {
                     target.add(feedback);
                     return;
                 }
-                maprClusterService.deployCluster(model.getObject());
+                maprClusterService.deployCluster(clusterConfig);
                 info("Cluster deployment started");
                 setResponsePage(new MoreInfoPage(new PropertyModel<>(model, "envPrefix")));
+            }
+
+            private void advancedValidation(ClusterConfigurationDTO clusterConfig) {
+                if (maprClusterService.isPrefixUsed(clusterConfig)) {
+                    error("Prefix is already in use. If Cluster was destroyed, delete the configuration.");
+                }
+                if (clusterConfig.getNodesLayout().stream().filter(NodeLayoutDTO::isMySQL).count() != 1) {
+                    error("Please install exactly one MySQL.");
+                }
+                if (clusterConfig.getNodesLayout().stream().filter(NodeLayoutDTO::isHistoryServer).count() > 1) {
+                    error("Please choose only one HistoryServer.");
+                }
+                if (clusterConfig.getNodesLayout().stream().filter(NodeLayoutDTO::isZookeeper).count() % 2 == 0) {
+                    error("Please select an odd number of nodes for Zookeeper.");
+                }
             }
 
             @Override
@@ -94,7 +110,8 @@ public class ClusterConfigurationPanel extends Panel {
             public boolean isVisible() {
                 return !ClusterConfigurationPanel.this.isReadOnly();
             }
-        });
+        };
+        form.add(submitLink);
         add(form);
     }
 
