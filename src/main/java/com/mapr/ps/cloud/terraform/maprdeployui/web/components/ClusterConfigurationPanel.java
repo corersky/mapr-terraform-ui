@@ -24,13 +24,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ClusterConfigurationPanel extends Panel {
+public abstract class ClusterConfigurationPanel<T extends ClusterConfigurationDTO> extends Panel {
     @SpringBean
     private AwsInfoService awsInfoService;
     @SpringBean
     private ClusterLayoutsService clusterLayoutsService;
-    @SpringBean
-    private MaprClusterService maprClusterService;
     @SpringBean
     private SshKeyPairService sshKeyPairService;
     @SpringBean
@@ -41,7 +39,7 @@ public class ClusterConfigurationPanel extends Panel {
     private final WebMarkupContainer deploymentMatrixComponent;
     private final WebMarkupContainer deploymentMatrixHint;
     private final FeedbackPanel feedback;
-    private final IModel<ClusterConfigurationDTO> model;
+    private final IModel<T> model;
     private final IModel<AwsRegionDTO> regionModel;
     private final IModel<AwsInstanceDTO> instanceModel;
     private final IModel<SshKeyPairFileRefDTO> sshKeyPairModel;
@@ -49,7 +47,7 @@ public class ClusterConfigurationPanel extends Panel {
     private final IModel<List<NodeLayoutDTO>> nodeLayoutsModel;
     private final IModel<AwsAccountDTO> awsAccountModel;
 
-    public ClusterConfigurationPanel(String id, IModel<ClusterConfigurationDTO> model) {
+    public ClusterConfigurationPanel(String id, IModel<T> model) {
         super(id, model);
         this.model = model;
         regionModel = new PropertyModel<>(model, "awsRegion");
@@ -80,33 +78,10 @@ public class ClusterConfigurationPanel extends Panel {
         form.add(numberNodesDropDownChoice());
         form.add(extensionDsr());
         form.add(feedback = feedbackPanel());
-        AjaxSubmitLink submitLink = new AjaxSubmitLink("deployButton") {
+        AjaxSubmitLink submitLink = new AjaxSubmitLink("submitButton") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                ClusterConfigurationDTO clusterConfig = model.getObject();
-                advancedValidation(clusterConfig);
-                if (feedback.anyErrorMessage()) {
-                    target.add(feedback);
-                    return;
-                }
-                maprClusterService.deployCluster(clusterConfig);
-                info("Cluster deployment started");
-                setResponsePage(new MoreInfoPage(new PropertyModel<>(model, "envPrefix")));
-            }
-
-            private void advancedValidation(ClusterConfigurationDTO clusterConfig) {
-                if (maprClusterService.isPrefixUsed(clusterConfig)) {
-                    error("Prefix is already in use. If Cluster was destroyed, delete the configuration.");
-                }
-                if (clusterConfig.getNodesLayout().stream().filter(NodeLayoutDTO::isMySQL).count() != 1) {
-                    error("Please install exactly one MySQL.");
-                }
-                if (clusterConfig.getNodesLayout().stream().filter(NodeLayoutDTO::isHistoryServer).count() > 1) {
-                    error("Please choose only one HistoryServer.");
-                }
-                if (clusterConfig.getNodesLayout().stream().filter(NodeLayoutDTO::isZookeeper).count() % 2 == 0) {
-                    error("Please select an odd number of nodes for Zookeeper.");
-                }
+                ClusterConfigurationPanel.this.onSubmit(target, model, feedback);
             }
 
             @Override
@@ -119,9 +94,13 @@ public class ClusterConfigurationPanel extends Panel {
                 return !ClusterConfigurationPanel.this.isReadOnly();
             }
         };
+        submitLink.add(new Label("submitButtonLabel", this::getSubmitButtonLabel));
         form.add(submitLink);
         add(form);
     }
+
+    protected abstract String getSubmitButtonLabel();
+    protected abstract void onSubmit(AjaxRequestTarget target, IModel<T> model, FeedbackPanel feedback);
 
     private CheckBox extensionDsr() {
         return new CheckBox("extensionDsr", new PropertyModel<>(model, "extensionDsr"));
@@ -248,7 +227,7 @@ public class ClusterConfigurationPanel extends Panel {
 
             @Override
             public AwsInstanceDTO getObject(String id, IModel<? extends List<? extends AwsInstanceDTO>> choices) {
-                return choices.getObject().stream().filter(awsInstance -> ((AwsInstanceDTO) awsInstance).getInstanceCode().equals(id)).findFirst().orElseGet(null);
+                return choices.getObject().stream().filter(awsInstance -> awsInstance.getInstanceCode().equals(id)).findFirst().orElseGet(null);
             }
         });
         awsInstanceType.setRequired(true);
@@ -274,7 +253,7 @@ public class ClusterConfigurationPanel extends Panel {
             protected List<AwsAccountDTO> load() {
                 return awsAccountService.getAwsAccounts();
             }
-        }, new ChoiceRenderer<AwsAccountDTO>("name", "id"));
+        }, new ChoiceRenderer<>("name", "id"));
         sshKeyPair.setRequired(true);
         sshKeyPair.setOutputMarkupId(true);
         return sshKeyPair;

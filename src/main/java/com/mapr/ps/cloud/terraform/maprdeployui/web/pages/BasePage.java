@@ -9,6 +9,6 @@ public class BasePage extends WebPage {
         add(new BookmarkablePageLink<>("clusterListLink", ClusterListPage.class));
         add(new BookmarkablePageLink<>("sshKeyPairListLink", KeyPairListPage.class));
         add(new BookmarkablePageLink<>("awsAccountsListLink", AwsAccountListPage.class));
-//        add(new BookmarkablePageLink<NewClusterPage>("newClusterLink", NewClusterPage.class));
+        add(new BookmarkablePageLink<>("templatesListLink", TemplateListPage.class));
     }
 }

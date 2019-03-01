@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.AdditionalClusterInfoDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterConfigurationDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentStatus;
+import com.mapr.ps.cloud.terraform.maprdeployui.model.TemplateDTO;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,6 +38,7 @@ public class MaprClusterService {
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/maprdeployui/"));
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/additionalinfo/"));
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/terraformconfig/"));
+        FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/templates/"));
     }
 
 

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+    <meta charset="utf-8" />
+    <title>Cluster Templates</title>
+</head>
+<body>
+<wicket:extend>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+    <h1 class="h2">Cluster Templates</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <button class="btn btn-primary" type="button" wicket:id="newTemplateTableLink">New Template</button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+        <thead>
+        <tr>
+            <th>Cluster Name</th>
+            <th>Domain</th>
+            <th>Customer</th>
+            <th>Prefix</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr wicket:id="templates">
+            <td wicket:id="clusterName">poc.mapr.com</td>
+            <td wicket:id="privateDomain">ps.mapr.cm</td>
+            <td wicket:id="customerName">MapR PS</td>
+            <td wicket:id="envPrefix">chufe-poc</td>
+            <td>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" wicket:id="editLink">Edit</button>
+                </div>
+            </td>
+            <td>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" wicket:id="newClusterLink">New Cluster</button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</wicket:extend>
+</body>
+</html>

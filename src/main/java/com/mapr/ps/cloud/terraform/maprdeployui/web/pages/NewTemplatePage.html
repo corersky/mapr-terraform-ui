@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+    <meta charset="utf-8"/>
+    <title>Create New Template</title>
+</head>
+<body>
+<wicket:extend>
+    <div class="col-md-8 order-md-1">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+            <h1 class="h2">Create New Template</h1>
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <a class="btn btn-danger" type="button" wicket:id="deleteButton" onclick="return confirm('Delete template?')">Delete</a>
+            </div>
+        </div>
+        <wicket:container wicket:id="template"></wicket:container>
+    </div>
+</wicket:extend>
+</body>
+</html>

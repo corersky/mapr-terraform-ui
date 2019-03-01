@@ -5,12 +5,14 @@ import com.mapr.ps.cloud.terraform.maprdeployui.service.InvalidClusterStateExcep
 import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterService;
 import com.mapr.ps.cloud.terraform.maprdeployui.web.components.ClusterConfigurationPanel;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -207,6 +209,16 @@ public class MoreInfoPage extends BasePage {
             @Override
             public boolean isReadOnly() {
                 return true;
+            }
+
+            @Override
+            protected String getSubmitButtonLabel() {
+                return "Not required";
+            }
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, IModel model, FeedbackPanel feedback) {
+
             }
         };
     }
