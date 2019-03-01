@@ -2,9 +2,12 @@ package com.mapr.ps.cloud.terraform.maprdeployui.web.pages;
 
 
 import com.mapr.ps.cloud.terraform.maprdeployui.model.ClusterConfigurationDTO;
+import com.mapr.ps.cloud.terraform.maprdeployui.model.GeneratedKeyPairDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.SshKeyPairDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.SshKeyPairService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -24,6 +27,8 @@ public class KeyPairEditPage extends BasePage {
     private SshKeyPairService sshKeyPairService;
 
     private final FeedbackPanel feedback;
+    private final TextArea<String> privateKeyField;
+    private final TextArea<String> publicKeyField;
     private final IModel<SshKeyPairDTO> model;
 
 
@@ -45,7 +50,8 @@ public class KeyPairEditPage extends BasePage {
             }
         };
 
-        add(deleteButton(model));
+        add(deleteButton());
+        add(generateKeysButton());
         Form<ClusterConfigurationDTO> form = new Form<ClusterConfigurationDTO>("form") {
             @Override
             public boolean isEnabled() {
@@ -53,8 +59,8 @@ public class KeyPairEditPage extends BasePage {
             }
         };
         form.add(keyPairName());
-        form.add(sshPrivateKey());
-        form.add(sshPublicKey());
+        form.add(privateKeyField = sshPrivateKey());
+        form.add(publicKeyField = sshPublicKey());
 
         form.add(feedback = feedbackPanel());
         AjaxSubmitLink submitLink = new AjaxSubmitLink("saveButton") {
@@ -75,12 +81,16 @@ public class KeyPairEditPage extends BasePage {
         add(form);
     }
 
-    private Button deleteButton(IModel<String> model) {
-        return new Button("deleteButton") {
+    private AjaxLink<Void> generateKeysButton() {
+        return new AjaxLink<Void>("generateKeysButton") {
+
             @Override
-            public void onSubmit() {
-                sshKeyPairService.delete(model.getObject());
-                info("SSH key pair deleted.");
+            public void onClick(AjaxRequestTarget target) {
+                GeneratedKeyPairDTO generatedKeyPairDTO = sshKeyPairService.generateKeyPair();
+                model.getObject().setPublicKey(generatedKeyPairDTO.getPublicKey());
+                model.getObject().setPrivateKey(generatedKeyPairDTO.getPrivateKey());
+                target.add(privateKeyField);
+                target.add(publicKeyField);
             }
 
             @Override
@@ -90,15 +100,32 @@ public class KeyPairEditPage extends BasePage {
         };
     }
 
+    private Button deleteButton() {
+        return new Button("deleteButton") {
+            @Override
+            public void onSubmit() {
+                sshKeyPairService.delete(KeyPairEditPage.this.model.getObject().getId());
+                info("SSH key pair deleted.");
+            }
+
+            @Override
+            public boolean isVisible() {
+                return isReadOnly();
+            }
+        };
+    }
+
     private TextArea<String> sshPublicKey() {
         TextArea<String> sshPublicKey = new TextArea<>("sshPublicKey", new PropertyModel<>(model, "publicKey"));
         sshPublicKey.setRequired(true);
+        sshPublicKey.setOutputMarkupId(true);
         return sshPublicKey;
     }
 
     private TextArea<String> sshPrivateKey() {
         TextArea<String> sshPrivateKey = new TextArea<>("sshPrivateKey", new PropertyModel<>(model, "privateKey"));
         sshPrivateKey.setRequired(true);
+        sshPrivateKey.setOutputMarkupId(true);
         return sshPrivateKey;
     }
 

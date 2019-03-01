@@ -61,7 +61,12 @@ public class KeyPairListPage extends BasePage {
                     @Override
                     public void onClick() {
                         Model<String> of = Model.of(item.getModelObject().getId());
-                        setResponsePage(new KeyPairEditPage(of));
+                        setResponsePage(new KeyPairEditPage(of) {
+                            @Override
+                            public boolean isReadOnly() {
+                                return true;
+                            }
+                        });
                     }
                 });
             }
