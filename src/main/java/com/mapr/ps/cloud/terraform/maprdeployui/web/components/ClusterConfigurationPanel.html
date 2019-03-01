@@ -39,8 +39,13 @@
         </div>
 
         <div class="mb-3">
-            <label for="keypair">SSH Key Pair</label>
-            <input type="text" class="form-control" id="keypair" placeholder="SSH Key Pair TODO" disabled>
+            <label for="sshKeyPair">SSH Key Pair</label>
+            <select class="custom-select d-block w-100" id="sshKeyPair" wicket:id="sshKeyPair" required>
+                <option value="">Choose...</option>
+                <option>eu-west-1a</option>
+                <option>eu-west-1b</option>
+                <option>eu-west-1c</option>
+            </select>
             <div class="invalid-feedback">
                 Please enter SSH Key Pair
             </div>

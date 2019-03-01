@@ -46,16 +46,21 @@
     <div class="row">
         <nav class="col-md-2 d-none d-md-block bg-light sidebar"  style="padding-top: 3em">
             <div class="sidebar-sticky">
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>MapR</span>
+                    <a class="d-flex align-items-center text-muted" href="#">
+                    </a>
+                </h6>
                 <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link active" href="#" wicket:id="clusterListLink">
-                            <span data-feather="home"></span>
+                            <span class="octicon octicon-server" style="font-size: 18px; vertical-align: inherit"></span>
                             MapR Clusters
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            <span data-feather="shopping-cart"></span>
+                            <span class="octicon octicon-file" style="font-size: 18px; vertical-align: inherit"></span>
                             Templates
                         </a>
                     </li>
@@ -64,20 +69,19 @@
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                     <span>Configuration</span>
                     <a class="d-flex align-items-center text-muted" href="#">
-                        <span data-feather="plus-circle"></span>
                     </a>
                 </h6>
                 <ul class="nav flex-column mb-2">
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            <span data-feather="file-text"></span>
+                            <span class="octicon octicon-tools" style="font-size: 18px; vertical-align: inherit"></span>
                             AWS Credentials
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
-                            <span data-feather="shopping-cart"></span>
-                            SSH Key Management
+                        <a class="nav-link" href="#" wicket:id="sshKeyPairListLink">
+                            <span class="octicon octicon-key" style="font-size: 18px; vertical-align: inherit"></span>
+                            SSH Key Pairs
                         </a>
                     </li>
                 </ul>
@@ -91,6 +95,5 @@
 </div>
 <!--<script src="/webjars/bootstrap/js/bootstrap.min.js"></script>-->
 <!--<script>window.jQuery || document.write('<script src="/webjars/bootstrap/js/bootstrap.min.js"><\/script>')</script>-->
-<script src="/webjars/feather-icons/dist/feather.js"></script>
 </body>
 </html>

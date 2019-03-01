@@ -30,6 +30,8 @@ public class MaprClusterService {
         FileUtils.forceMkdir(new File(terraformProjectPath));
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/"));
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/openvpn/"));
+        FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/keypairs/"));
+        FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/awsaccount/"));
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/logs/"));
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/states/"));
         FileUtils.forceMkdir(new File(terraformProjectPath + "/clusterinfo/maprdeployui/"));
@@ -54,7 +56,7 @@ public class MaprClusterService {
         terraformService.deploy(clusterConfiguration);
     }
 
-    public void deleteCluster(ClusterConfigurationDTO clusterConfiguration) throws InvalidClusterStateException {
+    public synchronized void  deleteCluster(ClusterConfigurationDTO clusterConfiguration) throws InvalidClusterStateException {
         checkState(clusterConfiguration, DeploymentStatus.DESTROYED);
         try {
             FileUtils.forceDelete(new File(terraformProjectPath + "/clusterinfo/maprdeployui/" + clusterConfiguration.getEnvPrefix() + "-maprdeployui.json"));

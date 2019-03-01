@@ -12,12 +12,21 @@ public class ClusterConfigurationDTO implements Serializable {
     private String privateDomain;
     private AwsRegionDTO awsRegion;
     private String awsAvZone;
+    private SshKeyPairFileRefDTO sshKeyPairFileRef;
     private DefaultClusterLayoutDTO defaultClusterLayout;
     private AwsInstanceDTO awsInstanceType;
     private List<NodeLayoutDTO> nodesLayout = new ArrayList<>();
     private DeploymentStatus deploymentStatus;
     private Set<DeploymentComponent> deploymentComponents = new HashSet<>();
     private boolean extensionDsr;
+
+    public SshKeyPairFileRefDTO getSshKeyPairFileRef() {
+        return sshKeyPairFileRef;
+    }
+
+    public void setSshKeyPairFileRef(SshKeyPairFileRefDTO sshKeyPairFileRef) {
+        this.sshKeyPairFileRef = sshKeyPairFileRef;
+    }
 
     public boolean isExtensionDsr() {
         return extensionDsr;
@@ -143,11 +152,13 @@ public class ClusterConfigurationDTO implements Serializable {
                 ", privateDomain='" + privateDomain + '\'' +
                 ", awsRegion=" + awsRegion +
                 ", awsAvZone='" + awsAvZone + '\'' +
+                ", sshKeyPairFileRef=" + sshKeyPairFileRef +
                 ", defaultClusterLayout=" + defaultClusterLayout +
                 ", awsInstanceType=" + awsInstanceType +
                 ", nodesLayout=" + nodesLayout +
                 ", deploymentStatus=" + deploymentStatus +
                 ", deploymentComponents=" + deploymentComponents +
+                ", extensionDsr=" + extensionDsr +
                 '}';
     }
 }

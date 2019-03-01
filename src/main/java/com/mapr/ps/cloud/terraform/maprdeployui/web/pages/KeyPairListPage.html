@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+    <meta charset="utf-8" />
+    <title>SSH Key Pairs</title>
+</head>
+<body>
+<wicket:extend>
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3">
+    <h1 class="h2">SSH Key Pairs</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <button class="btn btn-primary" type="button" wicket:id="newKeyPairLink">New Key Pair</button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-sm" wicket:id="tableContainer">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Created At</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr wicket:id="clusters">
+            <td wicket:id="name">My Key</td>
+            <td wicket:id="createdAt">2018-12-11</td>
+            <td>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" wicket:id="moreInfoLink">More</button>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</wicket:extend>
+</body>
+</html>

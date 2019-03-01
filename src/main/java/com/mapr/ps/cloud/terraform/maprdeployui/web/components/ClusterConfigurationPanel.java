@@ -5,6 +5,7 @@ import com.mapr.ps.cloud.terraform.maprdeployui.model.*;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.AwsInfoService;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.ClusterLayoutsService;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterService;
+import com.mapr.ps.cloud.terraform.maprdeployui.service.SshKeyPairService;
 import com.mapr.ps.cloud.terraform.maprdeployui.web.pages.MoreInfoPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -33,6 +34,8 @@ public class ClusterConfigurationPanel extends Panel {
     private ClusterLayoutsService clusterLayoutsService;
     @SpringBean
     private MaprClusterService maprClusterService;
+    @SpringBean
+    private SshKeyPairService sshKeyPairService;
 
     private final DropDownChoice<AwsInstanceDTO> awsInstanceTypeDropDownChoice;
     private final DropDownChoice<String> awsAvZoneDropDownChoice;
@@ -42,6 +45,7 @@ public class ClusterConfigurationPanel extends Panel {
     private final IModel<ClusterConfigurationDTO> model;
     private final IModel<AwsRegionDTO> regionModel;
     private final IModel<AwsInstanceDTO> instanceModel;
+    private final IModel<SshKeyPairDTO> sshKeyPairModel;
     private final IModel<DefaultClusterLayoutDTO> defaultClusterLayoutModel;
     private final IModel<List<NodeLayoutDTO>> nodeLayoutsModel;
 
@@ -50,6 +54,7 @@ public class ClusterConfigurationPanel extends Panel {
         this.model = model;
         regionModel = new PropertyModel<>(model, "awsRegion");
         instanceModel = new PropertyModel<>(model, "awsInstanceType");
+        sshKeyPairModel = new PropertyModel<>(model, "sshKeyPairFileRef");
         defaultClusterLayoutModel = new PropertyModel<>(model, "defaultClusterLayout");
         nodeLayoutsModel = new PropertyModel<>(model, "nodesLayout");
         Form<ClusterConfigurationDTO> form = new Form<ClusterConfigurationDTO>("form") {
@@ -69,6 +74,7 @@ public class ClusterConfigurationPanel extends Panel {
         form.add(deploymentMatrixComponent = deploymentMatrixComponent());
         form.add(deploymentMatrixHint = deploymentMatrixHint());
         form.add(awsRegionDropDownChoice());
+        form.add(sshKeyPairDropDownChoice());
         form.add(numberNodesDropDownChoice());
         form.add(extensionDsr());
         form.add(feedback = feedbackPanel());
@@ -247,6 +253,20 @@ public class ClusterConfigurationPanel extends Panel {
         awsInstanceType.setOutputMarkupId(true);
         return awsInstanceType;
     }
+
+    private DropDownChoice<SshKeyPairDTO> sshKeyPairDropDownChoice() {
+        DropDownChoice<SshKeyPairDTO> sshKeyPair = new DropDownChoice<>("sshKeyPair", sshKeyPairModel, new LoadableDetachableModel<List<SshKeyPairDTO>>() {
+            @Override
+            protected List<SshKeyPairDTO> load() {
+                return sshKeyPairService.getSshKeyPairs();
+            }
+        }, new ChoiceRenderer<SshKeyPairDTO>("name"));
+        sshKeyPair.setRequired(true);
+        sshKeyPair.setOutputMarkupId(true);
+        return sshKeyPair;
+    }
+
+
 
     private DropDownChoice<String> awsAvZoneDropDownChoice() {
         DropDownChoice<String> awsAvZone = new DropDownChoice<>("awsAvZone", new PropertyModel<>(model, "awsAvZone"), new LoadableDetachableModel<List<String>>() {
