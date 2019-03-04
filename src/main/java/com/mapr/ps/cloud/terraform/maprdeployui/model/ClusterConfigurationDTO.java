@@ -20,6 +20,7 @@ public class ClusterConfigurationDTO implements Serializable {
     private DeploymentStatus deploymentStatus;
     private Set<DeploymentComponent> deploymentComponents = new HashSet<>();
     private boolean extensionDsr;
+    private boolean extensionUsecase1;
 
     public SshKeyPairFileRefDTO getSshKeyPairFileRef() {
         return sshKeyPairFileRef;
@@ -150,6 +151,14 @@ public class ClusterConfigurationDTO implements Serializable {
         this.awsAccount = awsAccount;
     }
 
+    public boolean isExtensionUsecase1() {
+        return extensionUsecase1;
+    }
+
+    public void setExtensionUsecase1(boolean extensionUsecase1) {
+        this.extensionUsecase1 = extensionUsecase1;
+    }
+
     @Override
     public String toString() {
         return "ClusterConfigurationDTO{" +
@@ -169,6 +178,7 @@ public class ClusterConfigurationDTO implements Serializable {
                 ", deploymentStatus=" + deploymentStatus +
                 ", deploymentComponents=" + deploymentComponents +
                 ", extensionDsr=" + extensionDsr +
+                ", extensionUsecase1=" + extensionUsecase1 +
                 '}';
     }
 }

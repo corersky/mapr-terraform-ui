@@ -245,7 +245,8 @@
                             </div>
                         </td>
                         <td class="text-center">
-                            <div class="form-check"><input class="matrixCheckbox" type="checkbox" wicket:id="sparkHistoryServer">
+                            <div class="form-check"><input class="matrixCheckbox" type="checkbox"
+                                                           wicket:id="sparkHistoryServer">
                             </div>
                         </td>
                         <td class="text-center">
@@ -293,16 +294,32 @@
             </div>
         </div>
         <hr class="mb-4">
-            <h4 class="mb-3">Additional Components</h4>
+        <h4 class="mb-3">Additional Components</h4>
+        <div class="mb-3">
             <div class="custom-control custom-checkbox">
                 <input type="checkbox" class="custom-control-input" id="extensionDsr" wicket:id="extensionDsr">
-                <label class="custom-control-label" for="extensionDsr">Data Science Refinery (deployed on separate edge node)</label>
+                <label class="custom-control-label" for="extensionDsr">Data Science Refinery (deployed on separate edge
+                    node)</label>
             </div>
-        <hr class="mb-4">
-        <div class="alert alert-danger" wicket:id="feedback">
-            Feedback
+            <hr class="mb-1">
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="extensionUsecase1" wicket:id="extensionUsecase1">
+                <label class="custom-control-label" for="extensionUsecase1">Use case 1 (Clickstream)</label>
+            </div>
+            <p></p>
+            <ul>
+                <li>Files are located in /projects/usecase1.</li>
+                <li>Run clickstream generator.</li>
+                <li>Go to Grafana dashboard to see metrics.</li>
+                <li>Go to Zeppelin to browse clickstream data stored in MapR-DB</li>
+            </ul>
+            <hr class="mb-4">
+            <div class="alert alert-danger" wicket:id="feedback">
+                Feedback
+            </div>
+            <button class="btn btn-primary btn-lg btn-block" type="submit" wicket:id="submitButton"><span
+                    wicket:id="submitButtonLabel">Deploy!</span></button>
         </div>
-        <button class="btn btn-primary btn-lg btn-block" type="submit" wicket:id="submitButton"><span wicket:id="submitButtonLabel">Deploy!</span></button>
         <hr class="mb-4">
     </form>
 </wicket:panel>

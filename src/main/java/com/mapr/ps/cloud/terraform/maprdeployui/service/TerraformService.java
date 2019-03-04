@@ -107,6 +107,7 @@ public class TerraformService {
             substitutes.put("mapr_opentsdb", getNodesString(clusterConfig, NodeLayoutDTO::isOpenTSDB));
             substitutes.put("mapr_grafana", getNodesString(clusterConfig, NodeLayoutDTO::isGrafana));
             substitutes.put("ext_dsr_instance_count", clusterConfig.isExtensionDsr() ? "1" : "0");
+            substitutes.put("ext_usecase1_instance_count", clusterConfig.isExtensionUsecase1() ? "1" : "0");
             substitutes.put("ssh_public_key_file", new File(terraformProjectPath + "/clusterinfo/keypairs/" + clusterConfig.getSshKeyPairFileRef().getPublicKeyFile()).getAbsolutePath());
             substitutes.put("ssh_private_key_file", new File(terraformProjectPath + "/clusterinfo/keypairs/" + clusterConfig.getSshKeyPairFileRef().getPrivateKeyFile()).getAbsolutePath());
             substitutes.put("aws_access_key", clusterConfig.getAwsAccount().getAwsAccessKeyId());
@@ -205,6 +206,9 @@ public class TerraformService {
             clusterConfigurationService.saveJson(clusterConfiguration);
         } else if(line.startsWith("module.ansible.null_resource.ext_dsr_run_ansible: Creation complete")) {
             clusterConfiguration.getDeploymentComponents().add(DeploymentComponent.EXT_DSR);
+            clusterConfigurationService.saveJson(clusterConfiguration);
+        } else if(line.startsWith("module.ext_usecase1.null_resource.run_ansible_ext_usecase1: Creation complete")) {
+            clusterConfiguration.getDeploymentComponents().add(DeploymentComponent.EXT_USECASE1);
             clusterConfigurationService.saveJson(clusterConfiguration);
         } else if(line.startsWith("Apply complete!")) {
             clusterConfiguration.getDeploymentComponents().add(DeploymentComponent.ALL);

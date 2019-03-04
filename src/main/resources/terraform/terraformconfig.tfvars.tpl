@@ -33,6 +33,8 @@ mapr_collectd = "${mapr_collectd}"
 mapr_opentsdb = "${mapr_opentsdb}"
 mapr_grafana = "${mapr_grafana}"
 ext_dsr_instance_count = ${ext_dsr_instance_count}
+ext_usecase1_instance_count = ${ext_usecase1_instance_count}
+
 
 ssh_public_key_file = "${ssh_public_key_file}"
 ssh_private_key_file = "${ssh_private_key_file}"

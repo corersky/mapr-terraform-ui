@@ -77,6 +77,7 @@ public abstract class ClusterConfigurationPanel<T extends ClusterConfigurationDT
         form.add(awsAccountsDropDownChoice());
         form.add(numberNodesDropDownChoice());
         form.add(extensionDsr());
+        form.add(extensionUsecase1());
         form.add(feedback = feedbackPanel());
         AjaxSubmitLink submitLink = new AjaxSubmitLink("submitButton") {
             @Override
@@ -104,6 +105,10 @@ public abstract class ClusterConfigurationPanel<T extends ClusterConfigurationDT
 
     private CheckBox extensionDsr() {
         return new CheckBox("extensionDsr", new PropertyModel<>(model, "extensionDsr"));
+    }
+
+    private CheckBox extensionUsecase1() {
+        return new CheckBox("extensionUsecase1", new PropertyModel<>(model, "extensionUsecase1"));
     }
 
     private RequiredTextField<String> privateDomain() {
