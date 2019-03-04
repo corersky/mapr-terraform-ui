@@ -6,6 +6,7 @@ import com.mapr.ps.cloud.terraform.maprdeployui.model.DeploymentStatus;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.NodeLayoutDTO;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringSubstitutor;
 import org.apache.wicket.util.collections.ConcurrentHashSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -223,7 +224,11 @@ public class TerraformService {
 
     private String getNodesString(ClusterConfigurationDTO clusterConfig, Function<NodeLayoutDTO, Boolean> f) {
         List<NodeLayoutDTO> nodesLayout = clusterConfig.getNodesLayout();
-        return nodesLayout.stream().filter(f::apply).map(NodeLayoutDTO::getNodeIndex).map(val -> Integer.toString(val)).collect(Collectors.joining(","));
+        String nodes = nodesLayout.stream().filter(f::apply).map(NodeLayoutDTO::getNodeIndex).map(val -> Integer.toString(val)).collect(Collectors.joining(","));
+        if(StringUtils.isBlank(nodes)) {
+            return "none";
+        }
+        return nodes;
     }
 
     private void updateDeploymentStatus(ClusterConfigurationDTO clusterConfiguration, DeploymentStatus status) {
