@@ -3,7 +3,13 @@ security:
     enabled: false
 
 server:
-  port : 8080
+  port: 8443
+    # The format used for the keystore. It could be set to JKS in case it is a JKS file
+  ssl:
+    key-store-type: PKCS12
+    key-store: "classpath:ssl/maprdeployer.p12"
+    key-store-password: mapr123
+    key-alias: maprdeployer
 
 maprdeployui:
 #  terraform_project_path: C:/Projects/workspaces/terraform-mapr/
@@ -16,9 +22,9 @@ maprdeployui:
 #  terraform_binary_path: /usr/bin/terraform
   deploy_ssh_public_key_path: /home/ec2-user/.ssh/id_rsa.pub
   deploy_ssh_private_key_path: /home/ec2-user/.ssh/id_rsa
-
   login_username: admin
   login_password: admin123
+
 
 wicket:
   core:
