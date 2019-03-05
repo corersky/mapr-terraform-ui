@@ -4,6 +4,8 @@ import com.mapr.ps.cloud.terraform.maprdeployui.model.*;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.InvalidClusterStateException;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterService;
 import com.mapr.ps.cloud.terraform.maprdeployui.web.components.ClusterConfigurationPanel;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
@@ -18,6 +20,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.handler.TextRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -26,6 +29,8 @@ import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.annotation.mount.MountPath;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,11 +143,19 @@ public class MoreInfoPage extends BasePage {
             @Override
             public void onClick() {
                 File file = logFilePathModel.getObject();
-                FileResourceStream resourceStream = new FileResourceStream(file);
-                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(resourceStream, "deployment.log");
-                handler.setContentDisposition(ContentDisposition.INLINE);
-                handler.setCacheDuration(Duration.NONE);
-                getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+//                FileResourceStream resourceStream = new FileResourceStream(file);
+//                ResourceStreamRequestHandler handler = new ResourceStreamRequestHandler(resourceStream, "deployment.log");
+//                handler.setContentDisposition(ContentDisposition.INLINE);
+//                handler.setCacheDuration(Duration.NONE);
+//                getRequestCycle().scheduleRequestHandlerAfterCurrent(handler);
+                try {
+                    String logs = FileUtils.readFileToString(file, Charset.defaultCharset());
+                    getRequestCycle().scheduleRequestHandlerAfterCurrent(new TextRequestHandler("text/plain", "utf-8", logs ));
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+
+                }
             }
 
             @Override
