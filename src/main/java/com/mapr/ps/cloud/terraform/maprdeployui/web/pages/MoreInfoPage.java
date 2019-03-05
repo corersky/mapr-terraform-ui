@@ -215,7 +215,7 @@ public class MoreInfoPage extends BasePage {
         if(clusterConfigModel.getObject().isExtensionDsr()) {
             defs.add(new DeploymentStatusDefinition("Extension: Data Science Refinery", DeploymentComponent.EXT_DSR));
         }
-        if(clusterConfigModel.getObject().isExtensionDsr()) {
+        if(clusterConfigModel.getObject().isExtensionUsecase1()) {
             defs.add(new DeploymentStatusDefinition("Extension: Usecase 1 (Clickstream)", DeploymentComponent.EXT_USECASE1));
         }
         defs.add(new DeploymentStatusDefinition("Post actions", DeploymentComponent.ALL));
