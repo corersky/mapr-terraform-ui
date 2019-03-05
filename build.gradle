@@ -43,7 +43,7 @@ dependencies {
 //	compile 'org.wicketstuff:wicketstuff-serializer-fast2:8.3.0'
 //	compile 'org.wicketstuff:wicketstuff-restannotations:8.3.0'
 	compile 'org.wicketstuff:wicketstuff-springreference:8.3.0'
-	compile 'org.wicketstuff:shiro-spring-boot-web-starter:8.3.0'
+//	compile 'org.wicketstuff:shiro-spring-boot-web-starter:8.3.0'
 	compile 'org.wicketstuff:wicketstuff-jamon:8.3.0'
 	compile 'de.agilecoders.wicket.webjars:wicket-webjars:2.0.11'
 	compile 'org.webjars:octicons:4.3.0'
