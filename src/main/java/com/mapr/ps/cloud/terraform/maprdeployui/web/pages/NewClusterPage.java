@@ -8,6 +8,7 @@ import com.mapr.ps.cloud.terraform.maprdeployui.web.components.ClusterConfigurat
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
@@ -29,6 +30,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @MountPath("/create_new_cluster")
+@AuthorizeInstantiation("USER")
 public class NewClusterPage extends BasePage {
 
     @SpringBean

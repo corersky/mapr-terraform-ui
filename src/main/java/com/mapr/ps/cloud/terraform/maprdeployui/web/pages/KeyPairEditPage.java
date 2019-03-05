@@ -9,6 +9,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -22,13 +23,12 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @MountPath("/sshkeypairedit")
+@AuthorizeInstantiation("USER")
 public class KeyPairEditPage extends BasePage {
     @SpringBean
     private SshKeyPairService sshKeyPairService;
 
     private final FeedbackPanel feedback;
-    private final TextArea<String> privateKeyField;
-    private final TextArea<String> publicKeyField;
     private final IModel<SshKeyPairDTO> model;
 
 
@@ -44,14 +44,11 @@ public class KeyPairEditPage extends BasePage {
                 if(id == null) {
                     return new SshKeyPairDTO();
                 }
-                SshKeyPairDTO sshKeyPair = sshKeyPairService.getSshKeyPairById(id);
-                sshKeyPair.setPrivateKey("Not displayed for security reasons.");
-                return sshKeyPair;
+                return sshKeyPairService.getSshKeyPairById(id);
             }
         };
 
         add(deleteButton());
-        add(generateKeysButton());
         Form<ClusterConfigurationDTO> form = new Form<ClusterConfigurationDTO>("form") {
             @Override
             public boolean isEnabled() {
@@ -59,8 +56,7 @@ public class KeyPairEditPage extends BasePage {
             }
         };
         form.add(keyPairName());
-        form.add(privateKeyField = sshPrivateKey());
-        form.add(publicKeyField = sshPublicKey());
+        form.add(sshPublicKey());
 
         form.add(feedback = feedbackPanel());
         AjaxSubmitLink submitLink = new AjaxSubmitLink("saveButton") {
@@ -81,24 +77,24 @@ public class KeyPairEditPage extends BasePage {
         add(form);
     }
 
-    private AjaxLink<Void> generateKeysButton() {
-        return new AjaxLink<Void>("generateKeysButton") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                GeneratedKeyPairDTO generatedKeyPairDTO = sshKeyPairService.generateKeyPair();
-                model.getObject().setPublicKey(generatedKeyPairDTO.getPublicKey());
-                model.getObject().setPrivateKey(generatedKeyPairDTO.getPrivateKey());
-                target.add(privateKeyField);
-                target.add(publicKeyField);
-            }
-
-            @Override
-            public boolean isVisible() {
-                return !isReadOnly();
-            }
-        };
-    }
+//    private AjaxLink<Void> generateKeysButton() {
+//        return new AjaxLink<Void>("generateKeysButton") {
+//
+//            @Override
+//            public void onClick(AjaxRequestTarget target) {
+//                GeneratedKeyPairDTO generatedKeyPairDTO = sshKeyPairService.generateKeyPair();
+//                model.getObject().setPublicKey(generatedKeyPairDTO.getPublicKey());
+//                model.getObject().setPrivateKey(generatedKeyPairDTO.getPrivateKey());
+//                target.add(privateKeyField);
+//                target.add(publicKeyField);
+//            }
+//
+//            @Override
+//            public boolean isVisible() {
+//                return !isReadOnly();
+//            }
+//        };
+//    }
 
     private Button deleteButton() {
         return new Button("deleteButton") {
@@ -120,13 +116,6 @@ public class KeyPairEditPage extends BasePage {
         sshPublicKey.setRequired(true);
         sshPublicKey.setOutputMarkupId(true);
         return sshPublicKey;
-    }
-
-    private TextArea<String> sshPrivateKey() {
-        TextArea<String> sshPrivateKey = new TextArea<>("sshPrivateKey", new PropertyModel<>(model, "privateKey"));
-        sshPrivateKey.setRequired(true);
-        sshPrivateKey.setOutputMarkupId(true);
-        return sshPrivateKey;
     }
 
     private RequiredTextField<String> keyPairName() {

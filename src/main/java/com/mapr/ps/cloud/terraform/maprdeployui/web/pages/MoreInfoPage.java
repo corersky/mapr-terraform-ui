@@ -7,6 +7,7 @@ import com.mapr.ps.cloud.terraform.maprdeployui.web.components.ClusterConfigurat
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.*;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @MountPath("/moreinfo")
+@AuthorizeInstantiation("USER")
 public class MoreInfoPage extends BasePage {
     @SpringBean
     private MaprClusterService maprClusterService;

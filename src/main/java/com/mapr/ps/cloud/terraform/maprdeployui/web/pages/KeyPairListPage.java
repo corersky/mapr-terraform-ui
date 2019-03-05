@@ -4,6 +4,7 @@ import com.mapr.ps.cloud.terraform.maprdeployui.model.SshKeyPairDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.SshKeyPairFileRefDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.SshKeyPairService;
 import org.apache.wicket.Component;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -21,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 @MountPath("/sshkeypairs")
+@AuthorizeInstantiation("USER")
 public class KeyPairListPage extends BasePage {
 
     @SpringBean

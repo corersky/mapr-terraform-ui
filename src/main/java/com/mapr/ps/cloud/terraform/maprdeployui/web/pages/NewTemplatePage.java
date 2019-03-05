@@ -5,6 +5,7 @@ import com.mapr.ps.cloud.terraform.maprdeployui.service.TemplateService;
 import com.mapr.ps.cloud.terraform.maprdeployui.web.components.ClusterConfigurationPanel;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
@@ -14,6 +15,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wicketstuff.annotation.mount.MountPath;
 
 @MountPath("/create_new_template")
+@AuthorizeInstantiation("USER")
 public class NewTemplatePage extends BasePage {
     @SpringBean
     private TemplateService templateService;

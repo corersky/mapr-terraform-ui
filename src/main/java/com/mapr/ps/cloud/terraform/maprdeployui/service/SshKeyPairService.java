@@ -45,11 +45,9 @@ public class SshKeyPairService {
             return new SshKeyPairDTO();
         }
         SshKeyPairFileRefDTO withFileRef = getSshKeyPairByFile(inputFile);
-        String privateKey = readKey(withFileRef.getPrivateKeyFile());
         String publicKey = readKey(withFileRef.getPublicKeyFile());
         SshKeyPairDTO sshKeyPairByFile = new SshKeyPairDTO();
         sshKeyPairByFile.setId(id);
-        sshKeyPairByFile.setPrivateKey(privateKey);
         sshKeyPairByFile.setPublicKey(publicKey);
         sshKeyPairByFile.setName(withFileRef.getName());
         sshKeyPairByFile.setCreatedAt(withFileRef.getCreatedAt());
@@ -86,9 +84,7 @@ public class SshKeyPairService {
     public synchronized void delete(String id) {
         File sshKeyConfig = new File(getPath().getAbsolutePath() + "/" + id + ".json");
         SshKeyPairFileRefDTO withFileRef = getSshKeyPairByFile(sshKeyConfig);
-        File privateKeyFile = new File(getPath().getAbsolutePath() + "/" + withFileRef.getPrivateKeyFile());
         File publicKeyFile = new File(getPath().getAbsolutePath() + "/" + withFileRef.getPublicKeyFile());
-        FileUtils.deleteQuietly(privateKeyFile);
         FileUtils.deleteQuietly(publicKeyFile);
         FileUtils.deleteQuietly(sshKeyConfig);
     }
@@ -99,7 +95,6 @@ public class SshKeyPairService {
         SshKeyPairFileRefDTO stored = new SshKeyPairFileRefDTO();
         stored.setId(id);
         stored.setPublicKeyFile(id + ".pub");
-        stored.setPrivateKeyFile(id + ".key");
         stored.setCreatedAt(new Date());
         stored.setName(sshKeyPairDTO.getName());
         ObjectMapper objectMapper = new ObjectMapper();
@@ -108,9 +103,6 @@ public class SshKeyPairService {
             File publicKey = new File(getPath().getAbsolutePath() + "/" + stored.getPublicKeyFile());
             FileUtils.writeStringToFile(publicKey, sshKeyPairDTO.getPublicKey(), Charset.defaultCharset());
             setPermissionForKeys(publicKey);
-            File privateKey = new File(getPath().getAbsolutePath() + "/" + stored.getPrivateKeyFile());
-            FileUtils.writeStringToFile(privateKey, sshKeyPairDTO.getPrivateKey(), Charset.defaultCharset());
-            setPermissionForKeys(privateKey);
 
         } catch (IOException e) {
             throw new RuntimeException(e);

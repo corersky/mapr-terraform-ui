@@ -7,6 +7,7 @@ import com.mapr.ps.cloud.terraform.maprdeployui.service.MaprClusterService;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxSelfUpdatingTimerBehavior;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -25,6 +26,7 @@ import java.util.List;
 
 @WicketHomePage
 @MountPath("/clusters")
+@AuthorizeInstantiation("USER")
 public class ClusterListPage extends BasePage {
 
     @SpringBean

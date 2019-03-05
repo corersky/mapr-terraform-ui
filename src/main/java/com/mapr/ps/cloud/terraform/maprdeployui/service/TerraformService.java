@@ -33,6 +33,10 @@ public class TerraformService {
     private String terraformProjectPath;
     @Value("${maprdeployui.terraform_binary_path}")
     private String terraformBinaryPath;
+    @Value("${maprdeployui.deploy_ssh_public_key_path}")
+    private String deploySshPublicKeyPath;
+    @Value("${maprdeployui.deploy_ssh_private_key_path}")
+    private String deploySshPrivateKeyPath;
     @Value("classpath:terraform/terraformconfig.tfvars.tpl")
     private Resource terraformConfigTpl;
     @Autowired
@@ -109,8 +113,9 @@ public class TerraformService {
             substitutes.put("mapr_grafana", getNodesString(clusterConfig, NodeLayoutDTO::isGrafana));
             substitutes.put("ext_dsr_instance_count", clusterConfig.isExtensionDsr() ? "1" : "0");
             substitutes.put("ext_usecase1_instance_count", clusterConfig.isExtensionUsecase1() ? "1" : "0");
-            substitutes.put("ssh_public_key_file", new File(terraformProjectPath + "/clusterinfo/keypairs/" + clusterConfig.getSshKeyPairFileRef().getPublicKeyFile()).getAbsolutePath());
-            substitutes.put("ssh_private_key_file", new File(terraformProjectPath + "/clusterinfo/keypairs/" + clusterConfig.getSshKeyPairFileRef().getPrivateKeyFile()).getAbsolutePath());
+            substitutes.put("ssh_public_key_file", new File(deploySshPublicKeyPath).getAbsolutePath());
+            substitutes.put("ssh_private_key_file", new File(deploySshPrivateKeyPath).getAbsolutePath());
+            substitutes.put("ssh_mapruser_public_key_file", new File(terraformProjectPath + "/clusterinfo/keypairs/" + clusterConfig.getSshKeyPairFileRef().getPublicKeyFile()).getAbsolutePath());
             substitutes.put("aws_access_key", clusterConfig.getAwsAccount().getAwsAccessKeyId());
             substitutes.put("aws_secret_key", clusterConfig.getAwsAccount().getAwsSecretAccessKey());
             StringSubstitutor sub = new StringSubstitutor(substitutes);

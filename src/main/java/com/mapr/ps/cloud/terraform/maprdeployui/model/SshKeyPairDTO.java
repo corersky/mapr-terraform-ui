@@ -7,7 +7,6 @@ public class SshKeyPairDTO implements Serializable {
     private Date createdAt;
     private String id;
     private String name;
-    private String privateKey;
     private String publicKey;
 
     public String getId() {
@@ -32,14 +31,6 @@ public class SshKeyPairDTO implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPrivateKey() {
-        return privateKey;
-    }
-
-    public void setPrivateKey(String privateKey) {
-        this.privateKey = privateKey;
     }
 
     public String getPublicKey() {

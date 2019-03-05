@@ -3,6 +3,7 @@ package com.mapr.ps.cloud.terraform.maprdeployui.web.pages;
 import com.mapr.ps.cloud.terraform.maprdeployui.model.TemplateDTO;
 import com.mapr.ps.cloud.terraform.maprdeployui.service.TemplateService;
 import org.apache.wicket.Component;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -18,6 +19,7 @@ import org.wicketstuff.annotation.mount.MountPath;
 import java.util.List;
 
 @MountPath("/templates")
+@AuthorizeInstantiation("USER")
 public class TemplateListPage extends BasePage {
 
     @SpringBean
