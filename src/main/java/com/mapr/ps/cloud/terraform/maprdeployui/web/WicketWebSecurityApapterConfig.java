@@ -1,6 +1,7 @@
 package com.mapr.ps.cloud.terraform.maprdeployui.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,6 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 public class WicketWebSecurityApapterConfig extends WebSecurityConfigurerAdapter {
+	@Value("${maprdeployui.login_username}")
+	private String loginUsername;
+	@Value("${maprdeployui.login_password}")
+	private String loginPassword;
+
 
 	@Override
 	@Bean(name = "authenticationManager")
@@ -32,7 +38,7 @@ public class WicketWebSecurityApapterConfig extends WebSecurityConfigurerAdapter
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 		auth
 			.inMemoryAuthentication()
-			.withUser("admin").password("{noop}admin").authorities("USER", "ADMIN");
+			.withUser(loginUsername).password("{noop}" + loginPassword).authorities("USER", "ADMIN");
 	}
 
 }
