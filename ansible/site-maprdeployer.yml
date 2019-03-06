@@ -1,4 +1,4 @@
-- name: Stop Warden
+- name: MapR Deployer
   hosts: mapr-deployer
   vars:
     packages: ['mc', 'wget', 'yum-utils', 'unzip', 'openssl', 'curl', 'dos2unix', 'java', 'git']
