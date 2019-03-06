@@ -56,8 +56,7 @@ public abstract class ClusterConfigurationPanel<T extends ClusterConfigurationDT
         awsAccountModel = new PropertyModel<>(model, "awsAccount");
         defaultClusterLayoutModel = new PropertyModel<>(model, "defaultClusterLayout");
         nodeLayoutsModel = new PropertyModel<>(model, "nodesLayout");
-        Form<ClusterConfigurationDTO> form = new Form<ClusterConfigurationDTO>("form") {
-
+        Form<T> form = new Form<T>("form") {
             @Override
             public boolean isEnabled() {
                 return !ClusterConfigurationPanel.this.isReadOnly();
