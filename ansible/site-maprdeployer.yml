@@ -1,7 +1,7 @@
 - name: Stop Warden
   hosts: mapr-deployer
   vars:
-    packages: ['mc', 'wget', 'yum-utils', 'unzip', 'openssl', 'curl', 'dos2unix', 'java']
+    packages: ['mc', 'wget', 'yum-utils', 'unzip', 'openssl', 'curl', 'dos2unix', 'java', 'git']
 
   tasks:
     - name: Check if maprdeployer service exists
