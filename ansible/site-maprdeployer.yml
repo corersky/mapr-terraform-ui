@@ -1,0 +1,105 @@
+- name: Stop Warden
+  hosts: mapr-deployer
+  vars:
+    packages: ['mc', 'wget', 'yum-utils', 'unzip', 'openssl', 'curl', 'dos2unix', 'java']
+
+  tasks:
+    - name: Check if maprdeployer service exists
+      stat: path=/etc/systemd/system/maprdeployer.service
+      register: service_status
+    - name: Stop service
+      service: name=maprdeployer state=stopped
+      when: service_status.stat.exists
+      register: service_stopped
+    - name: Add service user for maprdeployer
+      user:
+        name: "{{ service_user }}"
+        password: '!'
+        comment: Service User for MapR Deployer
+        generate_ssh_key: yes
+        ssh_key_bits: 4096
+#        ssh_key_file: .ssh/id_rsa
+        uid: 5000
+    - name: upgrade all packages
+      yum: name='*' state=latest
+    - name: Install misc stuff
+      package: name={{ item }} state=present
+      with_items: "{{ vars['packages'] }}"
+    - name: Import RPM key for EPEL
+      rpm_key: state=present key={{ epel_repo_rpm_key }}
+    - name: Setup EPEL repository
+      yum: name="{{ epel_repo }}" state=present
+    - name: Download Terraform
+      get_url:
+        url: "{{ terraform_url }}"
+        dest: /tmp/terraform.zip
+        mode: 0600
+    - name: Unarchive a file that is already on the remote machine
+      unarchive:
+        src: /tmp/terraform.zip
+        dest: /usr/local/bin
+        remote_src: yes
+    - name: Install Ansible
+      yum: name=ansible state=present
+    - name: Create deployer directory
+      file:
+        path: "{{ remote_maprdeployer_path }}"
+        state: directory
+        mode: 0755
+        owner: "{{ service_user }}"
+        group: "{{ service_user }}"
+    - name: Create Terraform project directory
+      file:
+        path: "{{ remote_terraform_path }}"
+        state: directory
+        mode: 0755
+        owner: "{{ service_user }}"
+        group: "{{ service_user }}"
+    - name: Create Terraform storage directory
+      file:
+        path: "{{ remote_terraform_path }}/clusterinfo/"
+        state: directory
+        mode: 0755
+        owner: "{{ service_user }}"
+        group: "{{ service_user }}"
+    - name: Copy JAR
+      copy:
+        src: "{{ local_maprdeployer_jar_path }}"
+        dest: "{{ remote_maprdeployer_jar_path }}"
+        mode: 0755
+        owner: "{{ service_user }}"
+        group: "{{ service_user }}"
+    - name: Copy Terraform modules
+      copy:
+        src: "{{ local_terraform_path }}/{{ item }}"
+        dest: "{{ remote_terraform_path }}/{{ item }}"
+        owner: "{{ service_user }}"
+        group: "{{ service_user }}"
+      with_items:
+        - "modules/"
+        - "templates/"
+        - "variables.tf"
+        - "main.tf"
+    - name: Terraform init
+      command: "chdir={{ remote_terraform_path }} /usr/local/bin/terraform init"
+      become: true
+      become_user: "{{ service_user }}"
+#    - name: Check if SSH key exists
+#      stat: path=/home/centos/.ssh/id_rsa
+#      register: ssh_key_status
+#    - name: Generate SSH key, if not exists
+#      shell: "ssh-keygen -t rsa -b 4096 -C maprdeployer"
+#      become: true
+#      become_user: "{{ service_user }}"
+#      when: not ssh_key_status.stat.exists
+    - name: Create service for maprdeployer
+      template:
+        src: maprdeployer.service
+        dest: /etc/systemd/system/maprdeployer.service
+        mode: "0755"
+    - name: just force systemd to reread configs (2.4 and above)
+      systemd:
+        daemon_reload: yes
+    - name: Start service
+      service: name=maprdeployer state=started
+# Run: find . -type f -print0 | xargs -0 dos2unix

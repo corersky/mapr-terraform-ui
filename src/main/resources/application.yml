@@ -18,13 +18,14 @@ maprdeployui:
 #  terraform_binary_path:  C:/Projects/workspaces/mapr-terraform-ui/mock/terraform_destroy.bat
 
 # Prod
+# TODO should be configurable
   terraform_project_path: /opt/maprterraform/
-  terraform_binary_path: /usr/bin/terraform
+  terraform_binary_path: /usr/local/bin/terraform
 
-  deploy_ssh_public_key_path: /home/ec2-user/.ssh/id_rsa.pub
-  deploy_ssh_private_key_path: /home/ec2-user/.ssh/id_rsa
+  deploy_ssh_public_key_path: /home/mapr/.ssh/id_rsa.pub
+  deploy_ssh_private_key_path: /home/mapr/.ssh/id_rsa
   login_username: admin
-  login_password: admin123
+  login_password: MpHfLE7cpdRS
 
 
 wicket:
