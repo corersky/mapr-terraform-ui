@@ -80,6 +80,10 @@
         - "templates/"
         - "variables.tf"
         - "main.tf"
+    - name: Remove Windows Characters :-)
+      shell: "find {{ remote_terraform_path }} -type f -print0 | xargs -0 dos2unix"
+      become: true
+      become_user: "{{ service_user }}"
     - name: Terraform init
       command: "chdir={{ remote_terraform_path }} /usr/local/bin/terraform init"
       become: true
@@ -102,4 +106,3 @@
         daemon_reload: yes
     - name: Start service
       service: name=maprdeployer state=started
-# Run: find . -type f -print0 | xargs -0 dos2unix
