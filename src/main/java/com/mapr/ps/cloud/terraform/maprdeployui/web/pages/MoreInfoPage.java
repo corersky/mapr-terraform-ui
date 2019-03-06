@@ -20,11 +20,16 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.IRequestCycle;
 import org.apache.wicket.request.handler.TextRequestHandler;
 import org.apache.wicket.request.handler.resource.ResourceStreamRequestHandler;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.ContentDisposition;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.file.Files;
 import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
+import org.apache.wicket.util.string.Strings;
 import org.apache.wicket.util.time.Duration;
 import org.wicketstuff.annotation.mount.MountPath;
 
@@ -131,7 +136,32 @@ public class MoreInfoPage extends BasePage {
         additionalInfoRefreshContainer.add(extDsrLink);
 
 
-        additionalInfoRefreshContainer.add(new DownloadLink("openvpnDownloadButton", openvpnFilePathModel) {
+        additionalInfoRefreshContainer.add(new Link<File>("openvpnDownloadButton") {
+
+            @Override
+            public void onClick() {
+                final File file = openvpnFilePathModel.getObject();
+                if (file == null)
+                {
+                    throw new IllegalStateException(getClass().getName() +
+                            " failed to retrieve a File object from model");
+                }
+
+                IResourceStream resourceStream = new FileResourceStream(
+                        new org.apache.wicket.util.file.File(file));
+                getRequestCycle().scheduleRequestHandlerAfterCurrent(
+                        new ResourceStreamRequestHandler(resourceStream) {
+                            @Override
+                            public void respond(IRequestCycle requestCycle) {
+                                final WebResponse response = (WebResponse)requestCycle.getResponse();
+                                response.setContentType("application/x-openvpn-profile");
+                                super.respond(requestCycle);
+                            }
+                        }.setFileName(file.getName())
+                                .setContentDisposition(ContentDisposition.ATTACHMENT)
+                                .setCacheDuration(Duration.NONE));
+            }
+
             @Override
             public boolean isEnabled() {
                 return openvpnFilePathModel.getObject() != null;
