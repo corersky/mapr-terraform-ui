@@ -16,6 +16,8 @@ public class NodeLayoutDTO implements Serializable {
     private boolean mySQL;
     private boolean spark;
     private boolean sparkHistoryServer;
+    private boolean gateway;
+    private boolean dataAccessGateway;
     private boolean nfs;
     private boolean drill;
     private boolean flume;
@@ -209,5 +211,21 @@ public class NodeLayoutDTO implements Serializable {
 
     public void setGrafana(boolean grafana) {
         this.grafana = grafana;
+    }
+
+    public boolean isGateway() {
+        return gateway;
+    }
+
+    public void setGateway(boolean gateway) {
+        this.gateway = gateway;
+    }
+
+    public boolean isDataAccessGateway() {
+        return dataAccessGateway;
+    }
+
+    public void setDataAccessGateway(boolean dataAccessGateway) {
+        this.dataAccessGateway = dataAccessGateway;
     }
 }

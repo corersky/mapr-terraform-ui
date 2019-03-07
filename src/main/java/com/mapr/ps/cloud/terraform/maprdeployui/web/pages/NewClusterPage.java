@@ -74,6 +74,26 @@ public class NewClusterPage extends BasePage {
                 if (clusterConfig.getNodesLayout().stream().filter(NodeLayoutDTO::isZookeeper).count() % 2 == 0) {
                     error("Please select an odd number of nodes for Zookeeper.");
                 }
+                if (clusterConfig.getNodesLayout().stream().filter(NodeLayoutDTO::isKafkaKsql).count() > 0
+                    && clusterConfig.getNodesLayout().stream().noneMatch(NodeLayoutDTO::isDataAccessGateway)
+                ) {
+                    error("KSQL requires Data Access Gateway.");
+                }
+                if (clusterConfig.getNodesLayout().stream().filter(NodeLayoutDTO::isKafkaKsql).count() > 0
+                        && clusterConfig.getNodesLayout().stream().noneMatch(NodeLayoutDTO::isGateway)
+                ) {
+                    error("KSQL requires Gateway.");
+                }
+                if (clusterConfig.isExtensionUsecase1()
+                        && clusterConfig.getNodesLayout().stream().noneMatch(NodeLayoutDTO::isSpark)
+                ) {
+                    error("Use case 1 requires Spark.");
+                }
+                if (clusterConfig.isExtensionUsecase1()
+                        && clusterConfig.getNodesLayout().stream().noneMatch(NodeLayoutDTO::isKafkaKsql)
+                ) {
+                    error("Use case 1 requires KSQL.");
+                }
             }
         });
     }

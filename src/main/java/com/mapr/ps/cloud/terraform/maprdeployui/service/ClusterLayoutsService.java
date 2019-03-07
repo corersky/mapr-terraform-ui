@@ -39,6 +39,8 @@ public class ClusterLayoutsService {
         layout.setMySQL(nodes(10));
         layout.setSpark(all(numberNodes));
         layout.setSparkHistoryServer(nodes(10));
+        layout.setGateway(all(numberNodes));
+        layout.setDataAccessGateway(all(numberNodes));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -68,6 +70,8 @@ public class ClusterLayoutsService {
         layout.setMySQL(nodes(9));
         layout.setSpark(all(numberNodes));
         layout.setSparkHistoryServer(nodes(9));
+        layout.setGateway(all(numberNodes));
+        layout.setDataAccessGateway(all(numberNodes));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -97,6 +101,8 @@ public class ClusterLayoutsService {
         layout.setMySQL(nodes(8));
         layout.setSpark(all(numberNodes));
         layout.setSparkHistoryServer(nodes(8));
+        layout.setGateway(all(numberNodes));
+        layout.setDataAccessGateway(all(numberNodes));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -126,6 +132,8 @@ public class ClusterLayoutsService {
         layout.setMySQL(nodes(7));
         layout.setSpark(all(numberNodes));
         layout.setSparkHistoryServer(nodes(7));
+        layout.setGateway(all(numberNodes));
+        layout.setDataAccessGateway(all(numberNodes));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -156,6 +164,8 @@ public class ClusterLayoutsService {
         layout.setMySQL(nodes(6));
         layout.setSpark(all(numberNodes));
         layout.setSparkHistoryServer(nodes(6));
+        layout.setGateway(all(numberNodes));
+        layout.setDataAccessGateway(all(numberNodes));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -185,6 +195,8 @@ public class ClusterLayoutsService {
         layout.setMySQL(nodes(5));
         layout.setSpark(all(numberNodes));
         layout.setSparkHistoryServer(nodes(5));
+        layout.setGateway(all(numberNodes));
+        layout.setDataAccessGateway(all(numberNodes));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -214,6 +226,8 @@ public class ClusterLayoutsService {
         layout.setMySQL(nodes(4));
         layout.setSpark(all(numberNodes));
         layout.setSparkHistoryServer(nodes(4));
+        layout.setGateway(all(numberNodes));
+        layout.setDataAccessGateway(all(numberNodes));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -243,6 +257,8 @@ public class ClusterLayoutsService {
         layout.setMySQL(nodes(3));
         layout.setSpark(all(numberNodes));
         layout.setSparkHistoryServer(nodes(3));
+        layout.setGateway(all(numberNodes));
+        layout.setDataAccessGateway(all(numberNodes));
         layout.setNfs(all(numberNodes));
         layout.setDrill(all(numberNodes));
         layout.setFlume(all(numberNodes));
@@ -289,6 +305,8 @@ public class ClusterLayoutsService {
             layout.setMySQL(defaultLayout.getMySQL().contains(i));
             layout.setSpark(defaultLayout.getSpark().contains(i));
             layout.setSparkHistoryServer(defaultLayout.getSparkHistoryServer().contains(i));
+            layout.setGateway(defaultLayout.getGateway().contains(i));
+            layout.setDataAccessGateway(defaultLayout.getDataAccessGateway().contains(i));
             layout.setNfs(defaultLayout.getNfs().contains(i));
             layout.setDrill(defaultLayout.getDrill().contains(i));
             layout.setFlume(defaultLayout.getFlume().contains(i));

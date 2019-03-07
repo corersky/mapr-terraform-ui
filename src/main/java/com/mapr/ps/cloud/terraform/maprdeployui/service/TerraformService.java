@@ -101,6 +101,8 @@ public class TerraformService {
             substitutes.put("ext_mysql", getNodesString(clusterConfig, NodeLayoutDTO::isMySQL));
             substitutes.put("mapr_spark_yarn", getNodesString(clusterConfig, NodeLayoutDTO::isSpark));
             substitutes.put("mapr_spark_historyserver", getNodesString(clusterConfig, NodeLayoutDTO::isSparkHistoryServer));
+            substitutes.put("mapr_gateway", getNodesString(clusterConfig, NodeLayoutDTO::isGateway));
+            substitutes.put("mapr_data_access_gateway", getNodesString(clusterConfig, NodeLayoutDTO::isDataAccessGateway));
             substitutes.put("mapr_nfs_v3", getNodesString(clusterConfig, NodeLayoutDTO::isNfs));
             substitutes.put("mapr_drill_standalone", getNodesString(clusterConfig, NodeLayoutDTO::isDrill));
             substitutes.put("mapr_flume", getNodesString(clusterConfig, NodeLayoutDTO::isFlume));

@@ -10,4 +10,4 @@ epel_repo=https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 epel_repo_rpm_key=https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
 
 [mapr-deployer]
-54.194.163.183 ansible_user=centos ansible_become=yes ansible_become_method=sudo
+52.30.23.84 ansible_user=centos ansible_become=yes ansible_become_method=sudo

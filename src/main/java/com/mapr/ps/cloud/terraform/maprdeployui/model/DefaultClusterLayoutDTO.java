@@ -17,6 +17,8 @@ public class DefaultClusterLayoutDTO implements Serializable {
     private List<Integer> mySQL;
     private List<Integer> spark;
     private List<Integer> sparkHistoryServer;
+    private List<Integer> gateway;
+    private List<Integer> dataAccessGateway;
     private List<Integer> nfs;
     private List<Integer> drill;
     private List<Integer> flume;
@@ -210,5 +212,21 @@ public class DefaultClusterLayoutDTO implements Serializable {
 
     public void setGrafana(List<Integer> grafana) {
         this.grafana = grafana;
+    }
+
+    public List<Integer> getGateway() {
+        return gateway;
+    }
+
+    public void setGateway(List<Integer> gateway) {
+        this.gateway = gateway;
+    }
+
+    public List<Integer> getDataAccessGateway() {
+        return dataAccessGateway;
+    }
+
+    public void setDataAccessGateway(List<Integer> dataAccessGateway) {
+        this.dataAccessGateway = dataAccessGateway;
     }
 }

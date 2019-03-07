@@ -139,12 +139,6 @@
                             <div><span>FileServer</span></div>
                         </th>
                         <th class="rotate-45">
-                            <div><span>Kafka Client</span></div>
-                        </th>
-                        <th class="rotate-45">
-                            <div><span>Kafka KSQL</span></div>
-                        </th>
-                        <th class="rotate-45">
                             <div><span>MapR Control System</span></div>
                         </th>
                         <th class="rotate-45">
@@ -160,10 +154,22 @@
                             <div><span>MySQL</span></div>
                         </th>
                         <th class="rotate-45">
+                            <div><span>Gateway</span></div>
+                        </th>
+                        <th class="rotate-45">
+                            <div><span>Data Access Gateway</span></div>
+                        </th>
+                        <th class="rotate-45">
                             <div><span>Spark</span></div>
                         </th>
                         <th class="rotate-45">
                             <div><span>Spark HistoryServer</span></div>
+                        </th>
+                        <th class="rotate-45">
+                            <div><span>Kafka Client</span></div>
+                        </th>
+                        <th class="rotate-45">
+                            <div><span>Kafka KSQL</span></div>
                         </th>
                         <th class="rotate-45">
                             <div><span>NFS</span></div>
@@ -214,14 +220,6 @@
                                                            wicket:id="fileserver"></div>
                         </td>
                         <td class="text-center">
-                            <div class="form-check"><input class="matrixCheckbox" type="checkbox"
-                                                           wicket:id="kafkaClient"></div>
-                        </td>
-                        <td class="text-center">
-                            <div class="form-check"><input class="matrixCheckbox" type="checkbox"
-                                                           wicket:id="kafkaKsql"></div>
-                        </td>
-                        <td class="text-center">
                             <div class="form-check"><input class="matrixCheckbox" type="checkbox" wicket:id="mcs"></div>
                         </td>
                         <td class="text-center">
@@ -241,6 +239,14 @@
                             </div>
                         </td>
                         <td class="text-center">
+                            <div class="form-check"><input class="matrixCheckbox" type="checkbox"
+                                                           wicket:id="gateway"></div>
+                        </td>
+                        <td class="text-center">
+                            <div class="form-check"><input class="matrixCheckbox" type="checkbox"
+                                                           wicket:id="dataAccessGateway"></div>
+                        </td>
+                        <td class="text-center">
                             <div class="form-check"><input class="matrixCheckbox" type="checkbox" wicket:id="spark">
                             </div>
                         </td>
@@ -248,6 +254,14 @@
                             <div class="form-check"><input class="matrixCheckbox" type="checkbox"
                                                            wicket:id="sparkHistoryServer">
                             </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="form-check"><input class="matrixCheckbox" type="checkbox"
+                                                           wicket:id="kafkaClient"></div>
+                        </td>
+                        <td class="text-center">
+                            <div class="form-check"><input class="matrixCheckbox" type="checkbox"
+                                                           wicket:id="kafkaKsql"></div>
                         </td>
                         <td class="text-center">
                             <div class="form-check"><input class="matrixCheckbox" type="checkbox" wicket:id="nfs"></div>
@@ -314,7 +328,7 @@
                 <li>Go to Zeppelin to browse clickstream data stored in MapR-DB</li>
                 <li>SSH to first node</li>
                 <li>Run: export LD_LIBRARY_PATH=/opt/mapr/lib</li>
-                <li>Run: python /mapr/paysafe.ps.mapr.com/projects/usecase1/producer_generatedata.py</li>
+                <li>Run: python /mapr/clustername/projects/usecase1/producer_generatedata.py</li>
             </ul>
             <hr class="mb-4">
             <div class="alert alert-danger" wicket:id="feedback">

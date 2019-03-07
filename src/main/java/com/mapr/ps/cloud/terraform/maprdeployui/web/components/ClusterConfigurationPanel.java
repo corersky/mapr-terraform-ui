@@ -173,6 +173,8 @@ public abstract class ClusterConfigurationPanel<T extends ClusterConfigurationDT
                 item.add(new CheckBox("nodeManager", new PropertyModel<>(item.getModel(), "nodeManager")));
                 item.add(new CheckBox("historyServer", new PropertyModel<>(item.getModel(), "historyServer")));
                 item.add(new CheckBox("mySQL", new PropertyModel<>(item.getModel(), "mySQL")));
+                item.add(new CheckBox("gateway", new PropertyModel<>(item.getModel(), "gateway")));
+                item.add(new CheckBox("dataAccessGateway", new PropertyModel<>(item.getModel(), "dataAccessGateway")));
                 item.add(new CheckBox("spark", new PropertyModel<>(item.getModel(), "spark")));
                 item.add(new CheckBox("sparkHistoryServer", new PropertyModel<>(item.getModel(), "sparkHistoryServer")));
                 item.add(new CheckBox("nfs", new PropertyModel<>(item.getModel(), "nfs")));
