@@ -105,4 +105,4 @@
       systemd:
         daemon_reload: yes
     - name: Start service
-      service: name=maprdeployer state=started
+      service: name=maprdeployer state=started enabled=yes

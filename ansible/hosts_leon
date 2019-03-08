@@ -1,0 +1,13 @@
+[mapr-deployer:vars]
+service_user=mapr
+local_maprdeployer_jar_path=/mnt/c/Projects/workspaces/mapr-terraform-ui/build/libs/maprdeployui-0.0.1-SNAPSHOT.jar
+local_terraform_path=/mnt/c/Projects/workspaces/mapr-terraform-paysafe
+remote_maprdeployer_path=/opt/maprdeployer
+remote_maprdeployer_jar_path="{{ remote_maprdeployer_path }}/maprdeployui-0.0.1-SNAPSHOT.jar"
+remote_terraform_path=/opt/maprterraform/
+terraform_url=https://releases.hashicorp.com/terraform/0.11.11/terraform_0.11.11_linux_amd64.zip
+epel_repo=https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+epel_repo_rpm_key=https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+
+[mapr-deployer]
+52.56.97.153 ansible_user=centos ansible_become=yes ansible_become_method=sudo
